@@ -1,39 +1,149 @@
 ---
 title: "Changelog"
-description: "New features, improvements, and documentation updates"
+description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
-<Update label="August 2026" description="Docs" tags={["Documentation"]}>
+<Update label="August 2026" description="Public APIs" tags={["API", "Events", "Ingest"]}>
+## Public Events API
+
+A new tenant-scoped Events API is available on the public API: around 30 platform event types — imports, sources, cards, segments, destinations, media, users — published as standard [CloudEvents](https://cloudevents.io/). Consume them via cursor-based pull or a real-time [Server-Sent Events stream](/api-reference/events/streaming), with event discovery, filtering, and immutable JSON schemas per event type. See the [Events API reference](/api-reference/events/overview).
+
+## Public Ingest API
+
+The ingest surface is now exposed through the public API gateway: data-provider token issuance, import verification, and import endpoints, fully documented in the [Ingest API reference](/api-reference/ingest/overview).
+
+## Smarter card setup
+
+When creating card properties from source properties, Studio now suggests sensible property IDs, and new card definitions default their property groups from the data source's property groups — so cards start organized the way your source data already is.
+
 ## New documentation site
 
-The Occtoo documentation has moved to a new platform with a modernized structure:
-
-- **API Reference** — interactive reference for the Ingest API and Events API, generated from our OpenAPI specifications, with a built-in playground and code samples.
-- **Integrations** — ingest providers and consumption formatters now live in their own section.
-- **Cleaner navigation** — task-based guide names, streamlined URLs, and step-by-step guides using structured steps. All previous URLs redirect to their new locations.
+The documentation moved to a new platform with an interactive API reference and playground, an Integrations section, cleaner navigation, and this changelog. All previous URLs redirect to their new locations.
 </Update>
 
-<Update label="June 2026" description="Platform" tags={["MCP", "AI"]}>
+<Update label="July 2026" description="Source analytics" tags={["Studio", "Ingest", "Media", "Platform"]}>
+## Analytics view for data sources
+
+The source detail page has a redesigned analytics experience: stat widgets for entries, properties, and import activity over time, with a date-range picker. A new language coverage report shows per-language localization completeness across all localized properties and entries.
+
+## Search and filter source entries
+
+Browse data source entries with search, facets, and flexible filter criteria in Studio. Imports now synchronize entries to the search index as part of the import itself, so changes show up immediately.
+
+## Replace assets without losing metadata
+
+Upload a replacement file for an existing asset while keeping its enrichment and metadata. Deleting a file now also removes all of its derived versions.
+
+## Usage limits
+
+The platform gained per-tenant usage limits for imports — request rate, request size, entry size, and property value size — with standard `429 + Retry-After` responses and clear per-entry errors, rolling out gradually per tenant.
+</Update>
+
+<Update label="June 2026" description="Segment tags" tags={["Segments", "Ingest", "Studio"]}>
+## Segment tags
+
+Attach metadata tags to segments. Tags flow into each exposed entry's metadata in destination indexes and can be used to filter destination queries. Includes validation, tag suggestions, and a tags UI on segment details.
+
+## Scheduled segment filters, completed
+
+Queued endpoint segment changes now support include and exclude filters at any level of the endpoint structure — root or nested relations — and queued changes can be deleted before they apply.
+
+## Custom date formats on ingest
+
+Timestamp properties can declare a source format, so data arriving with non-standard date formats is parsed correctly.
+
+## Smarter filter guardrails
+
+Studio now only offers filterable (indexed) properties in segment filters, and partial-match text filters only on full-text-search-enabled properties — preventing filters that silently return nothing.
+</Update>
+
+<Update label="May 2026" description="Property capabilities" tags={["Ingest", "Segments", "Destinations", "Studio"]}>
+## Source property capabilities
+
+An opt-in capabilities model for source properties: explicitly enable indexing (searchability), full-text search, and type conversion per property, with a dedicated capabilities UI in Studio. Properties can also carry descriptions, making your data model self-documenting.
+
+## Scheduled segments apply to destinations automatically
+
+Scheduled segments now queue themselves against destination endpoints and are applied and removed automatically when they activate or archive — manageable via API and the MCP server.
+
+## Choose returned properties in the Destination API
+
+API consumers can cherry-pick which properties a destination query returns, reducing payload sizes.
+
+## Studio import and export improvements
+
+The import flow supports localized content, and you now get a notification when an export file is ready to download.
+</Update>
+
+<Update label="April 2026" description="MCP server" tags={["MCP", "Ingest", "Destinations", "Studio"]}>
 ## Occtoo MCP server
 
-Connect AI assistants to your Occtoo tenant with the [Occtoo MCP server](/get-started/occtoo-mcp). Query sources, inspect schemas, and work with your data directly from MCP-enabled tools.
+AI assistants can now connect directly to your Occtoo tenant through the [Occtoo MCP server](/get-started/occtoo-mcp): search and query data, explore facets and property values, import data, and manage destinations — with tenant-specific connection URLs. Launched as a pilot and expanded rapidly in the following months.
+
+## Purge a data source
+
+Wipe all entries from a data source in one action, from Studio or the API, with events emitted so downstream systems stay consistent.
+
+## Source property management in Studio
+
+A new data source properties view: edit and delete source properties, change display names, and use the new wildcard property type. Source property matching is now case-insensitive across the platform.
+
+## Retry failed imports
+
+Re-run a failed import task via the API instead of re-uploading the payload. Failed exports can likewise be retried from the Studio Notification Center.
 </Update>
 
-<Update label="June 2026" description="Events" tags={["API"]}>
-## Events API
+<Update label="March 2026" description="Typed properties" tags={["Ingest", "Studio", "Destinations", "Cards"]}>
+## Typed data source properties
 
-Tenant-scoped events delivered as CloudEvents: pull events with cursors or subscribe to a live Server-Sent Events stream. See the [Events API reference](/api-reference/events/overview).
+Source properties are now first-class objects: each can carry a data type, delimiter for list types, and display name — managed via new GraphQL queries and mutations. See [working with properties and data types](/studio/properties-and-data-types).
+
+## Catalog landing page
+
+A new overview experience for the Catalog with configurable widgets, pinned items, and favorites.
+
+## Granular destination status
+
+Destination API versions now report finer-grained states — Updating, Operational, Restarting — and publishing status correctly reflects partial publishes.
+
+## Faster, more reliable ingestion
+
+The ingestion backbone was rebuilt with streaming entry storage: faster imports, correct merging of localized values, and predictable behavior for deleted-then-restored entries. Entry update events now include previous and current values.
 </Update>
 
-<Update label="October 2025" description="Integrations" tags={["Providers"]}>
-## Provider updates: Akeneo and Bluestone PIM
+<Update label="February 2026" description="Scheduled segments" tags={["Segments", "Destinations", "Studio", "Cards"]}>
+## Scheduled segments
 
-Updated ingest provider documentation for [Akeneo](/integrations/providers/akeneo) and [Bluestone PIM](/integrations/providers/bluestone-pim).
+Give segments a start and end time: they wait in a Scheduled state, activate automatically, and archive themselves when the window closes.
+
+## Destination publishing overhaul
+
+A clearer publishing-status flow, editable pending changes on endpoints, proper revert of property changes, protection against conflicting edits from multiple users, and republishing of destinations stuck in a failed state.
+
+## Multiple segments per endpoint
+
+Endpoint roots can now filter content with multiple segments in both include and exclude mode.
+
+## Copy card definitions
+
+Duplicate a card definition to save setup time when creating similar structures. Properties can now also be removed from card definitions safely, with "used by" information showing what depends on them first.
 </Update>
 
-<Update label="June 2025" description="Guides" tags={["Documentation"]}>
-## Refreshed data onboarding guide
+<Update label="January 2026" description="Catalog import/export" tags={["Studio", "Cards", "Segments"]}>
+## Import and export from the Catalog
 
-The [Get data into Occtoo](/get-started/get-data-into-occtoo) guide was rewritten with a full walkthrough of sources, entries, and providers.
+Export card data to CSV directly from the Catalog view — including large multi-page exports — and import data back in, with configurable delimiters and per-card-definition filtering.
+
+## Notification Center improvements
+
+Retry failed exports with one click, delete individual notifications, and clear the whole list at once.
+
+## Clear property values via the API
+
+Setting a property to `null` now properly clears its value on the card, including during deletions.
+
+## Relation sorting improvements
+
+Sort relations based on list properties, create relations without a sorting configuration, and enjoy a tidied-up relation editor.
 </Update>
