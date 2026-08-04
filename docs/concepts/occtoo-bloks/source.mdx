@@ -1,0 +1,48 @@
+---
+title: "Source"
+---
+
+Transferring data into Occtoo is very easy since Occtoo has no model or format that the data needs to fit to. The process of onboarding data is handled by Occtoo Source. This block makes sure the data is onboarded to Occtoo and accessible across different data domains.
+
+## Data source
+
+The data source can be viewed as a labeled bucket of data. It carries a name for itself and optionally the source system it relates to, this is all user input in management of these data sources. The data source does not enforce any type of schema for the data contained in it, so each entry contained within might have a different set of properties as received during the ingest. The data source does however keep track of the properties it has seen during ingest.
+
+## Data source entry
+
+The entries in a data source are the main source of information in Occtoo. Entries are imported with an unique identifier and a list of property values. The properties of an entry does not conform to any domain schema but is rather just the user input values merged with the existing version of the entry during ingest.
+
+```json
+{
+    "key": "some-id",
+    "delete": false,
+    "properties": [
+        {
+            "id": "propertyId",
+            "value": "some value",
+            "language": null                
+        }
+    ]
+}
+```
+
+Propeties of a entry can be tagged with a language code, providing the possibility of providing a property in multiple locales. As with the rest of source there is no schema forced upon the language field.
+
+```json
+    "properties": [
+        {
+            "id": "localizedPropertyId",
+            "value": "some value",
+            "language": "en"
+        },
+        {
+            "id": "localizedPropertyId",
+            "value": "some value with a New Zealand touch",
+            "language": "en-NZ"
+        }
+    ]
+```
+
+## Data provider
+
+To upload data into a specific source a connected `data provider` is required. Using the credentials of the data provider (i.e. client id and secret) the necessary token can be generated which will allow for a upload to be performed. A data provider can be connected to multiple sources and hence reused, but it is always bound to a specific tenant.

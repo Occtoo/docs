@@ -1,0 +1,28 @@
+---
+title: "inRiver"
+description: "About inRiver"
+---
+
+## About inRiver
+
+inRiver is a PIM software that’s built to scale, turn product data into a profit maker with the inriver PIM solution.
+Add value at every stage of the product journey with standout, data-driven experiences powered by Product Information Management software from inriver.
+
+Read more at [www.inriver.com](https://www.inriver.com/)
+
+## Introduction
+
+Generic importer is assumed to become universal tool for importing data from inRiver into Occtoo. Basic idea is to control creation of datasources and their structure through a [json configuration file](https://github.com/Occtoo/Occtoo.Provider.Inriver?tab=readme-ov-file#how-it-works).
+
+## How it works
+
+InRiver extensions to send data over to Occtoo.
+
+- EntityListener - Listens to CRUD events in InRiver and creates a Connector state
+- RelationListener - Listens to relation changes and create a Connector state
+- SendToOcctooExtension - Picks up the stored Connector states and transforms into documents and sends over to Occtoo
+- FullExport - Scheduled extension that only runs when manually triggered to export all data to Occtoo
+
+## Download and Installation
+
+Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Provider.Inriver). Build and deploy to your inriver instance

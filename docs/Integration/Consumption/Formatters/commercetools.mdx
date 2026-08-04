@@ -1,0 +1,189 @@
+---
+title: "commercetools"
+description: "Introduction"
+---
+
+## Introduction
+
+Occtoo provides a prebuilt formatter to easily transfer product, variant, category and attribute data from Occtoo to Commercetools.
+
+Changes are automatically propagated and the configuration possibilties makes it easy to tailor the integration to the customer needs.
+
+The rich UI in Occtoo Studio allows the users to select content to transfer by using segements, select languages, and what attributes to transfer. This gives the user full control and a great overview of the content transferred.
+
+## About commercetools
+
+commercetools is a cloud-based headless commerce platform that provides APIs to power e-commerce sales and similar functions for large businesses.
+
+Read more at [https://commercetools.com](https://commercetools.com)
+
+## Data flow
+
+The data available from a destination is transferred by a formatter och is pushed to an import container in commercetools. The category flow is optional but the product flow is mandatory. The formatter executes every hour and checks for deltas which are then sent to commercetools. There is also an option to do a manual full trigger when needed. The updates are pushed to a commercetools import container which imports the updates in an asynchrounous manner. This allows for large number of updates to be processed. A view of the progress of the import is available in Merchant center.
+
+![commercetools transfer overview](/images/commercetools_overview-8963081a1f08ec93d36317d9c1cf5ef2.jpg)
+
+## Installation/Setup
+
+### Prerequisites
+
+- Access to the commercetools Merchant Center
+- Access to code from Github
+
+### Download code from GitHub
+
+The repository is located at:
+
+[https://github.com/Occtoo/Occtoo.Formatter.Commercetools](https://github.com/Occtoo/Occtoo.Formatter.Commercetools)
+
+### Register API client in commercetools
+
+Register an API client in commercetools by going to Settings > Developer Settings and selecting ‘Create new API client’. Make sure to select the scopes needed by the formatter. Copy all the values presented in the API client details. Note that the values will only be shown once. Add the values to the following settings for the formatter:
+
+- CommercetoolsImportClient\_\_ClientId
+- CommercetoolsImportClient\_\_ClientSecret
+- CommercetoolsImportClient\_\_AuthorizationBaseAddress
+- CommercetoolsImportClient\_\_Scope
+- CommercetoolsImportClient\_\_ProjectKey
+- CommercetoolsImportClient\_\_ApiBaseAddress
+
+<Info>
+Please note that the values for CommercetoolsImportClient\_\_AuthorizationBaseAddress and CommercetoolsImportClient\_\_ApiBaseAddress must end with a slash (‘/’).
+</Info>
+
+![commercetools register api client](/images/commercetools_apiClient-8348e9c411f3e44e00893ebf40e63d9e.png)
+
+### Endpoints
+
+#### Products
+
+The product flow is mandatory and an endpoint needs to be provided for product and product variant data. The URL for the product endpoint should be added to the configuration setting:
+
+- DestinationSettings\_\_ProductUrl
+
+There are some mandatory properties required for the endpoint:
+
+- productName- Localized Text
+- productSlug - Localized Text
+- productId - Text
+
+The following properties are recommended for the endpoint:
+
+- productCategories- List
+- sku - Text
+- productDescription - Text
+- productType - Text
+- productMetaTitle - Localized Text
+- productKeywords - Localized Text
+- isMasterVariant - Boolean
+
+![commercetools products](/images/commercetools_products-5d1cb7fb987160bc6c6188c3ce952165.png)
+
+#### Category
+
+The category flow is optional and requires a separate endpoint for the categories. If used, the URL should be added to the configuration setting:
+
+- DestinationSettings\_\_CategoriesUrl
+
+Omitting this setting means that no category data will be transferred. The following properties are mandatory for the endpoint:
+
+- name - Localized Text
+- slug- Localized Text
+
+The following properties are recommended for the endpoint:
+
+- description - Localized Text
+- parent- Text
+- externalId - Text
+- metaTitle - Localized Text
+- metaDescription - Localized Text
+- metaKeywords - Localized Text
+- orderHint - Text
+
+<Info>
+Please note that the orderHint needs to be a value between 0 and 1
+</Info>
+
+![Occtoo category](/images/occtoo_category-cadc34850c62e1d820c91f7afca65647.png)
+
+![commercetools category](/images/commercetools_categories-652fbfc7b4cf8c928626fb9525587645.png)
+
+### Register application in Occtoo
+
+Register an application and save the settings in the configuration file for the formatter. Add the following settings for the formatter:
+
+- ApiClientCredentials\_\_ClientId
+- ApiClientCredentials\_\_ClientSecret
+- ApiClientCredentials\_\_TokenAuthUrl
+
+![Occtoo application](/images/occtoo_application-46482c83037ef93889eb021e977c0b95.png)
+
+### Product Type
+
+Create a product type for assigning to all products. Add the key CommercetoolsSettings\_\_ProductTypeName to configuration file for the formatter.
+
+![commercetools product types](/images/commercetools_productType-9f41f3ec1ce665ed66e5e8baf01fb894.png)
+
+### Languages
+
+The languages configured for the destination should match the languages configured in the Merchant Center. The list of outbound languages should be added in the configuration file for the formatter. Each language should have it’s own row with the format. Example: "CommercetoolsSettings\_\_Languages\_\_[0]": "en”
+
+"CommercetoolsSettings\_\_Languages\_\_[1]": "en-US”
+
+"CommercetoolsSettings\_\_Languages\_\_[2]": "de-DE”
+
+![commercetools languages](/images/commercetools_languages-ae2922abfb2c5f86f3adea26d5d68df9.png)
+
+![Occtoo languages](/images/occtoo_languages-ceec4458ec45559036343f41c602b472.png)
+
+### Import container
+
+Import containers are created automatically and can be viewed in the Merchant center. It can be used to view ongoing imports and give information about potential failures.
+
+![commercetools category](/images/commercetools_import_container-c54fccdbf753303f7d6f18417dcc31e7.png)
+
+### Attributes
+
+Create attributes in commercetools where and set the attribute key to match the property identifier in Occtoo. The attributes should be created under the Product Type specified in the previous step. For List values in commercetools the values need to be predefined before they can be used. Add the selected attributes to transfer in the configuration file for the formatter and specify the commercetools attribute type for each attribute. Example:
+
+- CommercetoolsSettings\_\_AttributeDictionary\_\_WashingTemperature: “Number”
+- CommercetoolsSettings\_\_AttributeDictionary\_\_IsWashable: “Boolean”
+- CommercetoolsSettings\_\_AttributeDictionary\_\_DetailedDescription: “LocalizedText”
+- CommercetoolsSettings\_\_AttributeDictionary\_\_Color: “EnumList”
+
+The supported attribute types are:
+
+- Boolean
+- Text
+- LocalizedText
+- Number
+- DateTime
+- Date
+- Time
+- EnumList
+- LocalizedList
+
+### Product publishing
+
+To automatically set the Products or Product Variants as published when transferring to commercetools there are two settings that can be set to ‘true’:
+
+- CommercetoolsSettings\_\_PublishProducts
+- CommercetoolsSettings\_\_PublishProductVariants
+
+### Manual execution
+
+To execute the manual flow there is a POST endpoint which can be utilized. The URL for the endpoint is
+
+```html
+https://[root-url]/api/ManualDataTransfer
+```
+
+The request body for the endpoint is a JSON object with a 'LastRunTime' parameter. This allows for specifying when the delta should be run from. If a full synch is needed, the last run can be set to a very low date time.
+
+```json
+/*Execution request body*/
+
+{
+ "LastRunTime": "2000-01-01T00:00:00.000Z"
+}
+```

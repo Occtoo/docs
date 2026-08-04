@@ -1,0 +1,28 @@
+---
+title: "Newstore"
+description: "About Newstore"
+---
+
+## About Newstore
+
+Amazing shopping experiences, everywhere. Live in 55 countries, the NewStore Omnichannel Platform is the ONLY retail solution with POS, OMS, inventory, and fully integrated native shopping apps. All delivered as-a-service.
+
+Read more at [https://www.newstore.com/](https://www.newstore.com/)
+
+## Introduction
+
+This is a template project for creating a Formatter from Occtoo API to [NewStore](https://www.newstore.com/). Available via [Github](https://github.com/Occtoo/Occtoo.Formatter.Newstore).
+
+## How it works
+
+The solution has functions working as shown below:
+
+![Architectual Overview](/images/NewstoreFormatter-6a6f051bcb71f5055deab4d8d50af301.png)
+
+NewStoreExport (HttpTrigger) - Called to get products from the Occtoo API. It creates json files on blobstorage and send a message to the queue
+
+NewStoreOutboxDequeue (QueueTrigger) – Picks up the queue items and sends it to Newstore
+
+## Download and Installation
+
+Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Formatter.Newstore). Build and deploy to your azure instance

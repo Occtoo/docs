@@ -1,0 +1,644 @@
+---
+title: "Ingest"
+---
+
+Ingesting data into Occtoo is facilitated by the Ingest API. This powerful API serves as the backbone of the data ingestion process, allowing both data and media to be seamlessly pushed into Occtoo. All [providers](/docs/Integration/Ingest/Providers) utilize this API via the [onboarding SDK](/docs/Integration#onboarding-sdk), acting as bridges between external systems and Occtoo's ecosystem.
+
+## Data ingest
+
+Data ingestion is performed using the ingest API. Two endpoints, *tokens* and *import*, are necessary for completing a data import. The import sequence always needs to start with a request for a token, as all imports require authentication. Using the token, the import endpoint can then be called.
+
+<Accordion title="Data import sequence visualzation">
+![Data ingest](/images/integration-light.png)![Data ingest](/images/integration-dark.png)
+</Accordion>
+
+### Rules
+
+There are a set of rules related to the ingest data that need to be respected for the payload to be accepted by the ingest API:
+
+- Entry key can have a length of 1-256 characters.
+- Property ID can have a length of 1-256 characters.
+- Property language can have a length of 2-10 characters.
+- The following characters are allowed in entry key, property ID, or property language:
+  - a-z (lowercase a to z)
+  - A-Z (uppercase A to Z)
+  - 0-9 (numbers 0 to 9)
+  - \_ (underscore)
+  - - (hyphen)
+
+<Warning>
+If one of the rules is broken for *any* of the entries in a payload, the **entire import** will be rejected. The API response will indicate what the error is.
+</Warning>
+
+```javascript
+// Response HTTP Code 400 Bad Request
+{
+    "result": null,
+    "errors": [
+        {
+            "message": "Invalid request",
+            "details": {
+                "propertyName": "entities",
+                "message": "Entity keys contain restricted characters. The following ids containing restricted characters: @2"
+            }
+        }
+    ],
+    "requestId": "254db272f8af8cfe0e01051951cb1550"
+}
+```
+
+### Recommendations
+
+We recommend that payloads containing entities adhere to the following guidelines for optimal performance and efficiency:
+
+- **Total payload size:** Ensure that the total payload size does not exceed 20 MB. This helps maintain efficient data transfer and processing.
+- **Single entity size:** Each individual entity within the payload should not exceed 1 MB in size. Keeping entity sizes manageable improves processing speed and reduces the risk of errors.
+- **Payload entity limit:** It is recommended that a single payload does not contain more than 1000 entities. This limit helps maintain optimal performance during data ingestion and processing.
+
+Adhering to these guidelines will help ensure smooth and efficient handling of payloads containing entities, leading to improved system performance and reliability.
+
+### API endpoints
+
+#### Token
+
+The tokens endpoint is accessed via a POST request, and upon passing valid credentials, a token is returned. This token remains valid for 60 minutes from its creation and can be reused an unlimited number of times within that timeframe.
+
+```text
+https://ingest.occtoo.com/dataProviders/tokens
+```
+
+<Tip>
+Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
+</Tip>
+
+##### Request payload
+
+The tokens endpoint accepts a JSON payload in the body, consisting of the properties `id` and `secret`. These properties correspond to the identifiers provided by the [data provider](/docs/occtoo-studio/guides/sources/add-data-provider) used for the import.
+
+```javascript
+{
+    "id" : "{@DATA-PROVIDER-ID}",
+    "secret": "{@DATA-PROVIDER-SECRET}"
+}
+```
+
+##### Response payload
+
+Upon successful authentication of the passed credentials, an **access token** is returned from the API using the format below.
+
+```javascript
+// Response HTTP Code 200 OK
+{
+    "result": {
+        "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKV1QgQnVpbGRlciIsImlhdCI6MTcxMTAwOTE2OCwiZXhwIjoxNzQyNTQ4NzY4LCJhdWQiOiJPY2N0b28gdXNlcnMiLCJzdWIiOiJGYWtlIHRva2VuIGFzIGV4YW1wbGUiLCJkb21haW4iOiJPY2N0b28iLCJyb2xlIjoidXNlciJ9.bzcVlU0yDN9yGNbMMe8B_4jsGJszkczGAlT4ocJL0uA",
+        "expiresIn": 3600,
+        "tokenType": "Bearer",
+        "refreshToken": null,
+        "scope": "occtoo.user.writer"
+    },
+    "errors": [],
+    "requestId": "a4b78c500643fa1271eb84bb6b2d028b"
+}
+```
+
+#### Import
+
+Imports are initiated by sending a POST request to the URL ending with the identifier of the [data source](/docs/occtoo-studio/guides/sources/add-data-source) to which the data is intended for import.
+
+```text
+https://ingest.occtoo.com/import/{@DATA-SOURCE-IDENTIFIER}
+```
+
+The import endpoint accepts a JSON payload consisting of one or several entities. All import requests need to be authenticated by providing a bearer token as the authentication method. Upon successful import, the API will respond with an HTTP Code 202 Accepted, provided that the import content follows the [rules](#rules).
+
+##### Request payload
+
+The import format is structured as follows:
+
+- **entities**: Array of entities to be included in the import
+  - **key** (Mandatory): Unique identifier of the entity
+  - **delete** (Optional): Flag indicating if the entity is to be deleted (true) or added/updated (false)
+  - **properties** (Mandatory): Array of properties of the entity
+    - **id** (Mandatory): Unique identifier of the property
+    - **value** (Mandatory): Value of the property
+    - **language** (Optional): The language code for the property
+
+<Tabs>
+  <Tab title="Standard">
+<Tip>
+If an entry is to be added or updated, the **delete property** *can optianlly* be omitted.
+</Tip>
+
+```javascript
+{
+    "entities" : [
+    {
+        "key" : "Entry-key",
+        "delete" : false,
+        "properties" : [
+        {
+            "id" : "Property-ID",
+            "value" : "Property Value",
+            "language" : "Code"
+        }
+        ]
+    }
+    ]
+}
+```
+  </Tab>
+  <Tab title="Multiple items">
+<Tip>
+It is obviously possible to send both multiple entries with multiple properties in a single payload.
+</Tip>
+
+```javascript
+{
+    "entities" : [
+    {
+        "key" : "item123",
+        "delete" : false,
+        "properties" : [
+        {
+            "id" : "my-property",
+            "value" : "My propery value for item123",
+            "language" : "en-us"
+        }
+        ]
+    },
+    {
+        "key" : "item456",
+        "delete" : false,
+        "properties" : [
+        {
+            "id" : "my-propery",
+            "value" : "My propery value for item456. This text is slightly longer",
+            "language" : "en-us"
+        }
+        ]
+    }
+    ]
+}
+```
+  </Tab>
+  <Tab title="Multiple properties & languages">
+<Tip>
+To provide a property in multiple languages, repeat the property ID with its corresponding language code and value. If a property is not to be localized, the **language property** can optionally be omitted, left blank, or set to null.
+</Tip>
+
+```javascript
+    {
+        "entities" : [
+        {
+            "key" : "item123",
+            "properties" : [
+            {
+                "id": "My-first-prop",
+                "value":"This is the value of my-first-prop in English",
+                "language": "en"
+            },
+            {
+                "id": "My-first-prop",
+                "value":"これがmy-first-propの値です",
+                "language": "jp"
+            },
+            {
+                "id": "My-second-prop",
+                "value":"This is the value of My-second-prop"
+            },
+            {
+                "id": "My-third-prop",
+                "value":"This is the value of My-third-prop",
+                "language": null
+            },
+            {
+                "id": "My-fourth-prop",
+                "value":"This is the value of My-fourth-prop",
+                "language": ""
+            }
+            ]
+        }
+        ]
+    }
+```
+  </Tab>
+  <Tab title="Delete payload">
+<Tip>
+When removing entities, there is *no need* to send any properties in the payload as the item is to be deleted. Omitting properties also reduces the import payload size and thus saves the planet, one byte at a time 😉.
+</Tip>
+
+```javascript
+    {
+        "entities" : [
+        {
+            "key" : "item123",
+            "delete" : true,
+            "properties" : []
+        }
+        ]
+    }
+```
+  </Tab>
+  <Tab title="Mixed actions payload">
+<Tip>
+One has the option to mix actions in the payload, adding entities at the same time as updating or removing others.
+</Tip>
+
+```javascript
+{
+    "entities" : [
+    {
+        "key" : "item123",
+        "delete" : true,
+        "properties" : []
+    },
+    {
+        "key" : "item456",            
+        "properties" : [
+        {
+            "id": "My-prop",
+            "value":"This is a multi action payload example",
+            "language": "en"
+        },        
+    ]
+}
+```
+  </Tab>
+</Tabs>
+
+##### Response payload
+
+The status of the import is given by the HTTP response code of the request.
+
+```javascript
+// Response HTTP Code 202 Accepted
+{
+    "result": {
+        "id": "9d4a30c2-949d-4c4e-afb2-dc9279dbbd95"
+    },
+    "errors": [],
+    "requestId": "e9162cfaa9a41cccc919db13356ef5b7"
+}
+```
+
+## Media ingest
+
+Media ingestion can be performed using the ingest API, but the media file to be uploaded must be available at a public URL. The Occtoo [onboarding SDK](/docs/Integration#onboarding-sdk) supports uploading via streaming content directly. The import sequence must always start with a request for a token, as all imports require authentication. Once the token is obtained, the import endpoint can be called.
+
+All uploaded media files are provided with an Occtoo media file identifier. The media file ID is used for all API interactions related to the file. When uploading a file, users have the option to provide their own unique identifiers as an attribute to the file. The unique ID attribute is respected, meaning that once it is used, any additional upload attempts with that same unique ID will fail. If a media file needs to be replaced, users must first delete the original and then upload the updated file.
+
+All uploads are made asynchronously, and the ingest API allows for multiple uploads to be initiated in a single request. To track the status of uploads, users can use the [Upload Status API](#upload-status).
+
+Media information can be retrieved either using user-provided unique IDs via the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier), or using the Occtoo media file ID via the [Media File Information by File ID API](#media-file-information-by-file-id).
+
+<Accordion title="Media upload via link sequence visualzation">
+Upload media files using links via the [Upload via Links API](#upload-via-links).
+
+![Media upload via link sequence](/images/media-upload-via-links-light.png)![Media upload via link sequence](/images/media-upload-via-links-dark.png)
+</Accordion>
+
+<Accordion title="Get media upload status sequence visualzation">
+Get the upload status of a induvidual file using the Occtoo media file ID with the [Upload Status API](#upload-status).
+
+![Get media upload status sequence](/images/media-upload-status-light.png)![Get media upload status sequence](/images/media-upload-status-dark.png)
+</Accordion>
+
+<Accordion title="Get media information by ID sequence visualzation">
+Get detailed media information of a induvidual media file using the [Media File Information by File ID API](#media-file-information-by-file-id).
+
+![Get media information by ID sequence](/images/media-information-by-id-light.png)![Get media information by ID sequence](/images/media-information-by-id-dark.png)
+</Accordion>
+
+<Accordion title="Get media information by unique identifier sequence visualzation">
+Get detailed media information for one or multiple media files using the unique ID attribute with the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier).
+
+![Get media information by unique identifier sequence](/images/media-information-by-unique-identifier-light.png)![Get media information by unique identifier sequence](/images/media-information-by-unique-identifier-dark.png)
+</Accordion>
+
+<Accordion title="Delete media sequence visualzation">
+Delete an uploaded media file with the [Delete Media File endpoint](#delete-media) using the assigned Occtoo Media File ID.
+
+![Delete media sequence](/images/delete-media-light.png)![Delete media sequence](/images/delete-media-dark.png)
+</Accordion>
+
+### API endpoints
+
+#### Token
+
+The tokens endpoint is accessed via a POST request, and upon passing valid credentials, a token is returned. This token remains valid for 60 minutes from its creation and can be reused an unlimited number of times within that timeframe.
+
+```text
+https://ingest.occtoo.com/dataProviders/tokens
+```
+
+<Tip>
+Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
+</Tip>
+
+##### Request payload
+
+The tokens endpoint accepts a JSON payload in the body, consisting of the properties `id` and `secret`. These properties correspond to the identifiers provided by the [data provider](/docs/occtoo-studio/guides/sources/add-data-provider) used for the import.
+
+```javascript
+{
+    "id" : "{@DATA-PROVIDER-ID}",
+    "secret": "{@DATA-PROVIDER-SECRET}"
+}
+```
+
+##### Response payload
+
+Upon successful authentication of the passed credentials, an **access token** is returned from the API using the format below.
+
+```javascript
+// Response HTTP Code 200 OK
+{
+    "result": {
+        "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKV1QgQnVpbGRlciIsImlhdCI6MTcxMTAwOTE2OCwiZXhwIjoxNzQyNTQ4NzY4LCJhdWQiOiJPY2N0b28gdXNlcnMiLCJzdWIiOiJGYWtlIHRva2VuIGFzIGV4YW1wbGUiLCJkb21haW4iOiJPY2N0b28iLCJyb2xlIjoidXNlciJ9.bzcVlU0yDN9yGNbMMe8B_4jsGJszkczGAlT4ocJL0uA",
+        "expiresIn": 3600,
+        "tokenType": "Bearer",
+        "refreshToken": null,
+        "scope": "occtoo.user.writer"
+    },
+    "errors": [],
+    "requestId": "a4b78c500643fa1271eb84bb6b2d028b"
+}
+```
+
+#### Upload via links
+
+Media uploads are initiated by sending a PUT request containing a list of one or more media files to be uploaded. Upon successful acceptance of the payload, the API will respond with an HTTP Code 202 Accepted.
+
+```text
+https://ingest.occtoo.com/media/uploads/links
+```
+
+##### Request payload
+
+The upload via links payload format is structured as follows:
+
+- **links**: Array of links to the media be included in the import
+  - **filename** (Mandatory): The filename of the media file when uploaded
+  - **link** (Mandatory): The URL to the media to be uploaded
+  - **uniqueidentifier** (Optional): Unique identifier of the media to be uploaded
+
+<Tip>
+If the media file that is to be upload contains [illegal characters](#rules-1) one can use the filename attribute to rename the file as this is the name that will be used for the file when uploaded to the Occtoo media service.
+</Tip>
+
+<Tabs>
+  <Tab title="Standard">
+<Tip>
+You can mix and match different types of media and locations when uploading.
+</Tip>
+
+```javascript
+{
+  "links": [
+    {
+      "filename": "my-media-file-name.png",
+      "link": "https://www.the.url/to/the/media/file/my-media-file-name.png",
+      "uniqueidentifier": "1709807830"
+    },
+    {
+      "filename": "another-media-file.tif",
+      "link": "https://www.another.url/to/a/media/file/location/another-media-file.tif",
+      "uniqueidentifier": "1709808053"
+    }
+  ]
+}
+```
+  </Tab>
+  <Tab title="Without unique identifer">
+<Tip>
+It is possible to either set **uniqueidentifer** to *null* or omit it entirely from the payload. Although it is our **strong recommendation** that a unique identifier is used to avoid reuploading the same binary multiple times.
+</Tip>
+
+```javascript
+{
+  "links": [
+    {
+      "filename": "my-media-file-name.png",
+      "link": "https://www.the.url/to/the/media/file/my-media-file-name.png",
+    },
+    {
+      "filename": "another-media-file.tif",
+      "link": "https://www.the.url/to/the/media/file/another-media-file.tif",
+      "uniqueidentifier": null
+    }
+  ]
+}
+```
+  </Tab>
+</Tabs>
+
+##### Response payload
+
+The response is divided into two parts: `succeeded` and `failures`. Since file uploads are handled asynchronously, each linked media's information in the sent payload indicates whether the file has finished uploading to Occtoo. Accepted links receive an Occtoo media ID, which can be used to query the upload status of individual links using the [upload status](#upload-status) endpoint. This same ID can also be used to retrieve media file details using the [media information by file ID](#media-file-information-by-file-id) endpoint. If an upload link was rejected for any reason (such as conflicting unique identifiers or unreachable URLs), it will be categorized under the `failures` section with an error message explaining the cause of the failed upload.
+
+```javascript
+{
+    "result": {
+        "succeeded": {
+            "https://www.the.url/to/the/media/file/my-media-file-name.png": {
+                "id": "6601c9e3-b4df-4610-ba0c-cfeb29432a63",
+                "progress": {
+                    "totalSize": 107508,
+                    "uploadedSize": 107508,
+                    "completedPercentage": 100.0,
+                    "isCompleted": true
+                },
+                "state": "Completed",
+                "sourceUrl": "https://www.the.url/to/the/media/file/my-media-file-name.png",
+                "createdAt": "2024-03-07T12:40:42.9386452+00:00",
+                "updatedAt": "2024-03-07T12:40:42.9386453+00:00",
+                "metadata": {
+                    "filename": "my-media-file-name.png",
+                    "mimeType": "application/octet-stream",
+                    "uniqueIdentifier": "1709807830",
+                    "size": 107508
+                }
+            }
+        },
+        "failures": {
+            "https://www.the.url/to/the/media/file/another-media-file.tif": {
+                "error": "Media File with uniqueIdentifier [1709808053] already exists"
+            }
+        }
+    },
+    "errors": [],
+    "requestId": "cc29d09e6625df925891351523566d1a"
+}
+```
+
+#### Upload status
+
+The upload status of a induvidual file can be checked by sending a GET request with the provided Occtoo media ID. Upon successful request, the API will respond with an HTTP Code 200 OK.
+
+```text
+https://ingest.occtoo.com/media/uploads/{@OCCTOO-MEDIA-ID}
+```
+
+##### Response payload
+
+The response payload contains detailed information on the current status of the upload.
+
+```javascript
+{
+    "result": {
+        "id": "6601c9e3-b4df-4610-ba0c-cfeb29432a63",
+        "progress": {
+            "totalSize": 107508,
+            "uploadedSize": 107508,
+            "completedPercentage": 100.0,
+            "isCompleted": true
+        },
+        "state": "Completed",
+        "sourceUrl": "https://www.the.url/to/the/media/file/my-media-file-name.png",
+        "createdAt": "2024-03-07T12:40:42.9386452+00:00",
+        "updatedAt": "2024-03-07T12:40:42.9386453+00:00",
+        "metadata": {
+            "filename": "my-media-file-name.png",
+            "mimeType": "application/octet-stream",
+            "uniqueIdentifier": "1709807830",
+            "size": 107508
+        }
+    },
+    "errors": [],
+    "requestId": "c9e82ec7e9d49018e7cc076ea1336bb2"
+}
+```
+
+#### Media file information by File ID
+
+Detailed media information can be fetched by doing a GET request with the Occtoo media ID. Upon successful request, the API will respond with an HTTP Code 200 OK.
+
+```text
+https://ingest.occtoo.com/media/files/{@OCCTOO-MEDIA-ID}
+```
+
+##### Response payload
+
+The response contains the **public URL** that is to be used when accessing the media. Additionally, the response contains the `metadata` object, which provides more details about the media object, such as its size and MIME type. If the media object is an image file (e.g., jpg, png) or a video file (e.g., XXXX), there is detailed information about the file encapsulated in the `mediaInfo` object.
+
+```javascript
+{
+    "result": {
+        "id": "6601c9e3-b4df-4610-ba0c-cfeb29432a63",
+        "publicUrl": "https://cdn.occtoo-media.com/24885f4e-9f70-44ad-870e-d18362a20b2b/6601c9e3-b4df-4610-ba0c-cfeb29432a63/my-media-file-name.png",
+        "sourceUrl": "https://www.the.url/to/the/media/file/my-media-file-name.png",        
+        "metadata": {
+            "filename": "my-media-file-name.png",
+            "mimeType": "image/png",
+            "size": 107508,
+            "extension": ".png",
+            "mediaInfo": {
+                "image": {
+                    "width": 400,
+                    "height": 668,
+                    "resolution": {
+                        "vertical": 3779.0,
+                        "horizontal": 3779.0
+                    }
+                }
+            }
+        }
+    },    
+    "errors": [],
+    "requestId": "0efc737c456fddfca0cd0d0b85ab19b6"
+}
+```
+
+#### Media file information by unique identifier
+
+To fetch detailed media information for multiple objects simultaneously, you can make a POST request to the batch endpoint, providing a list of unique identifiers. Upon a successful request, the API will respond with an HTTP Code 200 OK.
+
+```text
+https://ingest.occtoo.com/media/files/batch
+```
+
+##### Request payload
+
+The endpoint accepts a JSON payload in the body, which consists of a list of unique identifiers used during the media upload process.
+
+```javascript
+{
+  "UniqueIdentifiers": [
+    "1709807830",
+    "1709808053",
+    "my-fake-unique-id"
+  ]
+}
+```
+
+##### Response payload
+
+The response is divided into two parts: `succeeded` and `failures`. Media information for each media object that could be identified via its unique identifier is listed under `succeeded`. The response contains the **public URL** to access the media. Additionally, it includes the `metadata` object, which provides details such as size and MIME type. If the media object is an image file (e.g., jpg, png) or a video file (e.g., XXXX), detailed information is encapsulated in the `mediaInfo` object.
+
+Unique identifiers that were not found are sorted under `failures`.
+
+```javascript
+{
+    "result": {
+        "succeeded": {
+            "1709807830": {
+                "id": "6601c9e3-b4df-4610-ba0c-cfeb29432a63",
+                "publicUrl": "https://cdn.occtoo-media.com/24885f4e-9f70-44ad-870e-d18362a20b2b/6601c9e3-b4df-4610-ba0c-cfeb29432a63/my-media-file-name.png",
+                "sourceUrl": "https://www.the.url/to/the/media/file/my-media-file-name.png",                
+                "metadata": {
+                    "filename": "my-media-file-name.png",
+                    "mimeType": "image/png",
+                    "size": 107508,
+                    "extension": ".png",
+                    "mediaInfo": {
+                        "image": {
+                            "width": 400,
+                            "height": 668,
+                            "resolution": {
+                                "vertical": 3779.0,
+                                "horizontal": 3779.0
+                            }
+                        }
+                    }
+                }
+            },
+            "1709808053": {
+                "id": "1321b879-99a7-421c-b74f-0e756450e9f5",
+                "publicUrl": "https://cdn.occtoo-media.com/24885f4e-9f70-44ad-870e-d18362a20b2b/1321b879-99a7-421c-b74f-0e756450e9f5/another-media-file.tif",
+                "sourceUrl": "https://www.another.url/to/a/media/file/location/another-media-file.tif",
+                "metadata": {
+                    "filename": "another-media-file.tif",
+                    "mimeType": "image/tiff",
+                    "size": 13498048,
+                    "extension": ".tif",
+                    "mediaInfo": {
+                        "image": {
+                            "width": 1000,
+                            "height": 1000,
+                            "resolution": {
+                                "vertical": 1,
+                                "horizontal": 1
+                            }
+                        }                     
+                    }
+                }
+            }
+        },
+        "failures": {
+            "my-fake-unique-id": {
+                "message": "MediaFile not found in tenant 24885f4e-9f70-44ad-870e-d18362a20b2b"
+            }
+        }
+    },
+    "errors": [],
+    "requestId": "327015f59f3148dafd5fcb8ced83ee5c"
+}
+```
+
+#### Delete media
+
+To delete a media object one sends a DELETE request containing the Occtoo media ID. Upon successful request, the API will respond with an HTTP Code 204 No Content.
+
+```text
+https://ingest.occtoo.com/media/files/{@OCCTOO-MEDIA-ID}
+```

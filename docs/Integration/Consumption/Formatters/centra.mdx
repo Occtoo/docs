@@ -1,0 +1,28 @@
+---
+title: "Centra"
+description: "About Centra"
+---
+
+## About Centra
+
+Centra serves both wholesale and direct-to-consumer sales. It enables brands to handle all channels from one platform - both Wholesale B2B and Direct-to-Consumer B2C.
+
+Read more at [https://centra.com](https://centra.com)
+
+## Introduction
+
+This is a template project for creating a Formatter from Occtoo API to [Centra](https://centra.com/). Available via [Github](https://github.com/Occtoo/Occtoo.Formatter.Centra).
+
+## How it works
+
+The solution has functions working as shown below:
+
+![Architectual Overview](/images/CentraFormatter-2c985cb54eb069ac0957ff60682f6120.png)
+
+Orchestrator – is called every two minutes and depending on the state of the finite-state machine calls Occtoo API and fills the queue
+
+ProcessProductMasterFromQueue (QueueTrigger) – Loads flatten SKU list for specific productMaster, create product hierarchy necessary for import process and import product (variants, SKUs) into Centra DB
+
+## Download and Installation
+
+Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Formatter.Centra). Build and deploy to your azure instance

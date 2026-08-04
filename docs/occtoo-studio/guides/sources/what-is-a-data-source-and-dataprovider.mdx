@@ -1,0 +1,15 @@
+---
+title: "What is a data source & data provider?"
+---
+
+A data source is a location where data can be gathered and stored from different sources. Data can have different origins from PIM, ERP, and CRM but it can also be manual imports directly in the source itself throughout the built in CSV importer.
+
+Follow our quick start guides to quickly get started with onboarding data:
+
+- [Get data into Occtoo](/docs/get-started/provide-data)
+
+<Info>
+Data can be consolidated in Occtoo from multiple systems, one system can have multiple sources inside occtoo, for example ERP can have prices, stock and customer as different sources.
+</Info>
+
+A data provider, as represented in the Occtoo Studio, is embodying the integration application that is providing a source with data. Each data provider has a unique provider id and secret that is used to get the necessary token for pushing data to the ingest API. A data provider can have grants to several sources.

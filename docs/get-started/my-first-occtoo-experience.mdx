@@ -1,0 +1,110 @@
+---
+title: "My first Occtoo experience"
+description: "Welcome 👋!"
+---
+
+## Welcome 👋!
+
+We are very happy that you've decided to give Occtoo a go and hope that [**the trial**](https://www.occtoo.com/free-trial) will provide you with all answers you might have. If not, *do not* hesitate to reach out to your appointed CX representative.
+
+On this page we've saved a set of [**useful links**](#useful-links) along with an introduction to help guide you through the trial environment that you've been given access too. The environment has been preloaded with data that are there to further aid in the understanding of how Occtoo fits in the new digital landscape and to display how easy it is to create tailored APIs for any digital initiatives you might have going on.
+
+As a starting point, we strongly recommend that you at least skim through the [**Occtoo blocks concept page**](/docs/concepts/occtoo-bloks) to get a better understanding, not only about of the different parts that make up Occtoo, but also what their purposes are.
+
+#### TL;DR
+
+In a hurry 🏃? Don't worry, we've save a set of [**useful links**](#useful-links) at the bottom of this page to get right into the action.
+
+## Catalog
+
+The catalog section is a powerful part of Occtoo, adding many new functionalities to the platform. It’s a way for users to find and manage products, variants & SKUs with ease, as well as enriching them. The datamodel supports variants, hierarchies, localization, business logic and more to craft comprehensive product experiences for complex and configurable products.
+
+![An image from the static](/images/catalogue-summary-1-b67299b62b0185a0d7e0cd8a7b521840.png)
+
+## Source
+
+Source is the block that displays the data that has been [**onboarded into Occtoo**](/docs/get-started/provide-data). The trial version offers limited functionality in this block but don't worry; we've created three data sources (product, price and customer) and pre-loaded them with data.
+
+![An image from the static](/images/soure-pre-loaded-sources-41c25ec3fa1893db5657de191b042375.png)
+
+In the non trial version of source you can either [**create new**](/docs/occtoo-studio/guides/sources/add-data-source) data sources or manage ([**edit**](/docs/occtoo-studio/guides/sources/how-to-update_source) or [**delete**](/docs/occtoo-studio/guides/sources/delete-data-source)) existing ones. You also have the possibilty to dive into a data source, [**search for**](/docs/occtoo-studio/guides/sources/how-to-search-in-source), and inspect induvidual data entries thats been onboarded, even [**removing them**](/docs/occtoo-studio/guides/sources/how-to-delete-an-entry) if the need arises. In the full version you also have the possbility to [**import data using CSV**](/docs/occtoo-studio/guides/sources/how-to-import-data-manual) directly into a data source.
+
+In order to programmatically [**upload data**](/docs/occtoo-studio/guides/sources/how-is-data-onboarded) into a source one is in need of a data provider, these are also managed ([**created**](/docs/occtoo-studio/guides/sources/add-data-provider), [**edited**](/docs/occtoo-studio/guides/sources/edit-data-provider) and [**deleted**](/docs/occtoo-studio/guides/sources/delete-data-provider)) within the source block.
+
+Allright, so now we have some data in the system ... let's do something useful with it in Cards 👇!
+
+## Card
+
+The Card block is were you "bring order to chaos" in the sense that it allows you as a user to model and repurpose the onboarded data into entities that you want to provide as an data via APIs. We've prepared two cards (product & price) that are *ready to use*.
+
+![An image from the static](/images/cards-pre-populated-5ddb4b2556ae82e014582b046dc13113.png)
+
+The starting point in cards is obviously the [**creation of a new card**](/docs/occtoo-studio/guides/card/how-to-create-card) which includes defining its [**name**](/docs/occtoo-studio/guides/card/how-to-create-card#add-card-details) and [**description**](/docs/occtoo-studio/guides/card/how-to-create-card#add-card-details) as well as [**which data source**](/docs/occtoo-studio/guides/card/how-to-create-card#add-card-details) to base the card upon. When defining which data source to use in the card, all properties in that data source is automatically made available when defining which to use on the card. When adding the card you also get the possibility to add structure to the otherwise unstructured data that was onboarded in the sense that you for individual properties get to define, not only its name and identifier, but also what [**type of data**](/docs/concepts/occtoo-bloks/card#properties) that it has.
+
+![An image from the static](/images/cards-structure-data-c70c7171dc40950309f3d70f7ead7bad.png)
+
+The time to complete the task of creating a card, and defining its included properties, can vary drastically from case to case and hence you always have the possibility as a user to get back to your card and update properties, [**adding new ones**](/docs/occtoo-studio/guides/card/how-to-add-property-existing-card) or [**changing old ones**](/docs/occtoo-studio/guides/card/how-to-update-an-existing-property). When you are satisfied with the card that you've created you [**activate it**](/docs/occtoo-studio/guides/card/how-to-create-card#activate-the-card), resulting in the card being available to use in a destination. Even with a card activated you have the possibility to [**edit**](/docs/occtoo-studio/guides/card/how-to-update-an-existing-property) or [**add new properties**](/docs/occtoo-studio/guides/card/how-to-add-property-existing-card) to the card. Any [**pending changes**](/docs/occtoo-studio/guides/card/how-to-work-with-pending-changes) to a *active* card are displayed in the tab "Changes" available on the card. Prior to appending any changes the user has the possibility to alter, and even remove, any planned changes to the card. When done just activate the card as previously.
+
+If a card has run its course and has no further use, users have the possibility to [**archive**](/docs/occtoo-studio/guides/card/how-to-archive-a-card) the card. This results in the card not being available for new destinations and no data updates to the card will be processed.
+
+Whohooo! We have structured the unstructured data in a manner that it's ready to be provided to the world 🥳. Now lets dive into segments and see how we can control *what* data that is made available.
+
+## Segment
+
+The Segment block helps users to take control of that the *correct* content is delivered given the context in which it is provided. And as always, we've prepared two segment types (product & prices) ready to be used in the exploration of Occtoo.
+
+![An image from the static](/images/segment-pre-loaded-918b9b130d4ea719e3663588cd2b3313.png)
+
+In order to create a segment, one needs a segment type. A segment type can be described as the *form* of a segment and it defines what card to base the segment on and what attributes are the primary ones to filters. Segment types are managed ([**added**](/docs/occtoo-studio/guides/segments/how-to-create-a-segmenttype), [**edited**](/docs/occtoo-studio/guides/segments/how-to-manage-existing-segment-types) and [**deleted**](/docs/occtoo-studio/guides/segments/how-to-delete-a-segment-type)) from the segment block.
+
+Now that we got a segment type in place we are ready to start [**creating segments**](/docs/occtoo-studio/guides/segments/how-to-create-a-segment). A segment defines an sub-selection of a data set based on either a [**filter**](/docs/occtoo-studio/guides/segments/how-to-create-a-segment#dynamic-query-filter) or as a [**fixed**](/docs/occtoo-studio/guides/segments/how-to-create-a-segment#fixed-query-filter) list. Examples could be *'product based segment that include all red t-shirts'* or *'price based segment that include all prices based on a specific market'* or *'just these three specific products'*. After creation a segment can be used to filter the data provided in a endpoint, giving the creator control over what is made available. From the segment block users have the possibility, not only to [**add new segments**](/docs/occtoo-studio/guides/segments/how-to-create-a-segment), but also to [**edit**](/docs/occtoo-studio/guides/segments/how-to-edit-a-segment) existing ones.
+
+We are almost at the crescendo, hold on for a little while longer 😅! We've gone from inspecting the onboarded data, to re-purposing it via cards to selecting what data we want to provide. We are now looking on the last piece of the puzzle, providing data as an real time API.
+
+## Destination
+
+We've arrived at our final destination (pun intended) of this introduction/crash course to Occtoo; the Destination block. Destinations is were the custom API are crafted, giving you as a user the possibility to create tailor made endpoints for your specific purpose and use case. In the trial, the only limitations applied is that you are not able to create public destinations.
+
+![An image from the static](/images/destination-add-destination-0e2552bf9c6083ccf2a1aa1e8fa5edb1.png)
+
+The destination block provides possibilities to manage ([**create**](/docs/occtoo-studio/guides/destination/how-to-create-destination) and [**delete**](/docs/occtoo-studio/guides/destination/how-to-delete-version-destination)) your destinations and within a individual destination (that is yet to be [**published**](/docs/occtoo-studio/guides/destination/how-to-publish-destination)) you have the possibility to adjust it to you purpose. Whether that is [**adding additional languages**](/docs/occtoo-studio/guides/destination/how-to-create-langugae-in-destination), [**adding new endpoints**](/docs/occtoo-studio/guides/destination/how-to-create-an-endpoint), adding a [**segment as a endpoint filter**](/docs/occtoo-studio/guides/destination/how-to-use-segtemnt-in-an-endpoint), [**selecting specific properties**](/docs/occtoo-studio/guides/destination/how-to-select-property-endpoint) or defining [**facets**](/docs/occtoo-studio/guides/destination/how-to-create-facets-endpoint) and [**aliases**](/docs/occtoo-studio/guides/destination/how-to-create-alias-endpoint) for a endpoint; this is the place you go.
+
+When examining the details of a destination, you also have the possibility to manage ([**registering new ones**](/docs/occtoo-studio/guides/destination/how-to-register-an-application), [**resetting secrets**](/docs/occtoo-studio/guides/destination/how-to-reset-secret) or [**removing access**](/docs/occtoo-studio/guides/destination/how-to-remove-application)) the applications that can communicate with it. As a user you have the possibility to managed application regardless of the publication status of a destination.
+
+Be sure also to check out the [**generated documentation**](/docs/occtoo-studio/guides/destination/how-to-generate-documentation) for you destination, either directly in the app or by downloading it from the documentation tab.
+
+## Wrap-up
+
+Congratulations, you've managed to get through this page (hopefully not too confused 😉). This means that you now have an overview of all the core components of Occtoo and how to convert enterprise data to experience data. Something still unclear? Do not hesitate to reach out to you appointed CX representative or drop a mail to [**support**](mailto:support@occtoo.com).
+
+Below we've composed a cheat sheet with the useful links to get going.
+
+### Useful links
+
+#### Source
+
+- [Add a data source](/docs/occtoo-studio/guides/sources/add-data-source)
+- [Add a data provider](/docs/occtoo-studio/guides/sources/add-data-provider)
+- [Manual data import via CSV](/docs/occtoo-studio/guides/sources/how-to-import-data-manual)
+
+#### Card
+
+- [Create and activate a card](/docs/occtoo-studio/guides/card/how-to-create-card)
+- [Add a property to a existing card](/docs/occtoo-studio/guides/card/how-to-add-property-existing-card)
+- [Archive a card](/docs/occtoo-studio/guides/card/how-to-archive-a-card)
+
+#### Segment
+
+- [Create a segment type](/docs/occtoo-studio/guides/segments/how-to-create-a-segmenttype)
+- [Create a segment](/docs/occtoo-studio/guides/segments/how-to-create-a-segment)
+- [Edit a segment](/docs/occtoo-studio/guides/segments/how-to-edit-a-segment)
+
+#### Destination
+
+- [Create a destination](/docs/occtoo-studio/guides/destination/how-to-create-destination)
+- [Create a endpoint](/docs/occtoo-studio/guides/destination/how-to-create-an-endpoint)
+- [Use a segment in a endpoint](/docs/occtoo-studio/guides/destination/how-to-use-segtemnt-in-an-endpoint)
+- [Publish a destination](/docs/occtoo-studio/guides/destination/how-to-publish-destination)
+- [Register an application](/docs/occtoo-studio/guides/destination/how-to-register-an-application)
+
+You can find all Occtoo Studio articles [**here >>**](/docs/occtoo-studio)

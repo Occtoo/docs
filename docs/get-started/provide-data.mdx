@@ -1,0 +1,273 @@
+---
+title: "Get data into Occtoo"
+---
+
+This guide displays how to get data into Occtoo in three easy steps.
+
+<Tip>
+In order to get the maximum amount of value from this guide it is recommended to read up on the following concepts:
+
+- [Data source](/docs/concepts/occtoo-bloks/source#data-source)
+- [Data source entry](/docs/concepts/occtoo-bloks/source#data-source-entry)
+- [Data provider](/docs/concepts/occtoo-bloks/source#data-provider)
+</Tip>
+
+## Occtoo Source Overview: Flexible Data Ingestion and Management
+
+#### Introduction to Occtoo Source
+
+Occtoo Source is a flexible and schema-less data ingestion framework that enables seamless integration of data into the Occtoo Experience Data Platform. Unlike traditional systems that require data to conform to strict formats or data models, Occtoo Source accepts data in any structure, making it ideal for organizations with diverse and dynamic data sources.
+
+#### What is a Data Source in Occtoo?
+
+In Occtoo, a data source functions as a container for incoming data, similar to a labeled data bucket. Each data source is user-defined and can include metadata such as a source name and the origin system it relates to. Importantly, Occtoo data sources do not enforce a fixed schema, allowing entries to vary in structure.
+
+- Schema-less ingestion: Each entry can have its own set of key-value pairs (properties).
+- Property tracking: While schemas are not enforced, Occtoo tracks all property keys observed during ingestion to provide structure visibility.
+
+#### Key Concept: Data Source Entry
+
+A data source entry is the core data unit within a source. These entries are imported using a unique key and contain a dynamic list of property-value pairs.
+Example of a data source entry in JSON format:
+
+json
+
+```json
+{
+  "key": "some-id",
+  "delete": false,
+  "properties": [
+    {
+      "id": "propertyId",
+      "value": "some value",
+      "language": null
+    }
+  ]
+}
+```
+
+Localized Properties
+Properties in a data entry can be localized by tagging them with language codes, supporting multiple language variants for each property. This supports globalized content management and multilingual customer experiences.
+Example with localized properties:
+
+json
+
+```json
+{
+  "properties": [
+    {
+      "id": "localizedPropertyId",
+      "value": "some value",
+      "language": "en"
+    },
+    {
+      "id": "localizedPropertyId",
+      "value": "some value with a New Zealand touch",
+      "language": "en-NZ"
+    }
+  ]
+}
+```
+
+Data Upload with Data Providers
+
+To ingest data into Occtoo, you need a configured data provider. This is a secure integration mechanism that uses authentication credentials (e.g., client ID and secret) to obtain a valid token for data uploads.
+
+- A data provider can be reused across multiple data sources.
+- It is always associated with a specific Occtoo tenant.
+- It enables automated, authenticated data ingestion.
+
+#### Summary of Key Features
+
+- No fixed data model: Accepts diverse data structures.
+- Localized property support: Manage multilingual content.
+- Tracked properties: Automatic discovery of data attributes.
+- Reusable data providers: Centralized upload management.
+
+### Generate an Access Token (Authentication)
+
+To securely upload data, you must first generate an access token using your Data Provider credentials (client ID and secret). This token is required for all authenticated API calls.
+
+Example: retrieve token
+
+```cs
+var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "dataProviders/tokens");
+tokenRequest.Content = new StringContent(JsonSerializer.Serialize(new
+{
+    id = dataProviderId,
+    secret = dataProviderSecret
+}), Encoding.UTF8, "application/json");
+
+var tokenResponse = await httpClient.SendAsync(tokenRequest);
+var tokenResponseContent = await tokenResponse.Content.ReadAsStreamAsync();
+var tokenDocument = JsonSerializer.Deserialize<JsonDocument>(tokenResponseContent);
+var token = tokenDocument.RootElement.GetProperty("result").GetProperty("accessToken").GetString();
+```
+
+#### 1a. Client/secret
+
+To be able to call the the ingest service, a provider needs to be created in Occtoo studio; [https://studio.occtoo.com/sources/dataProviders](https://studio.occtoo.com/sources/dataProviders), in order to create a provider the name and a source needs to be selected. When the provider is created the secret needs to be saved.
+
+You can try it out by using postman: POST - [https://destinations.occtoo.com/dataProviders/tokens](https://destinations.occtoo.com/dataProviders/tokens), with the body below.
+
+```json
+{
+    "id" : "{@DATA-PROVIDER-ID}",
+    "secret": "{@DATA-PROVIDER-SECRET}"
+}
+```
+
+#### 2. Prepare and Ingest Data (Key-Value Structure)
+
+Once the token is retrieved, format your data to match the Occtoo ingestion structure, which uses unique keys and property-value pairs. Optional language codes can be added for localized values.
+If your integration requires custom business logic, such as conditional mapping of properties, implement that logic before creating the request.
+
+Example: Ingesting Entity Data
+
+```cs
+var ingestRequest = new HttpRequestMessage(HttpMethod.Post, $"import/{dataSource}");
+ingestRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+ingestRequest.Content = new StringContent(JsonSerializer.Serialize(new
+{
+    entities = new []
+    {
+        new
+        {
+            key = "some-id",
+            delete = false,
+            properties = new []
+            {
+                new
+                {
+                    id = "propertyId",
+                    value = "some value",
+                    language = "optional language code"
+                }
+            }
+        }
+    }
+}), Encoding.UTF8, "application/json");
+var ingestResponse = await httpClient.SendAsync(ingestRequest);
+```
+
+For additional examples and best practices on how to onboard data into the platform, please visit our official GitHub repository: [https://github.com/Occtoo](https://github.com/Occtoo)
+
+#### Keywords for Search Optimization:
+
+- Occtoo Source data ingestion
+- Upload entities to Occtoo using C#
+- Occtoo API access token generation
+- C# HTTP request example for Occtoo
+- Schema-less data upload key-value
+- Occtoo data provider authentication
+- JSON format for Occtoo ingest API
+
+#### Recommended Guidelines for Entity Payloads
+
+To ensure optimal performance, reliable ingestion, and efficient data processing in Occtoo, we recommend following these best practices when submitting payloads with entities:
+
+#### Maximum Payload Size
+
+- Limit total payload size to 20 MB
+- Staying under this threshold ensures fast, stable data transfer and avoids timeouts or performance bottlenecks.
+
+#### Maximum Entity Size
+
+- Each individual entity should be no larger than 1 MB
+- Smaller entity sizes reduce processing time and enhance error resilience during ingestion.
+
+#### Maximum Entity Count per Payload
+
+- Do not exceed 1,000 entities per payload
+- This limit helps maintain stable throughput and optimal API responsiveness.
+
+### Rules
+
+Entry Key Requirements
+
+- Must be 1 to 256 characters in length.
+- Allowed characters:
+  - a–z (lowercase letters)
+  - A–Z (uppercase letters)
+  - 0–9 (numeric digits)
+  - underscore (\_)
+  - hyphen (-)
+
+Property ID Requirements
+
+- Must be 1 to 256 characters in length.
+- Same character rules as Entry Key apply.
+
+Property Language Code Requirements
+
+- Must be 2 to 10 characters in length.
+- Same character rules as above apply.
+  Summary of Allowed Characters:
+- Letters: a–z, A–Z
+- Digits: 0–9
+- Symbols: \_, -
+  These validation constraints ensure compatibility with the Occtoo Source schema-less ingestion engine and prevent malformed data entries from being rejected during processing.
+
+## Media upload
+
+Media ingestion can be performed using the Occtoo Ingest API. To upload media files, the source media must be accessible via a public URL. Alternatively, the Occtoo Onboarding SDK supports direct streaming uploads.
+Import Authentication Flow
+
+All media imports require authentication. The process must begin by requesting an access token. Once a valid token is obtained, the import API endpoint can be called to initiate the upload.
+Media File Identification
+
+Each successfully uploaded media file receives a unique Occtoo Media File ID. This ID is used for all subsequent API interactions related to that file.
+
+Users also have the option to assign a custom unique identifier to the uploaded file. If a unique identifier is provided, it becomes immutable—any future uploads using the same unique identifier will be rejected. To update a media file with a reused unique identifier, the original file must first be deleted.
+
+Asynchronous Uploads & Tracking
+All media uploads are processed asynchronously. The Ingest API supports batch uploads, allowing multiple media files to be uploaded in a single request.
+
+Upload progress can be tracked via the Upload Status API.
+Retrieving Media File Information
+
+Information about uploaded media can be retrieved using either of the following methods:
+
+- By custom unique identifier → Media File Information by Unique Identifier API
+- By Occtoo-generated media file ID → Media File Information by File ID API
+
+Upload via Links
+To initiate a link-based media upload:
+
+PUT - [https://ingest.occtoo.com/media/uploads/links](https://ingest.occtoo.com/media/uploads/links)
+
+### Request Structure
+
+The request body must include a JSON array of media links with the following format:
+
+```json
+{ 
+  "links":[
+    { 
+      "filename": "image1.jpg", // Required: Desired file name after upload 
+      "link": "https://example.com/image1.jpg", // Required: Public URL to the media file
+      "uniqueidentifier": "img-001" //Optional: Custom unique ID 
+    }, 
+    { 
+      "filename": "video1.mp4", 
+      "link": "https://example.com/video1.mp4" 
+    } 
+  ]
+}
+```
+
+### Response
+
+If the upload request is accepted, the API responds with HTTP Status 202 Accepted, indicating that the processing has started.
+
+Bulk Upload Capability
+The Occtoo API allows uploading up to 50 data entries or media objects per request. This batch processing capability ensures efficient performance, reduced latency, and scalable data ingestion for high-volume operations.
+
+For more details on the import see the [import endpoint documentation](/docs/Integration/Ingest#import).
+
+## Summary
+
+Getting data into Occtoo is an easy process involving three steps: First, create a data source and a data provider in Occtoo Studio. Next, generate a token using the data provider ID and secret. Finally, onboard data by posting it to the designated endpoint with the token.
+
+For detailed steps and code examples, visit the [ingest documentation](/docs/Integration/Ingest).

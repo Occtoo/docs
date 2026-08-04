@@ -1,0 +1,85 @@
+---
+title: "Key concepts"
+---
+
+This page introduces the core terms you'll see throughout Occtoo Studio and the rest of the documentation. You don't need to memorize them — just skim once so the rest of the docs feel familiar.
+
+The concepts are grouped by what they relate to: getting data **in**, shaping it, getting it **out**, and the workspace itself.
+
+## The big picture
+
+At its simplest, Occtoo works like this:
+
+**Sources → Studio → Destinations**
+
+You connect to the systems that hold your data (Sources), bring that data into Studio where you organize and enrich it, and then publish it to the places that need it (Destinations). Everything else in this glossary supports one of those three steps.
+
+---
+
+## Getting data in
+
+### Source
+
+A system that data comes from — a PIM, ERP, DAM, spreadsheet, database, or any third-party service. A source is the *origin* of data, not the data itself.
+
+### Provider
+
+The connector that knows how to talk to a specific kind of source. For example, there's a provider for Shopify, one for SFTP folders, one for generic REST APIs, and so on. When you set up a source, you're choosing a provider and giving it the details it needs to connect.
+
+### Sync
+
+The process of pulling data from a source into Studio. Syncs can run on a schedule, on demand, or be triggered by changes in the source system. Each sync run is recorded so you can see what happened and when.
+
+### Onboarding
+
+The broader term for setting up a source — connecting it, mapping its data, and getting it flowing into Studio for the first time.
+
+---
+
+## Shaping and organizing data
+
+### Entity
+
+A single "thing" in your data — a product, an article, an image, a customer, a category. Entities are the building blocks of everything you publish.
+
+### Entity type
+
+The shape or schema of an entity. "Product" is an entity type; a specific product like "Blue T-Shirt, size M" is an entity of that type. Entity types define what fields an entity has.
+
+### Property (or field)
+
+A single piece of information on an entity — like `name`, `price`, `description`, or `image`. Properties have a type (text, number, reference to another entity, and so on).
+
+### Identifier
+
+A value that uniquely identifies an entity, so the same product coming from two different sources can be recognized as the same thing. Identifiers are how Studio merges data from multiple sources into one coherent entity.
+
+### Unification
+
+The process of combining data about the same entity from different sources into a single, merged view. This is one of the things Studio does behind the scenes once your identifiers are set up correctly.
+
+### Media
+
+Files — typically images, but also videos, documents, and other assets. Media is managed in its own area of Studio and can be referenced by any entity.
+
+---
+
+## Getting data out
+
+### Destination
+
+A place where your data is published so other systems can use it. A destination usually exposes your data as an API that websites, apps, or partners can call.
+
+### Dataset
+
+A curated selection of data within a destination — for example, "all active products in English for the US market." Datasets let you publish different views of your data to different audiences without duplicating the underlying entities.
+
+### API
+
+The interface that destinations expose so other systems can read your data. Occtoo APIs are designed to be fast and predictable, so they can power live websites and apps directly.
+
+### Publishing
+
+The act of making data available through a destination. Once published, data is queryable through the destination's API.
+
+---

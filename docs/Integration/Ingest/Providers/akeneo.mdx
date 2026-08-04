@@ -1,0 +1,86 @@
+---
+title: "Akeneo"
+description: "Introduction"
+---
+
+## Introduction
+
+Using the Occtoo App from the [Akeneo marketplace](https://apps.akeneo.com/) users can easily and seamlessly connect their Akeneo PIM with Occtoo to make product data instantly available to be used by their digital team.
+
+By providing instantly access to the product data through the Occtoo Product Orchestration Engine users enables re-use across channels of their choice and can thus spend time shipping more experiences and focus on developing a customer experience that truly differentiates their brand!
+
+The Occtoo App creates a continuous flow between the systems keeping any digital experience built using PIM data updated with the latest and greatest changes from Akeneo.
+
+![Akeneo Occtoo integration](/images/Akeneo-document-medium-95d1900ee884ac42ba083a302b2968dc.jpeg)
+
+## About Akeneo
+
+Akeneo is the Product Experience company, helping organizations deliver enriched, engaging, consistent, and compelling product experiences across all owned and unowned channels, including eCommerce, mobile, print, social commerce, points of sale, and beyond.
+
+Read more at [www.akeneo.com](http://www.akeneo.com)
+
+## Setup the Akeneo provider
+
+### Prerequisites
+
+To complete the setup the following is required:
+
+- User in Akeneo with permissions to manage apps
+- User connected to an Occtoo environment
+
+### 1. Connect Occtoo app
+
+From your Akeneo installation, locate and connect the Occtoo App from the [Akeneo marketplace](https://apps.akeneo.com/).
+
+![Locate app in Akeneo app store](/images/step-1-install-app-from-marketplace-8c1c9f9eb3d40169b5e93813c2a7c49d.png)
+
+Pressing the *Connect* button will initiate the setup process by redirect the user to the Occtoo Studio.
+
+![User is redirected to Occtoo](/images/step-x-redirect-1724e5ec54ce050c973e68348173126f.png)
+
+### 2. Authenticate in Occtoo
+
+Login to Occtoo Studio with a user, if not already logged in, that has access to the environment that should received the Akeneo PIM data.
+
+![Login to Occtoo Studio](/images/step-2-authenticate-user-to-occtoo-54b09e96ee388043eeb79d7e4aa9e8b1.png)
+
+### 3. Select environment
+
+The user is informed that a connection will be created between Akeneo PIM and the environment that he has access to. If the user has access to multiple environments, he needs to choose which environment to connect to.
+
+![Confirm environment](/images/step-3-select-environment-to-connect-to-9085eac3a5082127d880eafd249de0b8.png)
+
+After the user press OK he is transfered back to Akeneo.
+
+### 4. Confirm requested permissions
+
+In Akeneo the user is presented with all the permissions and grants that that the Occtoo app is requesting to setup the connection correctly. The user needs to accept the policy and terms of usage by clicking the checkbox and then pressing the “Allow and Next” button.
+
+![Confirm requested grants](/images/step-4-grants-02cdf39156f6e0837be4dae791345b6b.png)
+
+In the next screen the user is asked to define permissions for the app for category trees, locales and attribute groups. To secure full functionality and expected behaviour it is highly recommended that the user selects all on all three options.
+
+![Select all requested permissions](/images/step-4-select-all-option-c539320f582d7bcb21bfcbd8fb11858e.png)
+
+When done the user is redirected to Occtoo.
+
+### 5. Select channel
+
+The final part of the configuration is the selection of what Akeneo channel to use when synchronizing products.
+
+![Select all requested permissions](/images/step-5-select-channel-2e4d23890303a9ee6086b609360ca832.png)
+
+### 6. View configuration settings
+
+After the completion of the configuration the user is directed to the Akaneo data provider which offers the user more details of the connection, as well as the possibility to initiate a manual synchronization
+
+![Select all requested permissions](/images/step-6-akeneo-details-b36a32400167a215a75cc0250af3310b.png)
+
+*Done - happy data transferring!* 😉
+
+## Limitations
+
+- Does not handle deletes due to lack of support in REST API
+- Connects a single specific Akeneo channel
+- Only one channel integration can be active at the time
+- Only binary files from fields of type pim\_catalog\_file and pim\_catalog\_image are uploaded into Occtoo

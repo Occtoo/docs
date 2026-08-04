@@ -1,0 +1,70 @@
+---
+title: "Create a segment"
+description: "A segment can be either build on a query based or be a fixed based selection"
+---
+
+<Info>
+A segment can be either build on a query based or be a fixed based selection
+</Info>
+
+<Tip>
+A segment can be used in an endpoint to either include the segment or to exclude the segment from an endpoint
+</Tip>
+
+To create a segment press the **Add segment** button in the upper right corner.
+
+![An image from the static](/images/add-segment-03a9377338ea77f88551365669f8ed32.png)
+
+Select a segment type based on what you would like it to look like in the final UI and confirm with the **Add [type]** button
+
+<Info>
+A segment type is build on a card definition
+</Info>
+
+![An image from the static](/images/segment-type-65b590b83078d3f6b5d0d52c381be0f1.png)
+
+## Filtering
+
+By using the filters in the left hand column you can easily filter the data that you would like to include in the endpoint. The result of the filtering is reflected in the middle column.
+
+<Tip>
+If you would like to filter on other attributes that is not shown in the left column, just click on "Add more filter" to be able to serach and add more attributes.
+
+![An image from the static](/images/add-more-filters-95e001dd1150e7b8bf064c8f360526d0.png)
+</Tip>
+
+### Dynamic query filter
+
+If you want your segment to dynamically include all cards that correspond to the applied filter then you want to create a dynamic query filter. This is easily achieved. Basically, once you are done defining what attribute values to filter on, you click **Apply** to add this filter to the segment.
+
+![An image from the static](/images/segment-filters-30aa04660dd030fdffd80af902430860.png)
+
+The entries that currently corresponds to this filter appears in the right-hand side column. Here you can choose to *exclude* induvidual entries by pressing the **exclude** button on the card. The card will remain in the right-hand column and can be re-included by pressing the **include** button on the card.
+
+![An image from the static](/images/filter-exclude-1e39b6346804a243814e061e99e332d7.png)
+
+Verify that the correct filter type is used by inspecting the badge placed next to the *Selected* text. If it says "Query" you are creating a dynamic query filter segment. When pressing the **Save [type]** button you will be prompted to save the segment you just created.
+
+![An image from the static](/images/save-products-d3d904546001158b0fa5c3325cc38c73.png)
+
+Give the segment a name, the identifier will be automatically filled in based on the name you choose. Optionally you can add a description and the segment is created by pressing **Save**.
+
+![An image from the static](/images/save-query-f274beb45fae3151f84808dcfbdea6df.png)
+
+You have now created a segment using a dynamic query filter, meaning that any new items matching the filter criteria will be automatically added to the segment.
+
+### Fixed query filter
+
+Start by identifying the induvidual entries you want to include in the segment by using the filters to identify them. When found, press the **include** button on the card in the middle column. The included card is added to the right hand column.
+
+![An image from the static](/images/include-items-0b45bae9769594c2367d2380da8b993a.png)
+
+Verify that the correct filter type is used by inspecting the badge placed next to the *Selected* text. If it says "Query" you are creating a dynamic query filter segment. When pressing the **Save [type]** button you will be prompted to save the segment you just created.
+
+Give the segment a name, the identifier will be automatically filled in based on the name you choose. Optionally you can add a description and the segment is created by pressing **Save**.
+
+![An image from the static](/images/save-query-f274beb45fae3151f84808dcfbdea6df.png)
+
+You have now created a segment using a fixed query filter, meaning that no new items will be added automatically. The only times the result set of this segment will change is when the segment is edited (cards are added or removed) or when a card is removed from the system.
+
+## Video walkthrough

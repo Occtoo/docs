@@ -1,0 +1,28 @@
+---
+title: "Card"
+---
+
+Card Block is responsible for the mapping of the onboarded data and, if needed, enriching it further onboarding of any 3rd party data sources. This is where you define your onboarded data and end up with a unified dataset that can be used to power your new digital experiences.
+
+## Card model
+
+A card is the model that one applies on top of the unstructured data ingested in [source](/docs/concepts/occtoo-bloks/source). When applying this structure one creates the individual objects that are to be exposed via API. A card can be based on several sources *given* that the same identifier is used across these. Examples of cards from different implementations are *Product*, *Customer profile* and *Store*.
+
+## Properties
+
+A card can have multiple properties and one differentatior from the properties identified in the source is that card properties are typed. The supported types:
+
+- Text
+- Localized text
+- List
+- Localized list
+- Boolean
+- Integer
+- Decimal
+- Timestamp
+
+Each identified property in a source *can* be used as a property on a card. It is also possible to add properties that arent yet identified when creating the card, although it is necessary to define what source that will be the origin of that property.
+
+## Card relations
+
+Cards can have relations to one another, based on specified attributes, providing the possiblity to ship information from related cards as a part of the payload of what is selected as the primary card. Examples of a relation can be between the card *product*, consisting of product information, and the card *media*, consisting of product media. By keying the cards based on their attributes the media can be provided together with the product information.
