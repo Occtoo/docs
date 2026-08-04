@@ -3,11 +3,11 @@
   "theme": "mint",
   "name": "Occtoo Documentation",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#E36103",
+    "light": "#FA9A17",
+    "dark": "#EB8F38"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.ico",
   "navigation": {
     "tabs": [
       {
@@ -261,8 +261,8 @@
     ]
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/occtoo-light.svg",
+    "dark": "/logo/occtoo-dark.svg"
   },
   "navbar": {
     "links": [
