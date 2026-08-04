@@ -1,0 +1,98 @@
+---
+title: "Event stream (SSE)"
+description: "Subscribe to a live, ordered stream of tenant events delivered as CloudEvents over Server-Sent Events."
+---
+
+An ordered SSE stream. The SSE id field contains the raw resumable event sequence; the initial `after` query accepts either that sequence or a pull cursor.
+
+```text
+GET https://api-test.occtoo.com/v1/events/stream
+Accept: text/event-stream
+Authorization: Bearer <token>
+```
+
+<Note>
+Each SSE message is a [CloudEvents](https://cloudevents.io/) 1.0 envelope (`application/cloudevents+json`) with `id`, `type`, `source`, `subject`, `time`, `sequence`, `tenantid` and a typed `data` payload. The SSE `id` field carries a resumable sequence — pass it as the `after` query parameter on reconnect to resume without gaps. Fetch the JSON schema of any event's `data` payload from `GET /v1/events/schemas/{type}/{version}`.
+</Note>
+
+## Message types
+
+### Cards
+
+| Event type | Description |
+|---|---|
+| `card.segment_membership_changed` | A card entered or left a segment. |
+| `card.updated` | A card changed as a result of source data. |
+| `card_definition.activated` | A card definition became active. |
+| `card_definition.created` | A card definition was created. |
+| `card_definition.deleted` | A card definition was deleted. |
+| `card_definition.restored` | A card definition was restored. |
+| `card_definition.updated` | A card definition changed. |
+
+### Destinations
+
+| Event type | Description |
+|---|---|
+| `destination.created` | A destination was created. |
+| `destination.deleted` | A destination was deleted. |
+| `destination.published` | A destination was published. |
+| `destination.stopped` | A destination was stopped. |
+| `destination_entry.deleted` | An entry was removed from a destination endpoint. |
+| `destination_entry.updated` | An entry was written to a destination endpoint. |
+
+### Endpoints
+
+| Event type | Description |
+|---|---|
+| `endpoint.created` | A destination endpoint was created. |
+| `endpoint.deleted` | A destination endpoint was deleted. |
+| `endpoint.updated` | A destination endpoint changed. |
+
+### Segments
+
+| Event type | Description |
+|---|---|
+| `segment.archived` | A segment was archived. |
+| `segment.created` | A segment was created. |
+| `segment.deleted` | A segment was deleted. |
+| `segment.restored` | A segment was restored. |
+| `segment.updated` | A segment changed. |
+
+### Sources
+
+| Event type | Description |
+|---|---|
+| `source.created` | A source was created. |
+| `source.deleted` | A source was deleted. |
+| `source.updated` | A source configuration changed. |
+| `source_entry.added` | A source entry was added. |
+| `source_entry.deleted` | A source entry was deleted. |
+| `source_entry.updated` | A source entry changed. |
+
+### Users
+
+| Event type | Description |
+|---|---|
+| `user.created` | A tenant user was created. |
+| `user.deleted` | A tenant user was deleted. |
+| `user.updated` | A tenant user changed. |
+
+## Envelope example
+
+```json source_entry.added
+{
+  "specversion": "1.0",
+  "id": "8f4d2a1e-…",
+  "type": "source_entry.added",
+  "source": "occtoo",
+  "subject": "products/entry-123",
+  "time": "2026-08-04T12:00:00Z",
+  "datacontenttype": "application/json",
+  "dataschema": "https://api-test.occtoo.com/v1/events/schemas/source_entry.added/1.0",
+  "sequence": "001.00000000000000012345",
+  "tenantid": "6c9a…",
+  "data": {
+    "…": "typed payload, see dataschema"
+  }
+}
+```

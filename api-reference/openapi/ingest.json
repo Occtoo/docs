@@ -1,0 +1,963 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Occtoo Ingest API",
+    "description": "Submit source entries to the authenticated Occtoo tenant. Tenant identity always comes from the credential; it is never accepted from the route or request body.\n\n## Authentication and access\n\nSelect **Authorize** to reuse the existing Occtoo browser session, provide a tenant-scoped bearer token, or send an organization API key through `x-api-key`. Protected operations require `import-datasource`.\n\nKinde application credentials represent registered data providers and are additionally restricted to their assigned sources. User and organization API-key access is determined by the gateway-projected permission.\n\nThe credential-exchange endpoint is an anonymous convenience for server-side data-provider integrations. It accepts a provider id and secret in the request body and is not an OAuth client-credentials endpoint.\n\n## Payload rules\n\n- Entry keys must be unique within a request, compared case-insensitively.\n- Property ids are canonicalized to lowercase at rest.\n- A property id may repeat only when its language differs.\n- Reserved system properties are rejected.\n- Request, entry and property-value ceilings are tenant-configured and returned in validation errors when exceeded.\n\n`POST /datasources/<dataSource>/import/verify` runs validation without queueing or consuming the request-rate budget. `POST /datasources/<dataSource>/import` returns `202` when accepted for asynchronous processing.\n\nRetry `429` and transient `5xx` responses with bounded exponential backoff. Do not retry a successful `202` merely because downstream processing has not completed.\n\nMachine-readable contract: [OpenAPI](https://api-test.occtoo.com/openapi/ingest.json)",
+    "version": "1.0.0",
+    "summary": "Validate and ingest tenant-scoped source entries."
+  },
+  "servers": [
+    {
+      "url": "https://api-test.occtoo.com",
+      "description": "Occtoo public API"
+    }
+  ],
+  "paths": {
+    "/datasources/{dataSource}/import/verify": {
+      "post": {
+        "tags": [
+          "Ingest"
+        ],
+        "summary": "Verify an ingest payload",
+        "description": "Runs the same caller-access, payload, key, property and configured-size validation as ingest without enqueuing entries.\n\nVerification applies payload-size ceilings but does not consume the tenant request-rate budget. A successful verification does not reserve capacity or guarantee that a later ingest will be accepted.",
+        "operationId": "verifyIngestPayload",
+        "parameters": [
+          {
+            "name": "dataSource",
+            "in": "path",
+            "description": "Stable customer-facing source id within the authenticated tenant.",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "example": "products"
+            },
+            "example": "products"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngestRequest"
+              },
+              "examples": {
+                "example": {
+                  "summary": "Upsert and delete entries",
+                  "value": {
+                    "entities": [
+                      {
+                        "key": "sku-123",
+                        "delete": false,
+                        "properties": [
+                          {
+                            "id": "name",
+                            "value": "Blue chair",
+                            "language": "en"
+                          },
+                          {
+                            "id": "inStock",
+                            "value": "true",
+                            "type": "Boolean"
+                          },
+                          {
+                            "id": "tags",
+                            "value": "summer|sale",
+                            "delimiter": "|",
+                            "type": "List"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "sku-obsolete",
+                        "delete": true,
+                        "properties": [ ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The payload and caller access are valid. Nothing was queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "errors": [ ],
+                      "requestId": "01JZP4FQ2Y7JYV5Y2R8B4X9Q3W"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed payload, invalid or duplicate keys/properties/languages, reserved properties, or a configured size ceiling was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The caller lacks `import-datasource`, or the data-provider application is not assigned to this source.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested data source cannot be resolved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The data source is being purged or is in another conflicting state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "The tenant request-rate budget is exhausted. Retry after the indicated delay using bounded exponential backoff.",
+            "headers": {
+              "Retry-After": {
+                "description": "Optional number of seconds to wait before retrying.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The ingest operation failed unexpectedly. Retry transient failures with bounded exponential backoff.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ],
+        "x-required-permission": "import-datasource"
+      }
+    },
+    "/datasources/{dataSource}/import": {
+      "post": {
+        "tags": [
+          "Ingest"
+        ],
+        "summary": "Start an asynchronous ingest",
+        "description": "Validates and accepts source entries for asynchronous processing. A `202` response means the request was queued; it does not mean every entry has finished processing.\n\nPersist `result.id` as the ingest correlation id for diagnostics. There is currently no public status endpoint for this id. Do not retry a successful `202` response merely because downstream data is not visible yet.",
+        "operationId": "startIngest",
+        "parameters": [
+          {
+            "name": "dataSource",
+            "in": "path",
+            "description": "Stable customer-facing source id within the authenticated tenant.",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "example": "products"
+            },
+            "example": "products"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngestRequest"
+              },
+              "examples": {
+                "example": {
+                  "summary": "Upsert and delete entries",
+                  "value": {
+                    "entities": [
+                      {
+                        "key": "sku-123",
+                        "delete": false,
+                        "properties": [
+                          {
+                            "id": "name",
+                            "value": "Blue chair",
+                            "language": "en"
+                          },
+                          {
+                            "id": "inStock",
+                            "value": "true",
+                            "type": "Boolean"
+                          },
+                          {
+                            "id": "tags",
+                            "value": "summer|sale",
+                            "delimiter": "|",
+                            "type": "List"
+                          }
+                        ]
+                      },
+                      {
+                        "key": "sku-obsolete",
+                        "delete": true,
+                        "properties": [ ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "The import was accepted and queued for asynchronous processing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptedImportResponse"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "result": {
+                        "id": "83b538a7-df7c-4cf4-b988-cd3b71c4cd90"
+                      },
+                      "errors": [ ],
+                      "requestId": "01JZP4FQ2Y7JYV5Y2R8B4X9Q3W"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed payload, invalid or duplicate keys/properties/languages, reserved properties, or a configured size ceiling was exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The caller lacks `import-datasource`, or the data-provider application is not assigned to this source.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested data source cannot be resolved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The data source is being purged or is in another conflicting state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "The tenant request-rate budget is exhausted. Retry after the indicated delay using bounded exponential backoff.",
+            "headers": {
+              "Retry-After": {
+                "description": "Optional number of seconds to wait before retrying.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The ingest operation failed unexpectedly. Retry transient failures with bounded exponential backoff.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ],
+        "x-required-permission": "import-datasource"
+      }
+    },
+    "/v2/dataproviders/tokens": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "exchangeDataProviderCredentials",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CredentialExchangeRequest"
+              },
+              "examples": {
+                "example": {
+                  "summary": "Data-provider credentials",
+                  "value": {
+                    "id": "83b538a7-df7c-4cf4-b988-cd3b71c4cd90",
+                    "secret": "<provider-secret>"
+                  }
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateDataProviderCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticateDataProviderCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Bearer token issued for the registered data provider.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CredentialExchangeResponse"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "result": {
+                        "accessToken": "<redacted>",
+                        "expiresIn": 3600
+                      },
+                      "errors": [ ],
+                      "requestId": "01JZP4FQ2Y7JYV5Y2R8B4X9Q3W"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The credential request is malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider id or secret is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The credential exchange failed unexpectedly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AcceptedImport": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Ingest correlation id. This is not an HTTP request id and currently has no public status endpoint.",
+            "format": "uuid",
+            "example": "83b538a7-df7c-4cf4-b988-cd3b71c4cd90"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AcceptedImportResponse": {
+        "required": [
+          "errors",
+          "requestId",
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          },
+          "requestId": {
+            "type": "string",
+            "description": "HTTP request id used for support and diagnostics."
+          },
+          "result": {
+            "$ref": "#/components/schemas/AcceptedImport"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiError": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message."
+          },
+          "details": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "description": "Optional structured validation details."
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiResponse": {
+        "required": [
+          "errors",
+          "requestId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          },
+          "requestId": {
+            "type": "string",
+            "description": "HTTP request id used for support and diagnostics."
+          }
+        },
+        "additionalProperties": false
+      },
+      "AuthenticateDataProviderCommand": {
+        "required": [
+          "id",
+          "secret"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "secret": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticatedToken": {
+        "required": [
+          "accessToken",
+          "expiresIn"
+        ],
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "expiresIn": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          }
+        }
+      },
+      "CredentialExchangeRequest": {
+        "required": [
+          "id",
+          "secret"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Registered data-provider id.",
+            "format": "uuid",
+            "example": "83b538a7-df7c-4cf4-b988-cd3b71c4cd90"
+          },
+          "secret": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Registered data-provider secret.",
+            "writeOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CredentialExchangeResponse": {
+        "required": [
+          "errors",
+          "requestId",
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          },
+          "requestId": {
+            "type": "string",
+            "description": "HTTP request id used for support and diagnostics."
+          },
+          "result": {
+            "$ref": "#/components/schemas/CredentialToken"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CredentialToken": {
+        "required": [
+          "accessToken",
+          "expiresIn"
+        ],
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Tenant-scoped bearer token."
+          },
+          "expiresIn": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Token lifetime in seconds.",
+            "example": 3600
+          }
+        },
+        "additionalProperties": false
+      },
+      "DynamicEntity": {
+        "required": [
+          "key",
+          "delete",
+          "properties"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "delete": {
+            "type": "boolean"
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicProperty"
+            }
+          }
+        }
+      },
+      "DynamicProperty": {
+        "required": [
+          "id",
+          "value",
+          "language"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "language": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "delimiter": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PropertyType"
+              }
+            ]
+          }
+        }
+      },
+      "IngestEntity": {
+        "required": [
+          "key",
+          "delete",
+          "properties"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "Entry key unique within this request.",
+            "example": "sku-123"
+          },
+          "delete": {
+            "type": "boolean",
+            "description": "When true, delete the entry and send an empty properties array.",
+            "example": false
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngestProperty"
+            },
+            "description": "Entry property values. Property ids are canonicalized to lowercase at rest."
+          }
+        },
+        "additionalProperties": false
+      },
+      "IngestProperty": {
+        "required": [
+          "id",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "Property id. Repeated ids are permitted only for distinct languages; reserved system ids are rejected.",
+            "example": "name"
+          },
+          "value": {
+            "type": "string",
+            "description": "Property value encoded as text.",
+            "example": "Blue chair"
+          },
+          "language": {
+            "maxLength": 10,
+            "minLength": 2,
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional language code for localized values.",
+            "example": "en"
+          },
+          "delimiter": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional delimiter used to split list values.",
+            "example": "|"
+          },
+          "type": {
+            "enum": [
+              "Text",
+              "LocalizedText",
+              "List",
+              "LocalizedList",
+              "Boolean",
+              "Timestamp",
+              "Integer",
+              "Decimal"
+            ],
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional value type hint."
+          }
+        },
+        "additionalProperties": false
+      },
+      "IngestRequest": {
+        "required": [
+          "entities"
+        ],
+        "type": "object",
+        "properties": {
+          "entities": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IngestEntity"
+            },
+            "description": "Non-empty collection of source entries. Keys must be unique within the request, compared case-insensitively."
+          }
+        },
+        "additionalProperties": false
+      },
+      "PropertyType": {
+        "enum": [
+          "Text",
+          "LocalizedText",
+          "List",
+          "LocalizedList",
+          "Boolean",
+          "Timestamp",
+          "Integer",
+          "Decimal",
+          null
+        ]
+      },
+      "StartImportDto": {
+        "required": [
+          "entities"
+        ],
+        "type": "object",
+        "properties": {
+          "entities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DynamicEntity"
+            }
+          }
+        }
+      },
+      "StartImportResultDto": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "StjApiResult": {
+        "required": [
+          "errors",
+          "requestId"
+        ],
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          },
+          "requestId": {
+            "type": "string"
+          }
+        }
+      },
+      "StjApiResultOfAuthenticatedToken": {
+        "required": [
+          "result",
+          "errors",
+          "requestId"
+        ],
+        "type": "object",
+        "properties": {
+          "result": {
+            "$ref": "#/components/schemas/AuthenticatedToken"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          },
+          "requestId": {
+            "type": "string"
+          }
+        }
+      },
+      "StjApiResultOfStartImportResultDto": {
+        "required": [
+          "result",
+          "errors",
+          "requestId"
+        ],
+        "type": "object",
+        "properties": {
+          "result": {
+            "$ref": "#/components/schemas/StartImportResultDto"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          },
+          "requestId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "kindeOAuth": {
+        "type": "oauth2",
+        "description": "Sign in with the existing Occtoo Studio identity and selected organization.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://auth-test.occtoo.com/oauth2/auth?audience=https%3A%2F%2Fapi-test.occtoo.com",
+            "tokenUrl": "https://auth-test.occtoo.com/oauth2/token",
+            "scopes": {
+              "openid": "Authenticate the user with OpenID Connect.",
+              "profile": "Read the user's basic profile.",
+              "email": "Read the user's email address.",
+              "offline": "Refresh the access token without another interactive sign-in."
+            },
+            "x-usePkce": "SHA-256",
+            "x-scalar-redirect-uri": "https://api-test.occtoo.com/docs/"
+          }
+        }
+      },
+      "bearerAuth": {
+        "type": "http",
+        "description": "Tenant-scoped Occtoo access token, including Kinde machine-to-machine application tokens.",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "apiKey": {
+        "type": "apiKey",
+        "description": "Occtoo organization API key.",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Ingest",
+      "description": "Verify source-entry payloads and submit them for asynchronous processing."
+    },
+    {
+      "name": "Authentication",
+      "description": "Exchange registered data-provider credentials for an Occtoo bearer token."
+    }
+  ]
+}

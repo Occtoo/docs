@@ -9,248 +9,253 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "pages": [
-      "index",
-      "docs/intro",
+    "tabs": [
       {
-        "group": "Get started",
-        "pages": [
-          "docs/get-started",
-          "docs/get-started/my-first-occtoo-experience",
+        "tab": "Documentation",
+        "icon": "book-open",
+        "groups": [
           {
-            "group": "Occtoo Start 1\u20132\u20133",
+            "group": "Get started",
             "pages": [
-              "docs/get-started/occtoo-start",
-              "docs/get-started/occtoo-start/occtoo-start-1-data-activation",
-              "docs/get-started/occtoo-start/occtoo-start-2-hyper-intelligent-products",
-              "docs/get-started/occtoo-start/occtoo-start-3-process-and-roles"
+              "index",
+              "get-started/introduction",
+              "get-started/overview",
+              "get-started/my-first-occtoo-experience",
+              "get-started/get-data-into-occtoo",
+              "get-started/call-a-destination-api",
+              "get-started/occtoo-mcp",
+              "get-started/multifactor-authentication",
+              {
+                "group": "Occtoo Start 1-2-3",
+                "pages": [
+                  "get-started/occtoo-start/overview",
+                  "get-started/occtoo-start/data-activation",
+                  "get-started/occtoo-start/hyper-intelligent-products",
+                  "get-started/occtoo-start/process-and-roles"
+                ]
+              }
             ]
           },
-          "docs/get-started/provide-data",
-          "docs/get-started/call-custom-destination",
-          "docs/get-started/occtoo-mcp",
-          "docs/get-started/multifactor-authentication"
+          {
+            "group": "Core concepts",
+            "pages": [
+              "concepts/overview",
+              "concepts/catalog",
+              "concepts/card",
+              "concepts/source",
+              "concepts/segment",
+              "concepts/destination",
+              "concepts/destination-types"
+            ]
+          },
+          {
+            "group": "Occtoo Studio",
+            "pages": [
+              "studio/overview",
+              "studio/key-concepts",
+              "studio/properties-and-data-types",
+              {
+                "group": "Dashboard",
+                "pages": [
+                  "studio/dashboard/overview",
+                  "studio/dashboard/profile",
+                  "studio/dashboard/switch-environments"
+                ]
+              },
+              {
+                "group": "Sources",
+                "pages": [
+                  "studio/sources/data-sources-and-providers",
+                  "studio/sources/add-a-data-provider",
+                  "studio/sources/add-a-data-source",
+                  "studio/sources/import-data",
+                  "studio/sources/manual-import",
+                  "studio/sources/search-in-a-source",
+                  "studio/sources/search-in-an-entry",
+                  "studio/sources/edit-a-source",
+                  "studio/sources/edit-a-data-provider",
+                  "studio/sources/track-usage",
+                  "studio/sources/reset-a-client-secret",
+                  "studio/sources/delete-an-entry",
+                  "studio/sources/delete-a-data-source",
+                  "studio/sources/remove-a-data-provider"
+                ]
+              },
+              {
+                "group": "Cards",
+                "pages": [
+                  "studio/cards/create-a-card",
+                  "studio/cards/display-name-description-and-image",
+                  "studio/cards/card-summary",
+                  "studio/cards/add-a-property",
+                  "studio/cards/update-a-property",
+                  "studio/cards/delete-a-property",
+                  "studio/cards/pending-changes",
+                  "studio/cards/card-relations",
+                  "studio/cards/track-usage",
+                  "studio/cards/archive-a-card",
+                  "studio/cards/delete-a-card"
+                ]
+              },
+              {
+                "group": "Segments",
+                "pages": [
+                  "studio/segments/create-a-segment-type",
+                  "studio/segments/manage-segment-types",
+                  "studio/segments/delete-a-segment-type",
+                  "studio/segments/create-a-segment",
+                  "studio/segments/edit-a-segment",
+                  "studio/segments/search-within-a-segment",
+                  "studio/segments/track-usage"
+                ]
+              },
+              {
+                "group": "Catalog",
+                "pages": [
+                  "studio/catalog/enable-enrichment",
+                  "studio/catalog/changelog",
+                  "studio/catalog/used-by",
+                  "studio/catalog/edit-order-and-sections",
+                  "studio/catalog/manage-tags"
+                ]
+              },
+              {
+                "group": "Media",
+                "pages": [
+                  "studio/media/upload-media"
+                ]
+              },
+              {
+                "group": "Destinations",
+                "pages": [
+                  "studio/destinations/create-a-destination",
+                  "studio/destinations/create-an-endpoint",
+                  "studio/destinations/select-properties",
+                  "studio/destinations/use-a-segment",
+                  "studio/destinations/create-an-alias",
+                  "studio/destinations/create-a-facet",
+                  "studio/destinations/add-languages",
+                  "studio/destinations/publish-a-destination",
+                  "studio/destinations/create-a-version",
+                  "studio/destinations/update-a-version",
+                  "studio/destinations/delete-a-version",
+                  "studio/destinations/track-usage",
+                  "studio/destinations/register-an-application",
+                  "studio/destinations/reset-a-client-secret",
+                  "studio/destinations/remove-an-application",
+                  "studio/destinations/generate-documentation"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Partner Zone",
+            "pages": [
+              "partner-zone/overview",
+              {
+                "group": "Use Partner Zone",
+                "pages": [
+                  "partner-zone/navigate-the-product-page",
+                  "partner-zone/navigate-the-media-page",
+                  "partner-zone/use-the-cart",
+                  "partner-zone/multi-search",
+                  "partner-zone/dynamic-filters"
+                ]
+              },
+              {
+                "group": "Manage partners and users",
+                "pages": [
+                  "partner-zone/manage/incoming-requests",
+                  "partner-zone/manage/users",
+                  "partner-zone/manage/export-users",
+                  "partner-zone/manage/create-a-partner",
+                  "partner-zone/manage/update-a-partner",
+                  "partner-zone/manage/partner-attributes",
+                  "partner-zone/manage/partner-information"
+                ]
+              }
+            ]
+          }
         ]
       },
       {
-        "group": "Integration",
-        "pages": [
-          "docs/Integration",
+        "tab": "API Reference",
+        "icon": "square-terminal",
+        "groups": [
           {
-            "group": "Ingest",
+            "group": "Getting started",
             "pages": [
-              "docs/Integration/Ingest",
-              {
-                "group": "Providers",
-                "pages": [
-                  "docs/Integration/Ingest/Providers",
-                  "docs/Integration/Ingest/Providers/akeneo",
-                  "docs/Integration/Ingest/Providers/bluestone",
-                  "docs/Integration/Ingest/Providers/azurequeuetrigger",
-                  "docs/Integration/Ingest/Providers/azuretable",
-                  "docs/Integration/Ingest/Providers/centra",
-                  "docs/Integration/Ingest/Providers/csv",
-                  "docs/Integration/Ingest/Providers/inriver",
-                  "docs/Integration/Ingest/Providers/norce",
-                  "docs/Integration/Ingest/Providers/shopify",
-                  "docs/Integration/Ingest/Providers/sql",
-                  "docs/Integration/Ingest/Providers/xml"
-                ]
-              }
+              "api-reference/overview"
+            ]
+          },
+          {
+            "group": "Ingest API",
+            "openapi": "/api-reference/openapi/ingest.json",
+            "pages": [
+              "api-reference/ingest/overview",
+              "POST /datasources/{dataSource}/import/verify",
+              "POST /datasources/{dataSource}/import",
+              "POST /v2/dataproviders/tokens"
+            ]
+          },
+          {
+            "group": "Events API",
+            "openapi": "/api-reference/openapi/events.json",
+            "pages": [
+              "api-reference/events/overview",
+              "GET /v1/event-types",
+              "GET /v1/events",
+              "GET /v1/events/stream",
+              "GET /v1/events/schemas/{type}/{version}",
+              "api-reference/events/streaming"
             ]
           },
           {
             "group": "Data consumption",
             "pages": [
-              "docs/Integration/Consumption",
-              {
-                "group": "Formatters",
-                "pages": [
-                  "docs/Integration/Consumption/Formatters",
-                  "docs/Integration/Consumption/Formatters/commercetools",
-                  "docs/Integration/Consumption/Formatters/brink",
-                  "docs/Integration/Consumption/Formatters/centra",
-                  "docs/Integration/Consumption/Formatters/newstore"
-                ]
-              }
+              "api-reference/consumption/overview"
             ]
           }
         ]
       },
       {
-        "group": "Concepts",
-        "pages": [
-          "docs/concepts",
+        "tab": "Integrations",
+        "icon": "plug",
+        "groups": [
           {
-            "group": "Occtoo blocks",
+            "group": "Ingest providers",
             "pages": [
-              "docs/concepts/occtoo-bloks",
-              "docs/concepts/occtoo-bloks/catalog",
-              "docs/concepts/occtoo-bloks/card",
-              "docs/concepts/occtoo-bloks/source",
-              "docs/concepts/occtoo-bloks/segment",
-              {
-                "group": "Destination",
-                "pages": [
-                  "docs/concepts/occtoo-bloks/destination",
-                  "docs/concepts/occtoo-bloks/destination/destination-types"
-                ]
-              }
+              "integrations/providers/overview",
+              "integrations/providers/akeneo",
+              "integrations/providers/bluestone-pim",
+              "integrations/providers/azure-queue-trigger",
+              "integrations/providers/azure-table-storage",
+              "integrations/providers/centra",
+              "integrations/providers/csv",
+              "integrations/providers/inriver",
+              "integrations/providers/norce",
+              "integrations/providers/shopify",
+              "integrations/providers/sql",
+              "integrations/providers/xml"
+            ]
+          },
+          {
+            "group": "Consumption formatters",
+            "pages": [
+              "integrations/formatters/overview",
+              "integrations/formatters/commercetools",
+              "integrations/formatters/brink",
+              "integrations/formatters/centra",
+              "integrations/formatters/newstore"
             ]
           }
         ]
       },
       {
-        "group": "Occtoo Studio",
+        "tab": "Changelog",
+        "icon": "list-check",
         "pages": [
-          "docs/occtoo-studio",
-          {
-            "group": "Overview",
-            "pages": [
-              "docs/occtoo-studio/overview/introduction",
-              "docs/occtoo-studio/overview/key-concepts",
-              {
-                "group": "Parts of the Studio",
-                "pages": [
-                  "docs/occtoo-studio/overview/parts-of-the-studio/sources",
-                  "docs/occtoo-studio/overview/parts-of-the-studio/cards",
-                  "docs/occtoo-studio/overview/parts-of-the-studio/segments",
-                  "docs/occtoo-studio/overview/parts-of-the-studio/destinations"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Guides",
-            "pages": [
-              {
-                "group": "Dashboard - how to...",
-                "pages": [
-                  "docs/occtoo-studio/guides/dashboard/how-to-dashboard",
-                  "docs/occtoo-studio/guides/dashboard/how-to-profile",
-                  "docs/occtoo-studio/guides/dashboard/how-to-switch-enviroment"
-                ]
-              },
-              {
-                "group": "Source - how to...",
-                "pages": [
-                  "docs/occtoo-studio/guides/sources/what-is-a-data-source-and-dataprovider",
-                  "docs/occtoo-studio/guides/sources/add-data-provider",
-                  "docs/occtoo-studio/guides/sources/add-data-source",
-                  "docs/occtoo-studio/guides/sources/how-is-data-onboarded",
-                  "docs/occtoo-studio/guides/sources/how-to-search-in-source",
-                  "docs/occtoo-studio/guides/sources/how-to-search-a-entry",
-                  "docs/occtoo-studio/guides/sources/how-to-import-data-manual",
-                  "docs/occtoo-studio/guides/sources/how-to-track-usage-of-source",
-                  "docs/occtoo-studio/guides/sources/how-to-delete-an-entry",
-                  "docs/occtoo-studio/guides/sources/how-to-update_source",
-                  "docs/occtoo-studio/guides/sources/edit-data-provider",
-                  "docs/occtoo-studio/guides/sources/how-to-reset-secretkey",
-                  "docs/occtoo-studio/guides/sources/delete-data-source",
-                  "docs/occtoo-studio/guides/sources/delete-data-provider"
-                ]
-              },
-              {
-                "group": "Card - how to...",
-                "pages": [
-                  "docs/occtoo-studio/guides/card/how-to-create-card",
-                  "docs/occtoo-studio/guides/card/how-to-create-card-name-card-descrtiption-card-image",
-                  "docs/occtoo-studio/guides/card/how-to-see-card-summery",
-                  "docs/occtoo-studio/guides/card/how-to-add-property-existing-card",
-                  "docs/occtoo-studio/guides/card/how-to-update-an-existing-property",
-                  "docs/occtoo-studio/guides/card/how-to-work-with-pending-changes",
-                  "docs/occtoo-studio/guides/card/how-to-create-card-relation",
-                  "docs/occtoo-studio/guides/card/how-to-track-usage-of-card",
-                  "docs/occtoo-studio/guides/card/how-to-archive-a-card",
-                  "docs/occtoo-studio/guides/card/delete-properties-card",
-                  "docs/occtoo-studio/guides/card/how-to-delete-card"
-                ]
-              },
-              {
-                "group": "Segment - how to...",
-                "pages": [
-                  "docs/occtoo-studio/guides/segments/how-to-create-a-segmenttype",
-                  "docs/occtoo-studio/guides/segments/how-to-manage-existing-segment-types",
-                  "docs/occtoo-studio/guides/segments/how-to-delete-a-segment-type",
-                  "docs/occtoo-studio/guides/segments/how-to-create-a-segment",
-                  "docs/occtoo-studio/guides/segments/how-to-edit-a-segment",
-                  "docs/occtoo-studio/guides/segments/how-to-filter-within-a-segment",
-                  "docs/occtoo-studio/guides/segments/how-to-track-usage-of-segment"
-                ]
-              },
-              {
-                "group": "Catalog - how to...",
-                "pages": [
-                  "docs/occtoo-studio/guides/catalogue/how-to-enable-enrichment",
-                  "docs/occtoo-studio/guides/catalogue/how-to-changelog",
-                  "docs/occtoo-studio/guides/catalogue/how-to-used-by",
-                  "docs/occtoo-studio/guides/catalogue/how-to-edit-order-and-section",
-                  "docs/occtoo-studio/guides/catalogue/how-to-managed-tags"
-                ]
-              },
-              {
-                "group": "Media - how to...",
-                "pages": [
-                  "docs/occtoo-studio/guides/media/how-to-configure-media"
-                ]
-              },
-              {
-                "group": "Destination - how to...",
-                "pages": [
-                  "docs/occtoo-studio/guides/destination/how-to-create-destination",
-                  "docs/occtoo-studio/guides/destination/how-to-create-an-endpoint",
-                  "docs/occtoo-studio/guides/destination/how-to-select-property-endpoint",
-                  "docs/occtoo-studio/guides/destination/how-to-use-segtemnt-in-an-endpoint",
-                  "docs/occtoo-studio/guides/destination/how-to-create-alias-endpoint",
-                  "docs/occtoo-studio/guides/destination/how-to-create-facets-endpoint",
-                  "docs/occtoo-studio/guides/destination/how-to-create-langugae-in-destination",
-                  "docs/occtoo-studio/guides/destination/how-to-publish-destination",
-                  "docs/occtoo-studio/guides/destination/how-to-create-version-of-destination",
-                  "docs/occtoo-studio/guides/destination/how-to-update-existing-version-of-destination",
-                  "docs/occtoo-studio/guides/destination/how-to-delete-version-destination",
-                  "docs/occtoo-studio/guides/destination/how-to-track-usage-of-destination",
-                  "docs/occtoo-studio/guides/destination/how-to-register-an-application",
-                  "docs/occtoo-studio/guides/destination/how-to-reset-secret",
-                  "docs/occtoo-studio/guides/destination/how-to-remove-application",
-                  "docs/occtoo-studio/guides/destination/how-to-generate-documentation"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Feature Highlight",
-            "pages": [
-              "docs/occtoo-studio/feature-highlight/working-with-properties-and-data-types"
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Partner Zone",
-        "pages": [
-          "docs/partner-zone",
-          {
-            "group": "Partner Zone - how to...",
-            "pages": [
-              "docs/partner-zone/how-to-work-with-partner-zone/how-to-navigate-product-page",
-              "docs/partner-zone/how-to-work-with-partner-zone/how-to-navigate-media-page",
-              "docs/partner-zone/how-to-work-with-partner-zone/how-to-use-cart",
-              "docs/partner-zone/how-to-work-with-partner-zone/how-to-multi-search",
-              "docs/partner-zone/how-to-work-with-partner-zone/how-to-use-dynamic-filter"
-            ]
-          },
-          {
-            "group": "Manage partners and users - how to...",
-            "pages": [
-              "docs/partner-zone/how-to-manage-partners-and-users/Incoming-requests",
-              "docs/partner-zone/how-to-manage-partners-and-users/add-delete-user",
-              "docs/partner-zone/how-to-manage-partners-and-users/export-lists",
-              "docs/partner-zone/how-to-manage-partners-and-users/new-partner",
-              "docs/partner-zone/how-to-manage-partners-and-users/update-partner",
-              "docs/partner-zone/how-to-manage-partners-and-users/partner-attribute",
-              "docs/partner-zone/how-to-manage-partners-and-users/partner-info"
-            ]
-          }
+          "changelog"
         ]
       }
     ]
@@ -272,5 +277,483 @@
       "github": "https://github.com/Occtoo",
       "linkedin": "https://www.linkedin.com/company/occtoo"
     }
-  }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude"
+    ]
+  },
+  "redirects": [
+    {
+      "source": "/docs/intro",
+      "destination": "/get-started/introduction"
+    },
+    {
+      "source": "/docs/get-started",
+      "destination": "/get-started/overview"
+    },
+    {
+      "source": "/docs/get-started/my-first-occtoo-experience",
+      "destination": "/get-started/my-first-occtoo-experience"
+    },
+    {
+      "source": "/docs/get-started/provide-data",
+      "destination": "/get-started/get-data-into-occtoo"
+    },
+    {
+      "source": "/docs/get-started/call-custom-destination",
+      "destination": "/get-started/call-a-destination-api"
+    },
+    {
+      "source": "/docs/get-started/occtoo-mcp",
+      "destination": "/get-started/occtoo-mcp"
+    },
+    {
+      "source": "/docs/get-started/multifactor-authentication",
+      "destination": "/get-started/multifactor-authentication"
+    },
+    {
+      "source": "/docs/get-started/occtoo-start",
+      "destination": "/get-started/occtoo-start/overview"
+    },
+    {
+      "source": "/docs/get-started/occtoo-start/occtoo-start-1-data-activation",
+      "destination": "/get-started/occtoo-start/data-activation"
+    },
+    {
+      "source": "/docs/get-started/occtoo-start/occtoo-start-2-hyper-intelligent-products",
+      "destination": "/get-started/occtoo-start/hyper-intelligent-products"
+    },
+    {
+      "source": "/docs/get-started/occtoo-start/occtoo-start-3-process-and-roles",
+      "destination": "/get-started/occtoo-start/process-and-roles"
+    },
+    {
+      "source": "/docs/concepts",
+      "destination": "/concepts/overview"
+    },
+    {
+      "source": "/docs/concepts/occtoo-bloks",
+      "destination": "/concepts/overview"
+    },
+    {
+      "source": "/docs/concepts/occtoo-bloks/catalog",
+      "destination": "/concepts/catalog"
+    },
+    {
+      "source": "/docs/concepts/occtoo-bloks/card",
+      "destination": "/concepts/card"
+    },
+    {
+      "source": "/docs/concepts/occtoo-bloks/source",
+      "destination": "/concepts/source"
+    },
+    {
+      "source": "/docs/concepts/occtoo-bloks/segment",
+      "destination": "/concepts/segment"
+    },
+    {
+      "source": "/docs/concepts/occtoo-bloks/destination",
+      "destination": "/concepts/destination"
+    },
+    {
+      "source": "/docs/concepts/occtoo-bloks/destination/destination-types",
+      "destination": "/concepts/destination-types"
+    },
+    {
+      "source": "/docs/occtoo-studio/overview/parts-of-the-studio/sources",
+      "destination": "/concepts/source"
+    },
+    {
+      "source": "/docs/occtoo-studio/overview/parts-of-the-studio/cards",
+      "destination": "/concepts/card"
+    },
+    {
+      "source": "/docs/occtoo-studio/overview/parts-of-the-studio/segments",
+      "destination": "/concepts/segment"
+    },
+    {
+      "source": "/docs/occtoo-studio/overview/parts-of-the-studio/destinations",
+      "destination": "/concepts/destination"
+    },
+    {
+      "source": "/docs/occtoo-studio",
+      "destination": "/studio/overview"
+    },
+    {
+      "source": "/docs/occtoo-studio/overview/introduction",
+      "destination": "/studio/overview"
+    },
+    {
+      "source": "/docs/occtoo-studio/overview/key-concepts",
+      "destination": "/studio/key-concepts"
+    },
+    {
+      "source": "/docs/occtoo-studio/feature-highlight/working-with-properties-and-data-types",
+      "destination": "/studio/properties-and-data-types"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/dashboard/how-to-dashboard",
+      "destination": "/studio/dashboard/overview"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/dashboard/how-to-profile",
+      "destination": "/studio/dashboard/profile"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/dashboard/how-to-switch-enviroment",
+      "destination": "/studio/dashboard/switch-environments"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/what-is-a-data-source-and-dataprovider",
+      "destination": "/studio/sources/data-sources-and-providers"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/add-data-provider",
+      "destination": "/studio/sources/add-a-data-provider"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/add-data-source",
+      "destination": "/studio/sources/add-a-data-source"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/how-is-data-onboarded",
+      "destination": "/studio/sources/import-data"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/how-to-search-in-source",
+      "destination": "/studio/sources/search-in-a-source"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/how-to-search-a-entry",
+      "destination": "/studio/sources/search-in-an-entry"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/how-to-import-data-manual",
+      "destination": "/studio/sources/manual-import"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/how-to-track-usage-of-source",
+      "destination": "/studio/sources/track-usage"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/how-to-delete-an-entry",
+      "destination": "/studio/sources/delete-an-entry"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/how-to-update_source",
+      "destination": "/studio/sources/edit-a-source"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/edit-data-provider",
+      "destination": "/studio/sources/edit-a-data-provider"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/how-to-reset-secretkey",
+      "destination": "/studio/sources/reset-a-client-secret"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/delete-data-source",
+      "destination": "/studio/sources/delete-a-data-source"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/sources/delete-data-provider",
+      "destination": "/studio/sources/remove-a-data-provider"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-create-card",
+      "destination": "/studio/cards/create-a-card"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-create-card-name-card-descrtiption-card-image",
+      "destination": "/studio/cards/display-name-description-and-image"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-see-card-summery",
+      "destination": "/studio/cards/card-summary"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-add-property-existing-card",
+      "destination": "/studio/cards/add-a-property"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-update-an-existing-property",
+      "destination": "/studio/cards/update-a-property"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-work-with-pending-changes",
+      "destination": "/studio/cards/pending-changes"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-create-card-relation",
+      "destination": "/studio/cards/card-relations"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-track-usage-of-card",
+      "destination": "/studio/cards/track-usage"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-archive-a-card",
+      "destination": "/studio/cards/archive-a-card"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/delete-properties-card",
+      "destination": "/studio/cards/delete-a-property"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/card/how-to-delete-card",
+      "destination": "/studio/cards/delete-a-card"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/segments/how-to-create-a-segmenttype",
+      "destination": "/studio/segments/create-a-segment-type"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/segments/how-to-manage-existing-segment-types",
+      "destination": "/studio/segments/manage-segment-types"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/segments/how-to-delete-a-segment-type",
+      "destination": "/studio/segments/delete-a-segment-type"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/segments/how-to-create-a-segment",
+      "destination": "/studio/segments/create-a-segment"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/segments/how-to-edit-a-segment",
+      "destination": "/studio/segments/edit-a-segment"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/segments/how-to-filter-within-a-segment",
+      "destination": "/studio/segments/search-within-a-segment"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/segments/how-to-track-usage-of-segment",
+      "destination": "/studio/segments/track-usage"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/catalogue/how-to-enable-enrichment",
+      "destination": "/studio/catalog/enable-enrichment"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/catalogue/how-to-changelog",
+      "destination": "/studio/catalog/changelog"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/catalogue/how-to-used-by",
+      "destination": "/studio/catalog/used-by"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/catalogue/how-to-edit-order-and-section",
+      "destination": "/studio/catalog/edit-order-and-sections"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/catalogue/how-to-managed-tags",
+      "destination": "/studio/catalog/manage-tags"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/media/how-to-configure-media",
+      "destination": "/studio/media/upload-media"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-create-destination",
+      "destination": "/studio/destinations/create-a-destination"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-create-an-endpoint",
+      "destination": "/studio/destinations/create-an-endpoint"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-select-property-endpoint",
+      "destination": "/studio/destinations/select-properties"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-use-segtemnt-in-an-endpoint",
+      "destination": "/studio/destinations/use-a-segment"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-create-alias-endpoint",
+      "destination": "/studio/destinations/create-an-alias"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-create-facets-endpoint",
+      "destination": "/studio/destinations/create-a-facet"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-create-langugae-in-destination",
+      "destination": "/studio/destinations/add-languages"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-publish-destination",
+      "destination": "/studio/destinations/publish-a-destination"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-create-version-of-destination",
+      "destination": "/studio/destinations/create-a-version"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-update-existing-version-of-destination",
+      "destination": "/studio/destinations/update-a-version"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-delete-version-destination",
+      "destination": "/studio/destinations/delete-a-version"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-track-usage-of-destination",
+      "destination": "/studio/destinations/track-usage"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-register-an-application",
+      "destination": "/studio/destinations/register-an-application"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-reset-secret",
+      "destination": "/studio/destinations/reset-a-client-secret"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-remove-application",
+      "destination": "/studio/destinations/remove-an-application"
+    },
+    {
+      "source": "/docs/occtoo-studio/guides/destination/how-to-generate-documentation",
+      "destination": "/studio/destinations/generate-documentation"
+    },
+    {
+      "source": "/docs/partner-zone",
+      "destination": "/partner-zone/overview"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-work-with-partner-zone/how-to-navigate-product-page",
+      "destination": "/partner-zone/navigate-the-product-page"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-work-with-partner-zone/how-to-navigate-media-page",
+      "destination": "/partner-zone/navigate-the-media-page"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-work-with-partner-zone/how-to-use-cart",
+      "destination": "/partner-zone/use-the-cart"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-work-with-partner-zone/how-to-multi-search",
+      "destination": "/partner-zone/multi-search"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-work-with-partner-zone/how-to-use-dynamic-filter",
+      "destination": "/partner-zone/dynamic-filters"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-manage-partners-and-users/Incoming-requests",
+      "destination": "/partner-zone/manage/incoming-requests"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-manage-partners-and-users/add-delete-user",
+      "destination": "/partner-zone/manage/users"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-manage-partners-and-users/export-lists",
+      "destination": "/partner-zone/manage/export-users"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-manage-partners-and-users/new-partner",
+      "destination": "/partner-zone/manage/create-a-partner"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-manage-partners-and-users/update-partner",
+      "destination": "/partner-zone/manage/update-a-partner"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-manage-partners-and-users/partner-attribute",
+      "destination": "/partner-zone/manage/partner-attributes"
+    },
+    {
+      "source": "/docs/partner-zone/how-to-manage-partners-and-users/partner-info",
+      "destination": "/partner-zone/manage/partner-information"
+    },
+    {
+      "source": "/docs/Integration",
+      "destination": "/api-reference/overview"
+    },
+    {
+      "source": "/docs/Integration/Ingest",
+      "destination": "/api-reference/ingest/overview"
+    },
+    {
+      "source": "/docs/Integration/Consumption",
+      "destination": "/api-reference/consumption/overview"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers",
+      "destination": "/integrations/providers/overview"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/akeneo",
+      "destination": "/integrations/providers/akeneo"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/bluestone",
+      "destination": "/integrations/providers/bluestone-pim"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/azurequeuetrigger",
+      "destination": "/integrations/providers/azure-queue-trigger"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/azuretable",
+      "destination": "/integrations/providers/azure-table-storage"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/centra",
+      "destination": "/integrations/providers/centra"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/csv",
+      "destination": "/integrations/providers/csv"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/inriver",
+      "destination": "/integrations/providers/inriver"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/norce",
+      "destination": "/integrations/providers/norce"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/shopify",
+      "destination": "/integrations/providers/shopify"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/sql",
+      "destination": "/integrations/providers/sql"
+    },
+    {
+      "source": "/docs/Integration/Ingest/Providers/xml",
+      "destination": "/integrations/providers/xml"
+    },
+    {
+      "source": "/docs/Integration/Consumption/Formatters",
+      "destination": "/integrations/formatters/overview"
+    },
+    {
+      "source": "/docs/Integration/Consumption/Formatters/commercetools",
+      "destination": "/integrations/formatters/commercetools"
+    },
+    {
+      "source": "/docs/Integration/Consumption/Formatters/brink",
+      "destination": "/integrations/formatters/brink"
+    },
+    {
+      "source": "/docs/Integration/Consumption/Formatters/centra",
+      "destination": "/integrations/formatters/centra"
+    },
+    {
+      "source": "/docs/Integration/Consumption/Formatters/newstore",
+      "destination": "/integrations/formatters/newstore"
+    }
+  ]
 }

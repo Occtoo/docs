@@ -1,0 +1,18 @@
+---
+title: "Azure Queue Trigger"
+description: "Introduction"
+---
+
+## Introduction
+
+This is a template project for creating provider to onboard data from [Azure queue storage](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-queue-trigger?tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cextensionv5&pivots=programming-language-csharp). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.AzureQueueTrigger).
+
+## How it works
+
+The program contains two functions. One http triggered that will add three the messages to the queue, call this one from a browser when running locally . The second one will trigger on any messages added and converts each message into a [Dynamic Entity](https://github.com/Occtoo/Occtoo.Onboarding.Sdk/blob/main/src/Occtoo.Onboarding.Sdk/Models/DynamicEntity.cs). They are then imported into Occtoo using the [OnboardingServiceClient](https://github.com/Occtoo/Occtoo.Onboarding.Sdk)
+
+Check our documentation on [how to set up a Provider in Occtoo Studio](/get-started/get-data-into-occtoo#1a-clientsecret) to get your provider details.
+
+## Download and Installation
+
+Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Provider.AzureQueueTrigger). Build and deploy to your azure instance

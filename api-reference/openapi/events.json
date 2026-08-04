@@ -1,0 +1,754 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Occtoo Events API",
+    "description": "Occtoo Events API exposes customer-safe CloudEvents derived from changes across an Occtoo tenant. Use pull for scheduled or batch processing and SSE for low-latency delivery. Both transports read the same ordered, 90-day retained event projection.\n\n## Quick start\n\n1. Select **Authorize** and sign in with the existing Occtoo identity, or provide a bearer token or organization API key.\n2. Inspect the [event catalog](https://api-test.occtoo.com/v1/event-types) to select event types and entity-level filters.\n3. Pull the first page, process it, and persist its `after` cursor.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'limit=100' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\n## Authentication and tenancy\n\nEvent reads require a tenant-scoped credential. Interactive user calls use Authorization Code with PKCE and can reuse the existing Occtoo sign-in session. Machine consumers can send a tenant-scoped Kinde application token as `Authorization: Bearer <token>` or an Occtoo organization API key as `x-api-key: <organization-api-key>`. The gateway validates the credential and supplies its tenant and actor identity to the Events API; the tenant cannot be selected with a query parameter. Version 1 requires a valid tenant credential but does not require an event-specific permission.\n\nNative browser `EventSource` cannot attach either authorization header. Browser applications should consume SSE with streaming `fetch` or relay it through an authenticated backend; server-side SSE clients can set either header directly.\n\n## Delivery and checkpoints\n\nEvents are ordered by the fixed-width `sequence` extension rather than their timestamp. Pull normally transports that position as an opaque `after` cursor, but accepts the raw sequence as a recovery checkpoint when the cursor was not retained. SSE transports the raw sequence as `Last-Event-ID`. Resuming is exclusive: the event at the supplied position is not delivered again. Public event ids are deterministic UUIDv5 values, so replaying the same internal event recreates the same id. Consumers should nevertheless make business processing idempotent and checkpoint only after successful processing.\n\n### Recover from a recorded sequence\n\nIf the returned pull cursor was lost but the last successfully processed CloudEvent `sequence` was retained, pass that sequence directly as `after`. Continue using the same filter as the original subscription.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'after=003.00000000000000184467' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo resume SSE from the same processed position, send `Last-Event-ID: 003.00000000000000184467`. The first event returned has a greater sequence.\n\n## Filtering\n\n`filter` implements a bounded RFC 7644-derived subset: `eq`, `and`, `or`, parentheses and JSON double-quoted strings. `and` binds more tightly than `or`. Use parentheses when combining event families. Only `type` and the entity-level properties advertised by the catalog are accepted; entry/card-level filters are intentionally unavailable.\n\n## Schema compatibility\n\nThe CloudEvent `type` is stable and unversioned. Read the exact payload version from `dataschema`. A new minor version is additive: ignore unknown fields and fetch the new immutable schema asynchronously. Do not deserialize a new major version as an earlier major; retain or quarantine the raw event until the consumer is upgraded.\n\nMachine-readable contracts: [OpenAPI](https://api-test.occtoo.com/openapi/events.json) · [AsyncAPI](https://api-test.occtoo.com/asyncapi/events.json) · [event catalog](https://api-test.occtoo.com/v1/event-types)",
+    "version": "1.0.0",
+    "summary": "Pull and stream tenant-scoped Occtoo events."
+  },
+  "servers": [
+    {
+      "url": "https://api-test.occtoo.com",
+      "description": "Occtoo public API"
+    }
+  ],
+  "paths": {
+    "/v1/event-types": {
+      "get": {
+        "tags": [
+          "Event discovery"
+        ],
+        "summary": "List public event types and schema versions",
+        "description": "Returns the public event catalog. Each entry identifies a stable event `type`, its current payload schema version, the immutable JSON Schema URL, and the entity-level properties accepted by the filter grammar.\n\nCache the catalog briefly and resolve payload contracts through `schemaUrl`. Event type names do not contain a schema version.",
+        "operationId": "GetPublicEventTypes",
+        "responses": {
+          "200": {
+            "description": "The currently supported public event catalog.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicEventType"
+                  }
+                },
+                "examples": {
+                  "sourceUpdated": {
+                    "summary": "One catalog entry",
+                    "value": [
+                      {
+                        "type": "source.updated",
+                        "version": "1.0",
+                        "description": "A source configuration changed.",
+                        "schemaUrl": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0",
+                        "filterableProperties": [
+                          "sourceId"
+                        ],
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "sourceId": {
+                              "type": "string",
+                              "x-occtoo-filterable": true
+                            },
+                            "changes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "properties": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "change": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "change"
+                                ]
+                              },
+                              "default": null
+                            },
+                            "correlationIds": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "actor": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "sourceId",
+                            "changes",
+                            "correlationIds"
+                          ],
+                          "$schema": "https://json-schema.org/draft/2020-12/schema",
+                          "$id": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0",
+                          "additionalProperties": true
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events": {
+      "get": {
+        "tags": [
+          "Event delivery"
+        ],
+        "summary": "Pull public events",
+        "description": "Reads retained events in ascending `sequence` order. Every item is a structured CloudEvent 1.0 document.\n\n**Cursor handling**\n\n- Omit `after` to start at the beginning of the retained tenant stream.\n- Persist the returned `after` cursor only after the page has been processed successfully.\n- If the cursor is lost, `after` also accepts the raw fixed-width `sequence` of the last successfully processed event.\n- A cursor identifies a position in the tenant stream, not in a filtered view. Persist the filter together with its cursor.\n\nSet `total=true` only when an exact count is required. The count covers all matching events after the supplied cursor, before the page limit is applied.",
+        "operationId": "PullPublicEvents",
+        "parameters": [
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Opaque cursor returned by the previous pull page, or the raw fixed-width `sequence` of the last successfully processed event for recovery. Events at or before the supplied position are excluded. Omit it to begin at the earliest retained event.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "MDAzLjAwMDAwMDAwMDAwMDAwMTg0NDY3"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of events to return. The default is 100 and the maximum is 1,000.",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32",
+              "default": 100
+            },
+            "example": 100
+          },
+          {
+            "name": "total",
+            "in": "query",
+            "description": "When true, includes the exact number of events matching the tenant, after cursor and filter before the page limit. The count is omitted by default because it requires scanning all matches.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "example": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types.",
+            "schema": {
+              "maxLength": 4096,
+              "type": "string"
+            },
+            "example": "(type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\")",
+            "x-occtoo-filter-dialect": "rfc7644-subset",
+            "x-occtoo-filter-operators": [
+              "eq",
+              "and",
+              "or"
+            ],
+            "x-occtoo-filterable-properties": [
+              "apiVersion",
+              "apiVersionId",
+              "cardDefinitionId",
+              "destinationId",
+              "endpointId",
+              "segmentDefinitionId",
+              "segmentId",
+              "sourceId",
+              "userId"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An ordered page of tenant events and its continuation cursor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicEventsResponse"
+                },
+                "examples": {
+                  "matchingEvents": {
+                    "summary": "A page with a matching source event",
+                    "value": {
+                      "items": [
+                        {
+                          "specversion": "1.0",
+                          "id": "0197a2b4-7c1e-59f3-a8d4-1b2c3d4e5f60",
+                          "type": "source.updated",
+                          "source": "/sources/products",
+                          "subject": "products",
+                          "time": "2026-07-04T09:15:12.345Z",
+                          "datacontenttype": "application/json",
+                          "dataschema": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0",
+                          "sequence": "003.00000000000000184467",
+                          "tenantid": "9f3c2a10-2e2e-4e67-b941-89e8d3190c47",
+                          "data": {
+                            "sourceId": "products",
+                            "changes": [
+                              "settings"
+                            ],
+                            "correlationIds": [
+                              "0197a2b4-56bb-7b38-b82c-33b55b61ef2a"
+                            ]
+                          }
+                        }
+                      ],
+                      "after": "MDAzLjAwMDAwMDAwMDAwMDAwMTg0NDY3",
+                      "hasMore": true,
+                      "total": 42
+                    }
+                  },
+                  "emptyPage": {
+                    "summary": "No events currently match after the cursor",
+                    "value": {
+                      "items": [ ],
+                      "after": "MDAzLjAwMDAwMDAwMDAwMDAwMTg0NDY3",
+                      "hasMore": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The cursor, limit or filter expression is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "examples": {
+                  "invalidFilter": {
+                    "summary": "An unsupported filter property",
+                    "value": {
+                      "message": "Property 'entryId' is not filterable."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The credential is missing, invalid or does not identify an Occtoo tenant."
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/events/stream": {
+      "get": {
+        "tags": [
+          "Event delivery"
+        ],
+        "summary": "Stream public events using SSE",
+        "description": "Opens a long-lived Server-Sent Events connection and emits the same structured CloudEvents returned by the pull endpoint.\n\nEach SSE frame uses the CloudEvent `sequence` as `id`, its `type` as `event`, and the complete CloudEvent JSON as `data`. Reconnect with `Last-Event-ID`; the `after` query parameter is available for the initial connection. When both are supplied, `Last-Event-ID` takes precedence.\n\nComment-only heartbeats keep the connection and gateway activity window alive. Consumers must ignore comment frames and persist the last successfully processed event id.",
+        "externalDocs": {
+          "description": "AsyncAPI channel and message contract",
+          "url": "/asyncapi/events.json"
+        },
+        "operationId": "StreamPublicEvents",
+        "parameters": [
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Opaque pull cursor or raw fixed-width event `sequence` used to position the initial SSE connection. `Last-Event-ID` takes precedence on reconnect.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "MDAzLjAwMDAwMDAwMDAwMDAwMTg0NDY3"
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types.",
+            "schema": {
+              "maxLength": 4096,
+              "type": "string"
+            },
+            "example": "(type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\")",
+            "x-occtoo-filter-dialect": "rfc7644-subset",
+            "x-occtoo-filter-operators": [
+              "eq",
+              "and",
+              "or"
+            ],
+            "x-occtoo-filterable-properties": [
+              "apiVersion",
+              "apiVersionId",
+              "cardDefinitionId",
+              "destinationId",
+              "endpointId",
+              "segmentDefinitionId",
+              "segmentId",
+              "sourceId",
+              "userId"
+            ]
+          },
+          {
+            "name": "Last-Event-ID",
+            "in": "header",
+            "description": "Raw `sequence` from the last successfully processed SSE event. Sent automatically by conforming SSE clients when they reconnect.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "003.00000000000000184467"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A resumable Server-Sent Events stream of structured CloudEvents.",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "SSE frames containing one structured CloudEvent per `data` field."
+                },
+                "examples": {
+                  "sourceUpdated": {
+                    "summary": "One source.updated SSE frame",
+                    "value": "id: 003.00000000000000184467\nevent: source.updated\ndata: {\"specversion\":\"1.0\",\"id\":\"0197a2b4-7c1e-59f3-a8d4-1b2c3d4e5f60\",\"type\":\"source.updated\",\"source\":\"/sources/products\",\"subject\":\"products\",\"time\":\"2026-07-04T09:15:12.345Z\",\"datacontenttype\":\"application/json\",\"dataschema\":\"https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0\",\"sequence\":\"003.00000000000000184467\",\"tenantid\":\"9f3c2a10-2e2e-4e67-b941-89e8d3190c47\",\"data\":{\"sourceId\":\"products\",\"changes\":[\"settings\"],\"correlationIds\":[\"0197a2b4-56bb-7b38-b82c-33b55b61ef2a\"]}}\n\n"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The cursor, limit or filter expression is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "examples": {
+                  "invalidFilter": {
+                    "summary": "An unsupported filter property",
+                    "value": {
+                      "message": "Property 'entryId' is not filterable."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The credential is missing, invalid or does not identify an Occtoo tenant."
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ]
+      }
+    },
+    "/v1/events/schemas/{type}/{version}": {
+      "get": {
+        "tags": [
+          "Event schemas"
+        ],
+        "summary": "Get a versioned event data schema",
+        "description": "Returns the immutable JSON Schema for one event data payload version.\n\nCompatible additive changes receive a new minor version. Removing or renaming fields, changing a field type or meaning, or adding a required field receives a new major version. Documentation-only changes do not create a schema version.",
+        "operationId": "GetPublicEventSchema",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Stable event type from the event catalog.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "source.updated"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Payload schema version in `major.minor` form.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "1.0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The immutable JSON Schema for the requested event data payload.",
+            "content": {
+              "application/schema+json": {
+                "schema": {
+                  "type": "object",
+                  "description": "A JSON Schema Draft 2020-12 document."
+                },
+                "examples": {
+                  "sourceUpdatedSchema": {
+                    "summary": "source.updated data schema",
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "sourceId": {
+                          "type": "string",
+                          "x-occtoo-filterable": true
+                        },
+                        "changes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "properties": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "change": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "change"
+                            ]
+                          },
+                          "default": null
+                        },
+                        "correlationIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "actor": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "sourceId",
+                        "changes",
+                        "correlationIds"
+                      ],
+                      "$schema": "https://json-schema.org/draft/2020-12/schema",
+                      "$id": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0",
+                      "additionalProperties": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The event type or schema version is not in the public catalog.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "examples": {
+                  "unknownSchema": {
+                    "summary": "Unknown event schema",
+                    "value": {
+                      "message": "Unknown event schema source.updated/2.0."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiError": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "CloudEvent": {
+        "required": [
+          "specversion",
+          "id",
+          "type",
+          "source",
+          "subject",
+          "datacontenttype",
+          "dataschema",
+          "sequence",
+          "tenantid",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "specversion": {
+            "type": "string",
+            "description": "CloudEvents specification version.",
+            "example": "1.0"
+          },
+          "id": {
+            "type": "string",
+            "description": "Deterministic UUIDv5 idempotency key.",
+            "format": "uuid",
+            "example": "0197a2b4-7c1e-59f3-a8d4-1b2c3d4e5f60"
+          },
+          "type": {
+            "type": "string",
+            "description": "Stable, unversioned event type.",
+            "example": "source.updated"
+          },
+          "source": {
+            "type": "string",
+            "description": "Tenant-relative resource path that produced the event.",
+            "example": "/sources/products"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Entity key within the source resource.",
+            "example": "products"
+          },
+          "time": {
+            "type": "string",
+            "description": "UTC time at which the domain change occurred when supplied by the source event. This optional field is never synthesized from delivery or processing time.",
+            "format": "date-time",
+            "example": "2026-07-04T09:15:12.345Z"
+          },
+          "datacontenttype": {
+            "type": "string",
+            "description": "Media type of `data`.",
+            "example": "application/json"
+          },
+          "dataschema": {
+            "type": "string",
+            "description": "Immutable versioned JSON Schema URL for `data`.",
+            "format": "uri",
+            "example": "https://api.occtoo.com/v1/events/schemas/source.updated/1.0"
+          },
+          "sequence": {
+            "type": "string",
+            "description": "Fixed-width tenant stream position and SSE event id.",
+            "example": "003.00000000000000184467"
+          },
+          "tenantid": {
+            "type": "string",
+            "description": "Occtoo tenant identifier included for multi-tenant consumers.",
+            "format": "uuid",
+            "example": "9f3c2a10-2e2e-4e67-b941-89e8d3190c47"
+          },
+          "data": {
+            "type": "object",
+            "description": "Event-specific payload validated by `dataschema`."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Customer-safe CloudEvents 1.0 envelope returned by both delivery transports."
+      },
+      "JsonObject": {
+        "type": "object"
+      },
+      "PublicEventsResponse": {
+        "required": [
+          "items",
+          "after",
+          "hasMore"
+        ],
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CloudEvent"
+            },
+            "description": "Structured CloudEvents in ascending `sequence` order."
+          },
+          "after": {
+            "type": "string",
+            "description": "Opaque continuation cursor to send with the next request.",
+            "example": "MDAzLjAwMDAwMDAwMDAwMDAwMTg0NDY3"
+          },
+          "hasMore": {
+            "type": "boolean",
+            "description": "Whether another matching event was available when this page was read.",
+            "example": true
+          },
+          "total": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "Exact matching count when `total=true`; omitted otherwise.",
+            "format": "int64",
+            "example": 42
+          }
+        },
+        "description": "A finite page from the ordered tenant event stream."
+      },
+      "PublicEventType": {
+        "required": [
+          "type",
+          "version",
+          "description",
+          "schemaUrl",
+          "filterableProperties",
+          "schema"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Stable, unversioned CloudEvent type.",
+            "example": "source.updated"
+          },
+          "version": {
+            "type": "string",
+            "description": "Current payload JSON Schema version.",
+            "example": "1.0"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable event meaning.",
+            "example": "A source configuration changed."
+          },
+          "schemaUrl": {
+            "type": "string",
+            "description": "Immutable URL used by the CloudEvent `dataschema` attribute."
+          },
+          "filterableProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Entity-level data properties accepted by the filter grammar for this type."
+          },
+          "schema": {
+            "description": "The current JSON Schema, included inline for discovery clients.",
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        },
+        "description": "One supported public event type and its current payload contract."
+      }
+    },
+    "securitySchemes": {
+      "kindeOAuth": {
+        "type": "oauth2",
+        "description": "Sign in with the existing Occtoo Studio identity and selected organization.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://auth-test.occtoo.com/oauth2/auth?audience=https%3A%2F%2Fapi-test.occtoo.com",
+            "tokenUrl": "https://auth-test.occtoo.com/oauth2/token",
+            "scopes": {
+              "openid": "Authenticate the user with OpenID Connect.",
+              "profile": "Read the user's basic profile.",
+              "email": "Read the user's email address.",
+              "offline": "Refresh the access token without another interactive sign-in."
+            },
+            "x-usePkce": "SHA-256",
+            "x-scalar-redirect-uri": "https://api-test.occtoo.com/docs/"
+          }
+        }
+      },
+      "bearerAuth": {
+        "type": "http",
+        "description": "Tenant-scoped Occtoo access token, including Kinde machine-to-machine application tokens.",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "apiKey": {
+        "type": "apiKey",
+        "description": "Occtoo organization API key.",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Event delivery",
+      "description": "Consume the ordered tenant event feed by finite pull pages or a resumable SSE connection. Both transports use the same cursor and filter semantics."
+    },
+    {
+      "name": "Event discovery",
+      "description": "Discover stable event type names, available schema versions and the entity properties that can be filtered."
+    },
+    {
+      "name": "Event schemas",
+      "description": "Retrieve immutable JSON Schemas referenced by each CloudEvent `dataschema` attribute."
+    }
+  ],
+  "externalDocs": {
+    "description": "AsyncAPI contract for the SSE channel and all event messages",
+    "url": "https://api-test.occtoo.com/asyncapi/events.json"
+  }
+}

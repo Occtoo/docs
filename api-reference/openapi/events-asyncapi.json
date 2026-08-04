@@ -1,0 +1,2222 @@
+{
+ "asyncapi": "3.0.0",
+ "info": {
+  "title": "Occtoo Events API",
+  "version": "1.0.0",
+  "description": "Tenant-scoped Occtoo events delivered as CloudEvents over Server-Sent Events.",
+  "externalDocs": {
+   "description": "Interactive HTTP API reference",
+   "url": "https://api-test.occtoo.com/docs"
+  }
+ },
+ "defaultContentType": "application/cloudevents+json",
+ "servers": {
+  "production": {
+   "host": "api-test.occtoo.com",
+   "protocol": "https",
+   "description": "Occtoo public API",
+   "security": [
+    {
+     "$ref": "#/components/securitySchemes/bearerAuth"
+    },
+    {
+     "$ref": "#/components/securitySchemes/apiKey"
+    }
+   ]
+  }
+ },
+ "channels": {
+  "events": {
+   "address": "/v1/events/stream",
+   "title": "Tenant event stream",
+   "description": "An ordered SSE stream. The SSE id field contains the raw resumable event sequence; the initial after query accepts either that sequence or a pull cursor.",
+   "messages": {
+    "card.segment_membership_changed": {
+     "$ref": "#/components/messages/card.segment_membership_changed"
+    },
+    "card.updated": {
+     "$ref": "#/components/messages/card.updated"
+    },
+    "card_definition.activated": {
+     "$ref": "#/components/messages/card_definition.activated"
+    },
+    "card_definition.created": {
+     "$ref": "#/components/messages/card_definition.created"
+    },
+    "card_definition.deleted": {
+     "$ref": "#/components/messages/card_definition.deleted"
+    },
+    "card_definition.restored": {
+     "$ref": "#/components/messages/card_definition.restored"
+    },
+    "card_definition.updated": {
+     "$ref": "#/components/messages/card_definition.updated"
+    },
+    "destination.created": {
+     "$ref": "#/components/messages/destination.created"
+    },
+    "destination.deleted": {
+     "$ref": "#/components/messages/destination.deleted"
+    },
+    "destination.published": {
+     "$ref": "#/components/messages/destination.published"
+    },
+    "destination.stopped": {
+     "$ref": "#/components/messages/destination.stopped"
+    },
+    "destination_entry.deleted": {
+     "$ref": "#/components/messages/destination_entry.deleted"
+    },
+    "destination_entry.updated": {
+     "$ref": "#/components/messages/destination_entry.updated"
+    },
+    "endpoint.created": {
+     "$ref": "#/components/messages/endpoint.created"
+    },
+    "endpoint.deleted": {
+     "$ref": "#/components/messages/endpoint.deleted"
+    },
+    "endpoint.updated": {
+     "$ref": "#/components/messages/endpoint.updated"
+    },
+    "segment.archived": {
+     "$ref": "#/components/messages/segment.archived"
+    },
+    "segment.created": {
+     "$ref": "#/components/messages/segment.created"
+    },
+    "segment.deleted": {
+     "$ref": "#/components/messages/segment.deleted"
+    },
+    "segment.restored": {
+     "$ref": "#/components/messages/segment.restored"
+    },
+    "segment.updated": {
+     "$ref": "#/components/messages/segment.updated"
+    },
+    "source.created": {
+     "$ref": "#/components/messages/source.created"
+    },
+    "source.deleted": {
+     "$ref": "#/components/messages/source.deleted"
+    },
+    "source.updated": {
+     "$ref": "#/components/messages/source.updated"
+    },
+    "source_entry.added": {
+     "$ref": "#/components/messages/source_entry.added"
+    },
+    "source_entry.deleted": {
+     "$ref": "#/components/messages/source_entry.deleted"
+    },
+    "source_entry.updated": {
+     "$ref": "#/components/messages/source_entry.updated"
+    },
+    "user.created": {
+     "$ref": "#/components/messages/user.created"
+    },
+    "user.deleted": {
+     "$ref": "#/components/messages/user.deleted"
+    },
+    "user.updated": {
+     "$ref": "#/components/messages/user.updated"
+    }
+   },
+   "servers": [
+    {
+     "$ref": "#/servers/production"
+    }
+   ],
+   "x-occtoo-delivery": "server-sent-events",
+   "x-occtoo-filter-parameter": "filter",
+   "x-occtoo-filter-dialect": "rfc7644-subset",
+   "x-occtoo-filter-operators": [
+    "eq",
+    "and",
+    "or"
+   ],
+   "x-occtoo-filter-example": "(type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\")",
+   "x-occtoo-filterable-properties": [
+    "apiVersion",
+    "apiVersionId",
+    "cardDefinitionId",
+    "destinationId",
+    "endpointId",
+    "segmentDefinitionId",
+    "segmentId",
+    "sourceId",
+    "userId"
+   ]
+  }
+ },
+ "operations": {
+  "streamEvents": {
+   "action": "send",
+   "title": "Stream events",
+   "summary": "Send tenant events to an authenticated consumer.",
+   "channel": {
+    "$ref": "#/channels/events"
+   },
+   "messages": [
+    {
+     "$ref": "#/channels/events/messages/card.segment_membership_changed"
+    },
+    {
+     "$ref": "#/channels/events/messages/card.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/card_definition.activated"
+    },
+    {
+     "$ref": "#/channels/events/messages/card_definition.created"
+    },
+    {
+     "$ref": "#/channels/events/messages/card_definition.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/card_definition.restored"
+    },
+    {
+     "$ref": "#/channels/events/messages/card_definition.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/destination.created"
+    },
+    {
+     "$ref": "#/channels/events/messages/destination.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/destination.published"
+    },
+    {
+     "$ref": "#/channels/events/messages/destination.stopped"
+    },
+    {
+     "$ref": "#/channels/events/messages/destination_entry.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/destination_entry.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/endpoint.created"
+    },
+    {
+     "$ref": "#/channels/events/messages/endpoint.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/endpoint.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/segment.archived"
+    },
+    {
+     "$ref": "#/channels/events/messages/segment.created"
+    },
+    {
+     "$ref": "#/channels/events/messages/segment.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/segment.restored"
+    },
+    {
+     "$ref": "#/channels/events/messages/segment.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/source.created"
+    },
+    {
+     "$ref": "#/channels/events/messages/source.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/source.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/source_entry.added"
+    },
+    {
+     "$ref": "#/channels/events/messages/source_entry.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/source_entry.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/user.created"
+    },
+    {
+     "$ref": "#/channels/events/messages/user.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/user.updated"
+    }
+   ]
+  }
+ },
+ "components": {
+  "messages": {
+   "card.segment_membership_changed": {
+    "name": "card.segment_membership_changed",
+    "title": "card.segment_membership_changed",
+    "summary": "A card entered or left a segment.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "card.segment_membership_changed"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/card.segment_membership_changed/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/card.segment_membership_changed/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "card.updated": {
+    "name": "card.updated",
+    "title": "card.updated",
+    "summary": "A card changed as a result of source data.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "card.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/card.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/card.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "card_definition.activated": {
+    "name": "card_definition.activated",
+    "title": "card_definition.activated",
+    "summary": "A card definition became active.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "card_definition.activated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/card_definition.activated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/card_definition.activated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "card_definition.created": {
+    "name": "card_definition.created",
+    "title": "card_definition.created",
+    "summary": "A card definition was created.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "card_definition.created"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/card_definition.created/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/card_definition.created/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "card_definition.deleted": {
+    "name": "card_definition.deleted",
+    "title": "card_definition.deleted",
+    "summary": "A card definition was deleted.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "card_definition.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/card_definition.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/card_definition.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "card_definition.restored": {
+    "name": "card_definition.restored",
+    "title": "card_definition.restored",
+    "summary": "A card definition was restored.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "card_definition.restored"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/card_definition.restored/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/card_definition.restored/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "card_definition.updated": {
+    "name": "card_definition.updated",
+    "title": "card_definition.updated",
+    "summary": "A card definition changed.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "card_definition.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/card_definition.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/card_definition.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "destination.created": {
+    "name": "destination.created",
+    "title": "destination.created",
+    "summary": "A destination was created.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "destination.created"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/destination.created/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/destination.created/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "destination.deleted": {
+    "name": "destination.deleted",
+    "title": "destination.deleted",
+    "summary": "A destination was deleted.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "destination.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/destination.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/destination.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "destination.published": {
+    "name": "destination.published",
+    "title": "destination.published",
+    "summary": "A destination was published.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "destination.published"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/destination.published/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/destination.published/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "destination.stopped": {
+    "name": "destination.stopped",
+    "title": "destination.stopped",
+    "summary": "A destination was stopped.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "destination.stopped"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/destination.stopped/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/destination.stopped/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "destination_entry.deleted": {
+    "name": "destination_entry.deleted",
+    "title": "destination_entry.deleted",
+    "summary": "An entry was removed from a destination endpoint.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "destination_entry.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/destination_entry.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/destination_entry.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "destination_entry.updated": {
+    "name": "destination_entry.updated",
+    "title": "destination_entry.updated",
+    "summary": "An entry was written to a destination endpoint.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "destination_entry.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/destination_entry.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/destination_entry.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "endpoint.created": {
+    "name": "endpoint.created",
+    "title": "endpoint.created",
+    "summary": "A destination endpoint was created.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "endpoint.created"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/endpoint.created/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/endpoint.created/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "endpoint.deleted": {
+    "name": "endpoint.deleted",
+    "title": "endpoint.deleted",
+    "summary": "A destination endpoint was deleted.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "endpoint.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/endpoint.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/endpoint.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "endpoint.updated": {
+    "name": "endpoint.updated",
+    "title": "endpoint.updated",
+    "summary": "A destination endpoint changed.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "endpoint.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/endpoint.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/endpoint.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "segment.archived": {
+    "name": "segment.archived",
+    "title": "segment.archived",
+    "summary": "A segment was archived.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "segment.archived"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/segment.archived/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/segment.archived/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "segment.created": {
+    "name": "segment.created",
+    "title": "segment.created",
+    "summary": "A segment was created.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "segment.created"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/segment.created/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/segment.created/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "segment.deleted": {
+    "name": "segment.deleted",
+    "title": "segment.deleted",
+    "summary": "A segment was deleted.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "segment.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/segment.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/segment.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "segment.restored": {
+    "name": "segment.restored",
+    "title": "segment.restored",
+    "summary": "A segment was restored.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "segment.restored"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/segment.restored/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/segment.restored/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "segment.updated": {
+    "name": "segment.updated",
+    "title": "segment.updated",
+    "summary": "A segment changed.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "segment.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/segment.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/segment.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "source.created": {
+    "name": "source.created",
+    "title": "source.created",
+    "summary": "A source was created.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "source.created"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/source.created/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/source.created/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "source.deleted": {
+    "name": "source.deleted",
+    "title": "source.deleted",
+    "summary": "A source was deleted.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "source.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/source.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/source.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "source.updated": {
+    "name": "source.updated",
+    "title": "source.updated",
+    "summary": "A source configuration changed.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "source.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "source_entry.added": {
+    "name": "source_entry.added",
+    "title": "source_entry.added",
+    "summary": "A source entry was added.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "source_entry.added"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/source_entry.added/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/source_entry.added/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "source_entry.deleted": {
+    "name": "source_entry.deleted",
+    "title": "source_entry.deleted",
+    "summary": "A source entry was deleted.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "source_entry.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/source_entry.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/source_entry.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "source_entry.updated": {
+    "name": "source_entry.updated",
+    "title": "source_entry.updated",
+    "summary": "A source entry changed.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "source_entry.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/source_entry.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/source_entry.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "user.created": {
+    "name": "user.created",
+    "title": "user.created",
+    "summary": "A tenant user was created.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "user.created"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/user.created/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/user.created/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "user.deleted": {
+    "name": "user.deleted",
+    "title": "user.deleted",
+    "summary": "A tenant user was deleted.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "user.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/user.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/user.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "user.updated": {
+    "name": "user.updated",
+    "title": "user.updated",
+    "summary": "A tenant user changed.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "user.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api-test.occtoo.com/v1/events/schemas/user.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api-test.occtoo.com/v1/events/schemas/user.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   }
+  },
+  "securitySchemes": {
+   "bearerAuth": {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT",
+    "description": "Occtoo access token."
+   },
+   "apiKey": {
+    "type": "httpApiKey",
+    "name": "x-api-key",
+    "in": "header",
+    "description": "Occtoo organization API key."
+   }
+  }
+ }
+}

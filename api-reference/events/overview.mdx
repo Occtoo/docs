@@ -1,0 +1,37 @@
+---
+title: "Events"
+description: "Tenant-scoped Occtoo events delivered as CloudEvents, available by pull or as a live Server-Sent Events stream."
+---
+
+The Occtoo Events API lets you react to changes across your tenant — sources, cards, segments, destinations, endpoints, and users — without polling each resource. Every change is published as a [CloudEvents](https://cloudevents.io/) message (`application/cloudevents+json`).
+
+## Two ways to consume events
+
+<Columns cols={2}>
+  <Card title="Pull" href="/api-reference/event-delivery/pull-public-events">
+    Page through events with `GET /v1/events` using a cursor. Good for batch processing and catch-up jobs.
+  </Card>
+  <Card title="Stream" href="/api-reference/events/streaming">
+    Subscribe to a live, ordered Server-Sent Events stream at `GET /v1/events/stream`. Good for real-time reactions.
+  </Card>
+</Columns>
+
+## Event types
+
+Events cover the full lifecycle of each Occtoo building block, for example:
+
+- `source.created`, `source.updated`, `source.deleted` — and `source_entry.*` for individual entries
+- `card.updated`, `card.segment_membership_changed` — and `card_definition.*` for card definitions
+- `segment.created`, `segment.updated`, `segment.archived`, `segment.restored`, `segment.deleted`
+- `destination.created`, `destination.published`, `destination.stopped` — and `destination_entry.*`, `endpoint.*`
+- `user.created`, `user.updated`, `user.deleted`
+
+Use `GET /v1/event-types` for the full machine-readable list, and `GET /v1/events/schemas/{type}/{version}` to fetch the JSON schema of any event type.
+
+## Resuming a stream
+
+The SSE `id` field of each streamed event contains a raw, resumable event sequence. Pass it (or a pull cursor) as the `after` query parameter when reconnecting to continue exactly where you left off — no events lost, none replayed.
+
+<Note>
+The Events API uses the same authentication as the rest of the platform API: a bearer token or API key. See the [API overview](/api-reference/overview#authentication) for how to obtain tokens.
+</Note>
