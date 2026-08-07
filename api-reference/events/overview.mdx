@@ -8,7 +8,7 @@ The Occtoo Events API lets you react to changes across your tenant — sources, 
 ## Two ways to consume events
 
 <Columns cols={2}>
-  <Card title="Pull" href="/api-reference/event-delivery/pull-public-events">
+  <Card title="Pull">
     Page through events with `GET /v1/events` using a cursor. Good for batch processing and catch-up jobs.
   </Card>
   <Card title="Stream" href="/api-reference/events/streaming">
@@ -18,15 +18,110 @@ The Occtoo Events API lets you react to changes across your tenant — sources, 
 
 ## Event types
 
-Events cover the full lifecycle of each Occtoo building block, for example:
+Occtoo publishes 30 event types across sources, cards, segments, destinations, endpoints and users. All are currently at payload schema version `1.0`.
 
-- `source.created`, `source.updated`, `source.deleted` — and `source_entry.*` for individual entries
-- `card.updated`, `card.segment_membership_changed` — and `card_definition.*` for card definitions
-- `segment.created`, `segment.updated`, `segment.archived`, `segment.restored`, `segment.deleted`
-- `destination.created`, `destination.published`, `destination.stopped` — and `destination_entry.*`, `endpoint.*`
-- `user.created`, `user.updated`, `user.deleted`
+Every `data` payload includes these two properties, so they are omitted from the tables below:
 
-Use `GET /v1/event-types` for the full machine-readable list, and `GET /v1/events/schemas/{type}/{version}` to fetch the JSON schema of any event type.
+| Property | Type | Description |
+|---|---|---|
+| `correlationIds` | `string[]` | Ids correlating this event with the operation that caused it. Always present. |
+| `actor` | `object \| null` | Who caused the change, as `{ "id": "<user or service id>" }`. `null` for system-initiated changes. |
+
+In the tables, `?` marks a property that is not required — it may be absent or `null`. See the [data property reference](#data-property-reference) for types and meanings.
+
+### Sources
+
+| Event type | Description | Data properties |
+|---|---|---|
+| `source.created` | A source was created. | `sourceId` |
+| `source.updated` | A source configuration changed. | `sourceId`, `changes`, `properties?` |
+| `source.deleted` | A source was deleted. | `sourceId` |
+| `source_entry.added` | A source entry was added. | `sourceId`, `entryKey`, `version`, `properties?` |
+| `source_entry.updated` | A source entry changed. | `sourceId`, `entryKey`, `version`, `changedProperties`, `valuesTruncated`, `values?` |
+| `source_entry.deleted` | A source entry was deleted. | `sourceId`, `entryKey`, `version` |
+
+### Cards
+
+| Event type | Description | Data properties |
+|---|---|---|
+| `card.updated` | A card changed as a result of source data. | `cardDefinitionId`, `cardId`, `changedProperties` |
+| `card.segment_membership_changed` | A card entered or left a segment. | `cardDefinitionId`, `cardId`, `segmentId`, `change` |
+| `card_definition.created` | A card definition was created. | `cardDefinitionId` |
+| `card_definition.updated` | A card definition changed. | `cardDefinitionId`, `changes` |
+| `card_definition.activated` | A card definition became active. | `cardDefinitionId` |
+| `card_definition.deleted` | A card definition was deleted. | `cardDefinitionId` |
+| `card_definition.restored` | A card definition was restored. | `cardDefinitionId` |
+
+### Segments
+
+| Event type | Description | Data properties |
+|---|---|---|
+| `segment.created` | A segment was created. | `segmentId`, `segmentDefinitionId`, `cardDefinitionId?` |
+| `segment.updated` | A segment changed. | `segmentId`, `segmentDefinitionId`, `changes`, `cardDefinitionId?` |
+| `segment.archived` | A segment was archived. | `segmentId`, `segmentDefinitionId`, `cardDefinitionId?` |
+| `segment.restored` | A segment was restored. | `segmentId`, `segmentDefinitionId`, `cardDefinitionId?` |
+| `segment.deleted` | A segment was deleted. | `segmentId`, `segmentDefinitionId`, `cardDefinitionId?` |
+
+### Destinations
+
+| Event type | Description | Data properties |
+|---|---|---|
+| `destination.created` | A destination was created. | `destinationId` |
+| `destination.published` | A destination was published. | `destinationId` |
+| `destination.stopped` | A destination was stopped. | `destinationId` |
+| `destination.deleted` | A destination was deleted. | `destinationId` |
+| `destination_entry.updated` | An entry was written to a destination endpoint. | `destinationId`, `apiVersionId`, `apiVersion`, `endpointId`, `endpoint`, `entryId`, `version`, `changedProperties`, `valuesTruncated`, `values?` |
+| `destination_entry.deleted` | An entry was removed from a destination endpoint. | `destinationId`, `apiVersionId`, `apiVersion`, `endpointId`, `endpoint`, `entryId`, `version` |
+
+### Endpoints
+
+| Event type | Description | Data properties |
+|---|---|---|
+| `endpoint.created` | A destination endpoint was created. | `destinationId`, `apiVersionId`, `apiVersion`, `endpointId` |
+| `endpoint.updated` | A destination endpoint changed. | `destinationId`, `apiVersionId`, `apiVersion`, `endpointId` |
+| `endpoint.deleted` | A destination endpoint was deleted. | `destinationId`, `apiVersionId`, `apiVersion`, `endpointId` |
+
+### Users
+
+| Event type | Description | Data properties |
+|---|---|---|
+| `user.created` | A tenant user was created. | `userId`, `email?`, `firstName?`, `lastName?` |
+| `user.updated` | A tenant user changed. | `userId`, `email?`, `firstName?`, `lastName?` |
+| `user.deleted` | A tenant user was deleted. | `userId`, `email?`, `firstName?`, `lastName?` |
+
+## Data property reference
+
+Properties marked **filterable** can be used in the filter grammar of `GET /v1/events` and `GET /v1/events/stream`. The exact set accepted for a given type is returned as `filterableProperties` by `GET /v1/event-types`.
+
+| Property | Type | Filterable | Description |
+|---|---|---|---|
+| `apiVersion` | `string` | Yes | Destination API version name the endpoint belongs to. |
+| `apiVersionId` | `string` | Yes | Identifier of the destination API version. |
+| `cardDefinitionId` | `string` | Yes | Identifier of the card definition. Nullable on `segment.*` events. |
+| `cardId` | `string` | — | Identifier of the individual card. |
+| `change` | `string` | — | The membership change that occurred on `card.segment_membership_changed`. |
+| `changedProperties` | `string[]` | — | Names of the properties that changed. |
+| `changes` | `string[]` | — | Names of the configuration areas that changed. |
+| `destinationId` | `string` | Yes | Identifier of the destination. |
+| `email` | `string \| null` | — | User email address. |
+| `endpoint` | `string` | — | Name of the destination endpoint. |
+| `endpointId` | `string` | Yes | Identifier of the destination endpoint. |
+| `entryId` | `string` | — | Identifier of the destination entry. |
+| `entryKey` | `string` | — | Key of the source entry within its source. |
+| `firstName` | `string \| null` | — | User first name. |
+| `lastName` | `string \| null` | — | User last name. |
+| `properties` | `array \| null` | — | On `source.updated`, the changed source properties as `{ "id", "change" }` objects. On `source_entry.added`, the entry's properties. |
+| `segmentDefinitionId` | `string` | Yes | Identifier of the segment definition. |
+| `segmentId` | `string` | Yes | Identifier of the segment. |
+| `sourceId` | `string` | Yes | Identifier of the source. |
+| `userId` | `string` | Yes | Identifier of the tenant user. |
+| `values` | `object \| null` | — | Changed values keyed by property name, each an array of `{ "value", "language?" }`. Omitted when `valuesTruncated` is `true`. |
+| `valuesTruncated` | `boolean` | — | Whether `values` was dropped because the payload exceeded the size limit. |
+| `version` | `string \| integer` | — | Monotonic version of the entry, as an integer-valued string or integer. |
+
+<Note>
+`GET /v1/event-types` is the authoritative, machine-readable version of this page — it returns each type's description, `filterableProperties` and full inline JSON Schema. Fetch a single schema with `GET /v1/events/schemas/{type}/{version}`.
+</Note>
 
 ## Resuming a stream
 
