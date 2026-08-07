@@ -17,65 +17,7 @@ Each SSE message is a [CloudEvents](https://cloudevents.io/) 1.0 envelope (`appl
 
 ## Message types
 
-### Cards
-
-| Event type | Description |
-|---|---|
-| `card.segment_membership_changed` | A card entered or left a segment. |
-| `card.updated` | A card changed as a result of source data. |
-| `card_definition.activated` | A card definition became active. |
-| `card_definition.created` | A card definition was created. |
-| `card_definition.deleted` | A card definition was deleted. |
-| `card_definition.restored` | A card definition was restored. |
-| `card_definition.updated` | A card definition changed. |
-
-### Destinations
-
-| Event type | Description |
-|---|---|
-| `destination.created` | A destination was created. |
-| `destination.deleted` | A destination was deleted. |
-| `destination.published` | A destination was published. |
-| `destination.stopped` | A destination was stopped. |
-| `destination_entry.deleted` | An entry was removed from a destination endpoint. |
-| `destination_entry.updated` | An entry was written to a destination endpoint. |
-
-### Endpoints
-
-| Event type | Description |
-|---|---|
-| `endpoint.created` | A destination endpoint was created. |
-| `endpoint.deleted` | A destination endpoint was deleted. |
-| `endpoint.updated` | A destination endpoint changed. |
-
-### Segments
-
-| Event type | Description |
-|---|---|
-| `segment.archived` | A segment was archived. |
-| `segment.created` | A segment was created. |
-| `segment.deleted` | A segment was deleted. |
-| `segment.restored` | A segment was restored. |
-| `segment.updated` | A segment changed. |
-
-### Sources
-
-| Event type | Description |
-|---|---|
-| `source.created` | A source was created. |
-| `source.deleted` | A source was deleted. |
-| `source.updated` | A source configuration changed. |
-| `source_entry.added` | A source entry was added. |
-| `source_entry.deleted` | A source entry was deleted. |
-| `source_entry.updated` | A source entry changed. |
-
-### Users
-
-| Event type | Description |
-|---|---|
-| `user.created` | A tenant user was created. |
-| `user.deleted` | A tenant user was deleted. |
-| `user.updated` | A tenant user changed. |
+Every event type the stream can deliver — with its description and `data` properties — is listed in the [Events overview](/api-reference/events/overview#event-types). The stream delivers all of them by default; narrow it with the `filter` query parameter, for example `type eq "source.updated"`.
 
 ## Envelope example
 

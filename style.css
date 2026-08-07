@@ -1,0 +1,18 @@
+/*
+ * Custom styles. Any .css file in the content directory is included on every
+ * page of the site automatically, no import needed.
+ */
+
+/*
+ * Reference tables put an identifier in the first column — event types, property
+ * names, parameters. Left alone, names like `source_entry.updated` wrap mid-token
+ * ("source_entry.update" / "d"), which is hard to scan.
+ *
+ * This keeps such a cell on one line so the column sizes to its content. It is
+ * deliberately limited to cells whose entire content is a single code span, so
+ * first columns containing prose are unaffected. Tables scroll horizontally when
+ * the viewport is too narrow, so nothing is clipped.
+ */
+table td:first-child > code:only-child {
+  white-space: nowrap;
+}
