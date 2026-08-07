@@ -3,7 +3,7 @@
   "theme": "mint",
   "name": "Occtoo Documentation",
   "colors": {
-    "primary": "#0e6168",
+    "primary": "#E36103",
     "light": "#FA9A17",
     "dark": "#EB8F38"
   },
@@ -267,7 +267,7 @@
   "navbar": {
     "links": [
       {
-        "label": "Occtoo.com",
+        "label": "occtoo.com",
         "href": "https://www.occtoo.com"
       }
     ]
