@@ -21,7 +21,7 @@ Read more at [https://commercetools.com](https://commercetools.com)
 
 The data available from a destination is transferred by a formatter och is pushed to an import container in commercetools. The category flow is optional but the product flow is mandatory. The formatter executes every hour and checks for deltas which are then sent to commercetools. There is also an option to do a manual full trigger when needed. The updates are pushed to a commercetools import container which imports the updates in an asynchrounous manner. This allows for large number of updates to be processed. A view of the progress of the import is available in Merchant center.
 
-![commercetools transfer overview](/images/commercetools_overview-8963081a1f08ec93d36317d9c1cf5ef2.jpg)
+![commercetools transfer overview](/images/integrations/formatters/commercetools_overview-8963081a1f08ec93d36317d9c1cf5ef2.jpg)
 
 ## Installation/Setup
 
@@ -51,7 +51,7 @@ Register an API client in commercetools by going to Settings > Developer Setting
 Please note that the values for CommercetoolsImportClient\_\_AuthorizationBaseAddress and CommercetoolsImportClient\_\_ApiBaseAddress must end with a slash (‘/’).
 </Info>
 
-![commercetools register api client](/images/commercetools_apiClient-8348e9c411f3e44e00893ebf40e63d9e.png)
+![commercetools register api client](/images/integrations/formatters/commercetools_apiClient-8348e9c411f3e44e00893ebf40e63d9e.png)
 
 ### Endpoints
 
@@ -77,7 +77,7 @@ The following properties are recommended for the endpoint:
 - productKeywords - Localized Text
 - isMasterVariant - Boolean
 
-![commercetools products](/images/commercetools_products-5d1cb7fb987160bc6c6188c3ce952165.png)
+![commercetools products](/images/integrations/formatters/commercetools_products-5d1cb7fb987160bc6c6188c3ce952165.png)
 
 #### Category
 
@@ -104,9 +104,9 @@ The following properties are recommended for the endpoint:
 Please note that the orderHint needs to be a value between 0 and 1
 </Info>
 
-![Occtoo category](/images/occtoo_category-cadc34850c62e1d820c91f7afca65647.png)
+![Occtoo category](/images/integrations/formatters/occtoo_category-cadc34850c62e1d820c91f7afca65647.png)
 
-![commercetools category](/images/commercetools_categories-652fbfc7b4cf8c928626fb9525587645.png)
+![commercetools category](/images/integrations/formatters/commercetools_categories-652fbfc7b4cf8c928626fb9525587645.png)
 
 ### Register application in Occtoo
 
@@ -116,13 +116,13 @@ Register an application and save the settings in the configuration file for the 
 - ApiClientCredentials\_\_ClientSecret
 - ApiClientCredentials\_\_TokenAuthUrl
 
-![Occtoo application](/images/occtoo_application-46482c83037ef93889eb021e977c0b95.png)
+![Occtoo application](/images/integrations/formatters/occtoo_application-46482c83037ef93889eb021e977c0b95.png)
 
 ### Product Type
 
 Create a product type for assigning to all products. Add the key CommercetoolsSettings\_\_ProductTypeName to configuration file for the formatter.
 
-![commercetools product types](/images/commercetools_productType-9f41f3ec1ce665ed66e5e8baf01fb894.png)
+![commercetools product types](/images/integrations/formatters/commercetools_productType-9f41f3ec1ce665ed66e5e8baf01fb894.png)
 
 ### Languages
 
@@ -132,15 +132,15 @@ The languages configured for the destination should match the languages configur
 
 "CommercetoolsSettings\_\_Languages\_\_[2]": "de-DE”
 
-![commercetools languages](/images/commercetools_languages-ae2922abfb2c5f86f3adea26d5d68df9.png)
+![commercetools languages](/images/integrations/formatters/commercetools_languages-ae2922abfb2c5f86f3adea26d5d68df9.png)
 
-![Occtoo languages](/images/occtoo_languages-ceec4458ec45559036343f41c602b472.png)
+![Occtoo languages](/images/integrations/formatters/occtoo_languages-ceec4458ec45559036343f41c602b472.png)
 
 ### Import container
 
 Import containers are created automatically and can be viewed in the Merchant center. It can be used to view ongoing imports and give information about potential failures.
 
-![commercetools category](/images/commercetools_import_container-c54fccdbf753303f7d6f18417dcc31e7.png)
+![commercetools category](/images/integrations/formatters/commercetools_import_container-c54fccdbf753303f7d6f18417dcc31e7.png)
 
 ### Attributes
 

@@ -19,13 +19,13 @@ In a hurry 🏃? Don't worry, we've save a set of [**useful links**](#useful-lin
 
 The catalog section is a powerful part of Occtoo, adding many new functionalities to the platform. It’s a way for users to find and manage products, variants & SKUs with ease, as well as enriching them. The datamodel supports variants, hierarchies, localization, business logic and more to craft comprehensive product experiences for complex and configurable products.
 
-![An image from the static](/images/catalogue-summary-1-b67299b62b0185a0d7e0cd8a7b521840.png)
+![An image from the static](/images/shared/catalogue-summary-1-b67299b62b0185a0d7e0cd8a7b521840.png)
 
 ## Source
 
 Source is the block that displays the data that has been [**onboarded into Occtoo**](/get-started/get-data-into-occtoo). The trial version offers limited functionality in this block but don't worry; we've created three data sources (product, price and customer) and pre-loaded them with data.
 
-![An image from the static](/images/soure-pre-loaded-sources-41c25ec3fa1893db5657de191b042375.png)
+![An image from the static](/images/get-started/soure-pre-loaded-sources-41c25ec3fa1893db5657de191b042375.png)
 
 In the non trial version of source you can either [**create new**](/guides/studio/sources/add-a-data-source) data sources or manage ([**edit**](/guides/studio/sources/edit-a-source) or [**delete**](/guides/studio/sources/delete-a-data-source)) existing ones. You also have the possibilty to dive into a data source, [**search for**](/guides/studio/sources/search-in-a-source), and inspect induvidual data entries thats been onboarded, even [**removing them**](/guides/studio/sources/delete-an-entry) if the need arises. In the full version you also have the possbility to [**import data using CSV**](/guides/studio/sources/manual-import) directly into a data source.
 
@@ -37,11 +37,11 @@ Allright, so now we have some data in the system ... let's do something useful w
 
 The Card block is were you "bring order to chaos" in the sense that it allows you as a user to model and repurpose the onboarded data into entities that you want to provide as an data via APIs. We've prepared two cards (product & price) that are *ready to use*.
 
-![An image from the static](/images/cards-pre-populated-5ddb4b2556ae82e014582b046dc13113.png)
+![An image from the static](/images/get-started/cards-pre-populated-5ddb4b2556ae82e014582b046dc13113.png)
 
 The starting point in cards is obviously the [**creation of a new card**](/guides/studio/cards/create-a-card) which includes defining its [**name**](/guides/studio/cards/create-a-card#add-card-details) and [**description**](/guides/studio/cards/create-a-card#add-card-details) as well as [**which data source**](/guides/studio/cards/create-a-card#add-card-details) to base the card upon. When defining which data source to use in the card, all properties in that data source is automatically made available when defining which to use on the card. When adding the card you also get the possibility to add structure to the otherwise unstructured data that was onboarded in the sense that you for individual properties get to define, not only its name and identifier, but also what [**type of data**](/concepts/card#properties) that it has.
 
-![An image from the static](/images/cards-structure-data-c70c7171dc40950309f3d70f7ead7bad.png)
+![An image from the static](/images/get-started/cards-structure-data-c70c7171dc40950309f3d70f7ead7bad.png)
 
 The time to complete the task of creating a card, and defining its included properties, can vary drastically from case to case and hence you always have the possibility as a user to get back to your card and update properties, [**adding new ones**](/guides/studio/cards/add-a-property) or [**changing old ones**](/guides/studio/cards/update-a-property). When you are satisfied with the card that you've created you [**activate it**](/guides/studio/cards/create-a-card#activate-the-card), resulting in the card being available to use in a destination. Even with a card activated you have the possibility to [**edit**](/guides/studio/cards/update-a-property) or [**add new properties**](/guides/studio/cards/add-a-property) to the card. Any [**pending changes**](/guides/studio/cards/pending-changes) to a *active* card are displayed in the tab "Changes" available on the card. Prior to appending any changes the user has the possibility to alter, and even remove, any planned changes to the card. When done just activate the card as previously.
 
@@ -53,7 +53,7 @@ Whohooo! We have structured the unstructured data in a manner that it's ready to
 
 The Segment block helps users to take control of that the *correct* content is delivered given the context in which it is provided. And as always, we've prepared two segment types (product & prices) ready to be used in the exploration of Occtoo.
 
-![An image from the static](/images/segment-pre-loaded-918b9b130d4ea719e3663588cd2b3313.png)
+![An image from the static](/images/get-started/segment-pre-loaded-918b9b130d4ea719e3663588cd2b3313.png)
 
 In order to create a segment, one needs a segment type. A segment type can be described as the *form* of a segment and it defines what card to base the segment on and what attributes are the primary ones to filters. Segment types are managed ([**added**](/guides/studio/segments/create-a-segment-type), [**edited**](/guides/studio/segments/manage-segment-types) and [**deleted**](/guides/studio/segments/delete-a-segment-type)) from the segment block.
 
@@ -65,7 +65,7 @@ We are almost at the crescendo, hold on for a little while longer 😅! We've go
 
 We've arrived at our final destination (pun intended) of this introduction/crash course to Occtoo; the Destination block. Destinations is were the custom API are crafted, giving you as a user the possibility to create tailor made endpoints for your specific purpose and use case. In the trial, the only limitations applied is that you are not able to create public destinations.
 
-![An image from the static](/images/destination-add-destination-0e2552bf9c6083ccf2a1aa1e8fa5edb1.png)
+![An image from the static](/images/get-started/destination-add-destination-0e2552bf9c6083ccf2a1aa1e8fa5edb1.png)
 
 The destination block provides possibilities to manage ([**create**](/guides/studio/destinations/create-a-destination) and [**delete**](/guides/studio/destinations/delete-a-version)) your destinations and within a individual destination (that is yet to be [**published**](/guides/studio/destinations/publish-a-destination)) you have the possibility to adjust it to you purpose. Whether that is [**adding additional languages**](/guides/studio/destinations/add-languages), [**adding new endpoints**](/guides/studio/destinations/create-an-endpoint), adding a [**segment as a endpoint filter**](/guides/studio/destinations/use-a-segment), [**selecting specific properties**](/guides/studio/destinations/select-properties) or defining [**facets**](/guides/studio/destinations/create-a-facet) and [**aliases**](/guides/studio/destinations/create-an-alias) for a endpoint; this is the place you go.
 

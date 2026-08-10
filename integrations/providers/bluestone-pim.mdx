@@ -17,7 +17,7 @@ Read more at [https://www.bluestonepim.com/](https://www.bluestonepim.com/)
 
 Updates from Bluestone PIM are automatically transferred to different Occtoo sources. There is an option to run a full synchronizations when needed, and also to have continuous updates run whenever there is sync done to the public API. The full synch will fetch all products and categories and import them in an asynchrounous manner. For the continuous updates to work properly a webhook needs to be configured inside the Bluestone PIM user interface. This will trigger an event every time a synch is done and transfer all data related to the batch of updates. The updates will include both product- and category related changes.
 
-![bluestone pim transfer overview](/images/Bluestone_PIM_overview-3a9f7061b864a09b3b0d0774c0748e86.jpg)
+![bluestone pim transfer overview](/images/integrations/providers/Bluestone_PIM_overview-3a9f7061b864a09b3b0d0774c0748e86.jpg)
 
 ## Installation/Setup of provider
 
@@ -49,7 +49,7 @@ Register a provider and include the target sources from the previous step. Add t
 - DataProviderId
 - DataProviderSecret
 
-![Register provider](/images/register_provider-5d1af044091e551eddf5a29ac4b3ab6d.png)
+![Register provider](/images/integrations/providers/register_provider-5d1af044091e551eddf5a29ac4b3ab6d.png)
 
 ### Media
 
@@ -78,7 +78,7 @@ The additional context is optional and can contain one or more contexts to be tr
 
 To access the keys for the contexts a get call to /Contexts endpoint can be made in the Bluestone public API
 
-![Get contexts](/images/get_contexts-84a63d645e339d865df0de2a7d93d83c.png)
+![Get contexts](/images/integrations/providers/get_contexts-84a63d645e339d865df0de2a7d93d83c.png)
 
 ### Attributes
 
@@ -91,7 +91,7 @@ Properties that should be treated as localized text in Occtoo need to be configu
 
 If there are multiple properties they should be separated by a comma. Specifying a property as Localized means that it will get the values for all contexts specified.
 
-![bluestone attributes](/images/bluestone_attributes-66310f4ccabc5f64a60338bbb314c52d.png)
+![bluestone attributes](/images/integrations/providers/bluestone_attributes-66310f4ccabc5f64a60338bbb314c52d.png)
 
 ### Configure webhooks
 
@@ -101,13 +101,13 @@ For the update flow to work there are two webhooks needed - one for the update f
 
 The update webhook is responsible for publishing all changes to products and categories. When creating it make sure to check the option 'New sync done to public API'. Add the url to the http function 'DataSync'.
 
-![bluestone update webhook](/images/add_webhook-2c19001667ed191c0d829eb99eaf7cc8.png)
+![bluestone update webhook](/images/integrations/providers/add_webhook-2c19001667ed191c0d829eb99eaf7cc8.png)
 
 #### Delete webhook
 
 The delete webhook is used to remove products from Occtoo that are archived in Bluestone. When creating it make sure to check the option 'Change on product state in PIM'.
 
-![bluestone delete webhook](/images/delete_webhook-e6fae91485b2fbec55e73f7d9c3c3712.png)
+![bluestone delete webhook](/images/integrations/providers/delete_webhook-e6fae91485b2fbec55e73f7d9c3c3712.png)
 
 ### Full synch
 
@@ -140,4 +140,4 @@ The blob container for persisting the data should be added in the setting:
 
 - ProductContainer
 
-![bluestone full synch](/images/full_export-c83d4663a5fbe319ed04a505cead190c.jpg)
+![bluestone full synch](/images/integrations/providers/full_export-c83d4663a5fbe319ed04a505cead190c.jpg)
