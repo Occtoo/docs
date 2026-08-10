@@ -27,9 +27,9 @@ Source is the block that displays the data that has been [**onboarded into Occto
 
 ![An image from the static](/images/soure-pre-loaded-sources-41c25ec3fa1893db5657de191b042375.png)
 
-In the non trial version of source you can either [**create new**](/studio/sources/add-a-data-source) data sources or manage ([**edit**](/studio/sources/edit-a-source) or [**delete**](/studio/sources/delete-a-data-source)) existing ones. You also have the possibilty to dive into a data source, [**search for**](/studio/sources/search-in-a-source), and inspect induvidual data entries thats been onboarded, even [**removing them**](/studio/sources/delete-an-entry) if the need arises. In the full version you also have the possbility to [**import data using CSV**](/studio/sources/manual-import) directly into a data source.
+In the non trial version of source you can either [**create new**](/guides/studio/sources/add-a-data-source) data sources or manage ([**edit**](/guides/studio/sources/edit-a-source) or [**delete**](/guides/studio/sources/delete-a-data-source)) existing ones. You also have the possibilty to dive into a data source, [**search for**](/guides/studio/sources/search-in-a-source), and inspect induvidual data entries thats been onboarded, even [**removing them**](/guides/studio/sources/delete-an-entry) if the need arises. In the full version you also have the possbility to [**import data using CSV**](/guides/studio/sources/manual-import) directly into a data source.
 
-In order to programmatically [**upload data**](/studio/sources/import-data) into a source one is in need of a data provider, these are also managed ([**created**](/studio/sources/add-a-data-provider), [**edited**](/studio/sources/edit-a-data-provider) and [**deleted**](/studio/sources/remove-a-data-provider)) within the source block.
+In order to programmatically [**upload data**](/guides/studio/sources/import-data) into a source one is in need of a data provider, these are also managed ([**created**](/guides/studio/sources/add-a-data-provider), [**edited**](/guides/studio/sources/edit-a-data-provider) and [**deleted**](/guides/studio/sources/remove-a-data-provider)) within the source block.
 
 Allright, so now we have some data in the system ... let's do something useful with it in Cards 👇!
 
@@ -39,13 +39,13 @@ The Card block is were you "bring order to chaos" in the sense that it allows yo
 
 ![An image from the static](/images/cards-pre-populated-5ddb4b2556ae82e014582b046dc13113.png)
 
-The starting point in cards is obviously the [**creation of a new card**](/studio/cards/create-a-card) which includes defining its [**name**](/studio/cards/create-a-card#add-card-details) and [**description**](/studio/cards/create-a-card#add-card-details) as well as [**which data source**](/studio/cards/create-a-card#add-card-details) to base the card upon. When defining which data source to use in the card, all properties in that data source is automatically made available when defining which to use on the card. When adding the card you also get the possibility to add structure to the otherwise unstructured data that was onboarded in the sense that you for individual properties get to define, not only its name and identifier, but also what [**type of data**](/concepts/card#properties) that it has.
+The starting point in cards is obviously the [**creation of a new card**](/guides/studio/cards/create-a-card) which includes defining its [**name**](/guides/studio/cards/create-a-card#add-card-details) and [**description**](/guides/studio/cards/create-a-card#add-card-details) as well as [**which data source**](/guides/studio/cards/create-a-card#add-card-details) to base the card upon. When defining which data source to use in the card, all properties in that data source is automatically made available when defining which to use on the card. When adding the card you also get the possibility to add structure to the otherwise unstructured data that was onboarded in the sense that you for individual properties get to define, not only its name and identifier, but also what [**type of data**](/concepts/card#properties) that it has.
 
 ![An image from the static](/images/cards-structure-data-c70c7171dc40950309f3d70f7ead7bad.png)
 
-The time to complete the task of creating a card, and defining its included properties, can vary drastically from case to case and hence you always have the possibility as a user to get back to your card and update properties, [**adding new ones**](/studio/cards/add-a-property) or [**changing old ones**](/studio/cards/update-a-property). When you are satisfied with the card that you've created you [**activate it**](/studio/cards/create-a-card#activate-the-card), resulting in the card being available to use in a destination. Even with a card activated you have the possibility to [**edit**](/studio/cards/update-a-property) or [**add new properties**](/studio/cards/add-a-property) to the card. Any [**pending changes**](/studio/cards/pending-changes) to a *active* card are displayed in the tab "Changes" available on the card. Prior to appending any changes the user has the possibility to alter, and even remove, any planned changes to the card. When done just activate the card as previously.
+The time to complete the task of creating a card, and defining its included properties, can vary drastically from case to case and hence you always have the possibility as a user to get back to your card and update properties, [**adding new ones**](/guides/studio/cards/add-a-property) or [**changing old ones**](/guides/studio/cards/update-a-property). When you are satisfied with the card that you've created you [**activate it**](/guides/studio/cards/create-a-card#activate-the-card), resulting in the card being available to use in a destination. Even with a card activated you have the possibility to [**edit**](/guides/studio/cards/update-a-property) or [**add new properties**](/guides/studio/cards/add-a-property) to the card. Any [**pending changes**](/guides/studio/cards/pending-changes) to a *active* card are displayed in the tab "Changes" available on the card. Prior to appending any changes the user has the possibility to alter, and even remove, any planned changes to the card. When done just activate the card as previously.
 
-If a card has run its course and has no further use, users have the possibility to [**archive**](/studio/cards/archive-a-card) the card. This results in the card not being available for new destinations and no data updates to the card will be processed.
+If a card has run its course and has no further use, users have the possibility to [**archive**](/guides/studio/cards/archive-a-card) the card. This results in the card not being available for new destinations and no data updates to the card will be processed.
 
 Whohooo! We have structured the unstructured data in a manner that it's ready to be provided to the world 🥳. Now lets dive into segments and see how we can control *what* data that is made available.
 
@@ -55,9 +55,9 @@ The Segment block helps users to take control of that the *correct* content is d
 
 ![An image from the static](/images/segment-pre-loaded-918b9b130d4ea719e3663588cd2b3313.png)
 
-In order to create a segment, one needs a segment type. A segment type can be described as the *form* of a segment and it defines what card to base the segment on and what attributes are the primary ones to filters. Segment types are managed ([**added**](/studio/segments/create-a-segment-type), [**edited**](/studio/segments/manage-segment-types) and [**deleted**](/studio/segments/delete-a-segment-type)) from the segment block.
+In order to create a segment, one needs a segment type. A segment type can be described as the *form* of a segment and it defines what card to base the segment on and what attributes are the primary ones to filters. Segment types are managed ([**added**](/guides/studio/segments/create-a-segment-type), [**edited**](/guides/studio/segments/manage-segment-types) and [**deleted**](/guides/studio/segments/delete-a-segment-type)) from the segment block.
 
-Now that we got a segment type in place we are ready to start [**creating segments**](/studio/segments/create-a-segment). A segment defines an sub-selection of a data set based on either a [**filter**](/studio/segments/create-a-segment#dynamic-query-filter) or as a [**fixed**](/studio/segments/create-a-segment#fixed-query-filter) list. Examples could be *'product based segment that include all red t-shirts'* or *'price based segment that include all prices based on a specific market'* or *'just these three specific products'*. After creation a segment can be used to filter the data provided in a endpoint, giving the creator control over what is made available. From the segment block users have the possibility, not only to [**add new segments**](/studio/segments/create-a-segment), but also to [**edit**](/studio/segments/edit-a-segment) existing ones.
+Now that we got a segment type in place we are ready to start [**creating segments**](/guides/studio/segments/create-a-segment). A segment defines an sub-selection of a data set based on either a [**filter**](/guides/studio/segments/create-a-segment#dynamic-query-filter) or as a [**fixed**](/guides/studio/segments/create-a-segment#fixed-query-filter) list. Examples could be *'product based segment that include all red t-shirts'* or *'price based segment that include all prices based on a specific market'* or *'just these three specific products'*. After creation a segment can be used to filter the data provided in a endpoint, giving the creator control over what is made available. From the segment block users have the possibility, not only to [**add new segments**](/guides/studio/segments/create-a-segment), but also to [**edit**](/guides/studio/segments/edit-a-segment) existing ones.
 
 We are almost at the crescendo, hold on for a little while longer 😅! We've gone from inspecting the onboarded data, to re-purposing it via cards to selecting what data we want to provide. We are now looking on the last piece of the puzzle, providing data as an real time API.
 
@@ -67,11 +67,11 @@ We've arrived at our final destination (pun intended) of this introduction/crash
 
 ![An image from the static](/images/destination-add-destination-0e2552bf9c6083ccf2a1aa1e8fa5edb1.png)
 
-The destination block provides possibilities to manage ([**create**](/studio/destinations/create-a-destination) and [**delete**](/studio/destinations/delete-a-version)) your destinations and within a individual destination (that is yet to be [**published**](/studio/destinations/publish-a-destination)) you have the possibility to adjust it to you purpose. Whether that is [**adding additional languages**](/studio/destinations/add-languages), [**adding new endpoints**](/studio/destinations/create-an-endpoint), adding a [**segment as a endpoint filter**](/studio/destinations/use-a-segment), [**selecting specific properties**](/studio/destinations/select-properties) or defining [**facets**](/studio/destinations/create-a-facet) and [**aliases**](/studio/destinations/create-an-alias) for a endpoint; this is the place you go.
+The destination block provides possibilities to manage ([**create**](/guides/studio/destinations/create-a-destination) and [**delete**](/guides/studio/destinations/delete-a-version)) your destinations and within a individual destination (that is yet to be [**published**](/guides/studio/destinations/publish-a-destination)) you have the possibility to adjust it to you purpose. Whether that is [**adding additional languages**](/guides/studio/destinations/add-languages), [**adding new endpoints**](/guides/studio/destinations/create-an-endpoint), adding a [**segment as a endpoint filter**](/guides/studio/destinations/use-a-segment), [**selecting specific properties**](/guides/studio/destinations/select-properties) or defining [**facets**](/guides/studio/destinations/create-a-facet) and [**aliases**](/guides/studio/destinations/create-an-alias) for a endpoint; this is the place you go.
 
-When examining the details of a destination, you also have the possibility to manage ([**registering new ones**](/studio/destinations/register-an-application), [**resetting secrets**](/studio/destinations/reset-a-client-secret) or [**removing access**](/studio/destinations/remove-an-application)) the applications that can communicate with it. As a user you have the possibility to managed application regardless of the publication status of a destination.
+When examining the details of a destination, you also have the possibility to manage ([**registering new ones**](/guides/studio/destinations/register-an-application), [**resetting secrets**](/guides/studio/destinations/reset-a-client-secret) or [**removing access**](/guides/studio/destinations/remove-an-application)) the applications that can communicate with it. As a user you have the possibility to managed application regardless of the publication status of a destination.
 
-Be sure also to check out the [**generated documentation**](/studio/destinations/generate-documentation) for you destination, either directly in the app or by downloading it from the documentation tab.
+Be sure also to check out the [**generated documentation**](/guides/studio/destinations/generate-documentation) for you destination, either directly in the app or by downloading it from the documentation tab.
 
 ## Wrap-up
 
@@ -83,28 +83,28 @@ Below we've composed a cheat sheet with the useful links to get going.
 
 #### Source
 
-- [Add a data source](/studio/sources/add-a-data-source)
-- [Add a data provider](/studio/sources/add-a-data-provider)
-- [Manual data import via CSV](/studio/sources/manual-import)
+- [Add a data source](/guides/studio/sources/add-a-data-source)
+- [Add a data provider](/guides/studio/sources/add-a-data-provider)
+- [Manual data import via CSV](/guides/studio/sources/manual-import)
 
 #### Card
 
-- [Create and activate a card](/studio/cards/create-a-card)
-- [Add a property to a existing card](/studio/cards/add-a-property)
-- [Archive a card](/studio/cards/archive-a-card)
+- [Create and activate a card](/guides/studio/cards/create-a-card)
+- [Add a property to a existing card](/guides/studio/cards/add-a-property)
+- [Archive a card](/guides/studio/cards/archive-a-card)
 
 #### Segment
 
-- [Create a segment type](/studio/segments/create-a-segment-type)
-- [Create a segment](/studio/segments/create-a-segment)
-- [Edit a segment](/studio/segments/edit-a-segment)
+- [Create a segment type](/guides/studio/segments/create-a-segment-type)
+- [Create a segment](/guides/studio/segments/create-a-segment)
+- [Edit a segment](/guides/studio/segments/edit-a-segment)
 
 #### Destination
 
-- [Create a destination](/studio/destinations/create-a-destination)
-- [Create a endpoint](/studio/destinations/create-an-endpoint)
-- [Use a segment in a endpoint](/studio/destinations/use-a-segment)
-- [Publish a destination](/studio/destinations/publish-a-destination)
-- [Register an application](/studio/destinations/register-an-application)
+- [Create a destination](/guides/studio/destinations/create-a-destination)
+- [Create a endpoint](/guides/studio/destinations/create-an-endpoint)
+- [Use a segment in a endpoint](/guides/studio/destinations/use-a-segment)
+- [Publish a destination](/guides/studio/destinations/publish-a-destination)
+- [Register an application](/guides/studio/destinations/register-an-application)
 
-You can find all Occtoo Studio articles [**here >>**](/studio/overview)
+You can find all Occtoo Studio articles [**here >>**](/guides/studio/overview)
