@@ -2,74 +2,66 @@
 title: "Providers"
 ---
 
-*Provider* is what we call components that push data to Occtoo. Basically, they are integration components that serves as bridges linking systems, applications or services with the Occtoo platform. Its primary purpose is to facilitate data exchange by transforming and mapping data from a source system's format to a format that can be understood and processed by Occtoo.
+A *provider* is an integration component that pushes data into Occtoo. It bridges a source system, application, or service and the Occtoo platform, transforming and mapping data from the source format into a format that Occtoo can process.
 
-Dependent on how the data is to be activated and used, a common use case is that the provider splits and restructures the recived payloads to several data sources.
+Depending on how the data is to be activated and used, a provider commonly splits and restructures the payloads it receives into several data sources.
 
-## Ready made integration
+## Ready-made integrations
 
-On occasion we collaborate with other software vendors and create standard connectors between Occtoo and other systems. These are contionusly monitored and updated to stay up to date with changes to each respective system. Information about these you'll find below.
+We collaborate with selected software vendors to build standard connectors between Occtoo and their systems. These connectors are continuously monitored and updated to keep pace with changes in each respective system.
 
 <Tip>
-Are you a software vendor interested in a cooperation? Do not hesitate to reach out to us at [developer@occtoo.com](mailto:developer@occtoo.com) so that we can discuss how to go about it.
-
-Stronger together 💪
+Are you a software vendor interested in a collaboration? Reach out to us at [developer@occtoo.com](mailto:developer@occtoo.com) and we will discuss how to get started.
 </Tip>
-
-### Akeneo
-
-Using the [Occtoo App](/integrations/providers/akeneo), from the Akeneo marketplace, users can easily and seamlessly connect their [Akeneo PIM](https://www.akeneo.com) with Occtoo to make product data instantly available to be used by their digital team.
 
 ### Bluestone PIM
 
-Our pre-built integration for [Bluestone PIM](/integrations/providers/bluestone-pim), allows to export data, categories, and media from [Bluestone PIM](https://www.bluestonepim.com/).
+The [pre-built integration for Bluestone PIM](/integrations/providers/bluestone-pim) exports products, categories, and media from [Bluestone PIM](https://www.bluestonepim.com/) into Occtoo.
 
 ### inRiver
 
-Using the [Generic inRiver Provider](/integrations/providers/inriver) with Extensions ready to deploy, partners can easily and send data from inRiver to Occtoo.
+The [generic inRiver provider](/integrations/providers/inriver) ships with extensions that are ready to deploy, so partners can send data from inRiver to Occtoo with minimal effort.
 
 ## Boilerplates
 
-Below is a set of boilerplate projects, all available through the [Occtoo Github](https://github.com/orgs/Occtoo/). Boilerplates are a set of pre-written and reusable templates that provide a foundation or starting point for developing a integration component to push data into Occtoo. The boilerplates are provided *"as is"* under the [MIT license](https://opensource.org/license/mit/).
+Boilerplates are pre-written, reusable templates that provide a foundation for developing your own provider. All of them are available through [Occtoo on GitHub](https://github.com/orgs/Occtoo/) and are provided *"as is"* under the [MIT license](https://opensource.org/license/mit/).
 
 <Tip>
-Are you interested in sharing a boilerplate with the community? Do not hesitate to reach out to us at [developer@occtoo.com](mailto:developer@occtoo.com) so that we can discuss how to go about it.
-
-Sharing is caring ❤️
+Are you interested in sharing a boilerplate with the community? Reach out to us at [developer@occtoo.com](mailto:developer@occtoo.com) and we will discuss how to get started.
 </Tip>
 
 ### Akeneo
 
-Template project for creating provider to onboard data from [Akeneo](https://www.akeneo.com). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.Akeneo).
+Template project for onboarding products, categories, and media from [Akeneo PIM](https://www.akeneo.com). See the [setup details](/integrations/providers/akeneo) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Akeneo).
 
-### Azure table
+### Azure Queue Trigger
 
-Template project for creating provider to onboard data from [Azure table storage](https://azure.microsoft.com/en-us/products/storage/tables). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.AzureTable).
+Template project for onboarding data from [Azure Queue Storage](https://azure.microsoft.com/en-us/products/storage/queues/). See the [setup details](/integrations/providers/azure-queue-trigger) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.AzureQueueTrigger).
 
-### Azure queue trigger
+### Azure Table Storage
 
-Template project for creating provider to onboard data from [Azure queue storage](https://azure.microsoft.com/en-us/products/storage/queues/). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.AzureQueueTrigger).
+Template project for onboarding data from [Azure Table Storage](https://azure.microsoft.com/en-us/products/storage/tables). See the [setup details](/integrations/providers/azure-table-storage) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.AzureTable).
 
 ### Centra
 
-Template project for creating provider to onboard data from [Centra](https://centra.com). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.Centra).
+Template project for onboarding data from [Centra](https://centra.com). See the [setup details](/integrations/providers/centra) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Centra).
 
 ### CSV
 
-Template project for creating provider to onboard data from a [CSV file](https://www.techopedia.com/definition/24364/comma-separated-values-file-csv). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.CSV).
+Template project for onboarding data from a CSV file. See the [setup details](/integrations/providers/csv) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.CSV).
 
 ### Norce
 
-Template project for creating provider to onboard data from [Norce](https://www.norce.io/). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.Norce).
+Template project for onboarding data from [Norce](https://www.norce.io/). See the [setup details](/integrations/providers/norce) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Norce).
 
 ### Shopify
 
-Template project for creating provider to onboard data from [Shopify](https://shopify.dev/docs/api). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.Shopify).
+Template project for onboarding data from [Shopify](https://shopify.dev/docs/api). See the [setup details](/integrations/providers/shopify) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Shopify).
 
 ### SQL
 
-Template project for creating provider to onboard data from a [SQL database](https://www.w3schools.com/sql/sql_intro.asp). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.SQL).
+Template project for onboarding data from a SQL database. See the [setup details](/integrations/providers/sql) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.SQL).
 
 ### XML
 
-Template project for creating provider to onboard data from a [XML file](https://www.w3schools.com/xml/xml_whatis.asp). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.XML).
+Template project for onboarding data from an XML file. See the [setup details](/integrations/providers/xml) or get the code on [GitHub](https://github.com/Occtoo/Occtoo.Provider.XML).

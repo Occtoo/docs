@@ -1,30 +1,28 @@
 ---
 title: "Centra"
-description: "About Centra"
 ---
 
 ## About Centra
 
-Centra serves both wholesale and direct-to-consumer sales. It enables brands to handle all channels from one platform - both Wholesale B2B and Direct-to-Consumer B2C.
+Centra serves both wholesale and direct-to-consumer sales, enabling brands to handle all channels from one platform — both wholesale B2B and direct-to-consumer B2C.
 
-Read more at [https://centra.com](https://centra.com)
+Read more at [centra.com](https://centra.com).
 
 ## Introduction
 
-This is a template project for creating provider to onboard data from [Centra](https://centra.com). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.Centra).
+This is a template project for building a provider that onboards data from [Centra](https://centra.com). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Centra).
 
 ## How it works
 
-The solution has functions working as shown below:
+The solution consists of the functions shown below.
 
-![Architectual Overview](/images/integrations/providers/CentraProvider-fe9cec1129f812c7007288ad9373fc91.png)
+![Architectural overview of the Centra provider](/images/integrations/providers/CentraProvider-fe9cec1129f812c7007288ad9373fc91.png)
 
-FillQueueFromCentra (HttpTrigger) - Called to start moving products from Centra API into the queue
+- **FillQueueFromCentra** (HTTP trigger) — called to start moving products from the Centra API into the queue.
+- **ImportQueuedItemsToOcctoo** (queue trigger) — picks up the queued items, creates a key-value entity ([dynamic entity](https://github.com/Occtoo/Occtoo.Onboarding.Sdk/blob/main/src/Occtoo.Onboarding.Sdk/Models/DynamicEntity.cs)), and sends it to Occtoo onboarding.
 
-ImportQueuedItemsToOcctoo (QueueTrigger) – Picks up the queue items and create a key value entity ([Dynamic Entity](https://github.com/Occtoo/Occtoo.Onboarding.Sdk/blob/main/src/Occtoo.Onboarding.Sdk/Models/DynamicEntity.cs)) and sends it to Occtoo onboarding
+To get the provider details required by the template, see [Add a data provider](/guides/studio/sources/add-a-data-provider) and [Client/secret](/get-started/get-data-into-occtoo#1a-clientsecret).
 
-Check our documentation on [how to set up a Provider in Occtoo Studio](/get-started/get-data-into-occtoo#1a-clientsecret) to get your provider details.
+## Download and installation
 
-## Download and Installation
-
-Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Provider.Centra). Build and deploy to your azure instance
+Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Provider.Centra), then build and deploy it to your Azure instance.

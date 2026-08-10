@@ -1,18 +1,20 @@
 ---
 title: "Azure Queue Trigger"
-description: "Introduction"
 ---
 
 ## Introduction
 
-This is a template project for creating provider to onboard data from [Azure queue storage](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-queue-trigger?tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cextensionv5&pivots=programming-language-csharp). Available via [Github](https://github.com/Occtoo/Occtoo.Provider.AzureQueueTrigger).
+This is a template project for building a provider that onboards data from [Azure Queue Storage](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-queue-trigger?pivots=programming-language-csharp). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Provider.AzureQueueTrigger).
 
 ## How it works
 
-The program contains two functions. One http triggered that will add three the messages to the queue, call this one from a browser when running locally . The second one will trigger on any messages added and converts each message into a [Dynamic Entity](https://github.com/Occtoo/Occtoo.Onboarding.Sdk/blob/main/src/Occtoo.Onboarding.Sdk/Models/DynamicEntity.cs). They are then imported into Occtoo using the [OnboardingServiceClient](https://github.com/Occtoo/Occtoo.Onboarding.Sdk)
+The project contains two functions:
 
-Check our documentation on [how to set up a Provider in Occtoo Studio](/get-started/get-data-into-occtoo#1a-clientsecret) to get your provider details.
+- An HTTP-triggered function that adds three messages to the queue. Call it from a browser when running locally.
+- A queue-triggered function that runs whenever a message is added and converts each message into a [dynamic entity](https://github.com/Occtoo/Occtoo.Onboarding.Sdk/blob/main/src/Occtoo.Onboarding.Sdk/Models/DynamicEntity.cs). The entities are then imported into Occtoo using the [OnboardingServiceClient](https://github.com/Occtoo/Occtoo.Onboarding.Sdk).
 
-## Download and Installation
+To get the provider details required by the template, see [Add a data provider](/guides/studio/sources/add-a-data-provider) and [Client/secret](/get-started/get-data-into-occtoo#1a-clientsecret).
 
-Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Provider.AzureQueueTrigger). Build and deploy to your azure instance
+## Download and installation
+
+Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Provider.AzureQueueTrigger), then build and deploy it to your Azure instance.

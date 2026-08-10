@@ -1,86 +1,32 @@
 ---
 title: "Akeneo"
-description: "Introduction"
 ---
-
-## Introduction
-
-Using the Occtoo App from the [Akeneo marketplace](https://apps.akeneo.com/) users can easily and seamlessly connect their Akeneo PIM with Occtoo to make product data instantly available to be used by their digital team.
-
-By providing instantly access to the product data through the Occtoo Product Orchestration Engine users enables re-use across channels of their choice and can thus spend time shipping more experiences and focus on developing a customer experience that truly differentiates their brand!
-
-The Occtoo App creates a continuous flow between the systems keeping any digital experience built using PIM data updated with the latest and greatest changes from Akeneo.
-
-![Akeneo Occtoo integration](/images/integrations/providers/Akeneo-document-medium-95d1900ee884ac42ba083a302b2968dc.jpeg)
 
 ## About Akeneo
 
-Akeneo is the Product Experience company, helping organizations deliver enriched, engaging, consistent, and compelling product experiences across all owned and unowned channels, including eCommerce, mobile, print, social commerce, points of sale, and beyond.
+Akeneo is the Product Experience company, helping organizations deliver enriched, engaging, consistent, and compelling product experiences across all owned and unowned channels, including ecommerce, mobile, print, social commerce, points of sale, and beyond.
 
-Read more at [www.akeneo.com](http://www.akeneo.com)
+Read more at [akeneo.com](https://www.akeneo.com).
 
-## Setup the Akeneo provider
+## Introduction
 
-### Prerequisites
+This is a template project for building a provider that onboards products, categories, and media from [Akeneo PIM](https://www.akeneo.com). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Akeneo).
 
-To complete the setup the following is required:
+<Note>
+The provider is no longer distributed as an app on the Akeneo marketplace. Download the source code from GitHub and deploy it yourself, in the same way as the other boilerplate providers.
+</Note>
 
-- User in Akeneo with permissions to manage apps
-- User connected to an Occtoo environment
+## How it works
 
-### 1. Connect Occtoo app
+The solution has three function pairs working as shown below.
 
-From your Akeneo installation, locate and connect the Occtoo App from the [Akeneo marketplace](https://apps.akeneo.com/).
+![Architectural overview of the Akeneo provider](/images/integrations/providers/AkeneoProvider.jpg)
 
-![Locate app in Akeneo app store](/images/integrations/providers/step-1-install-app-from-marketplace-8c1c9f9eb3d40169b5e93813c2a7c49d.png)
+Two HTTP-triggered functions act as entry points. `PrepareAkeneoConnection` registers a connection for a tenant, and `StartDataSynchronization` starts the synchronization. From there, the start orchestration fans out into sub-orchestrations for categories, products, and media, which page through the Akeneo API and push the results to the Occtoo onboarding API. The date of the last successful synchronization is recorded per source, so subsequent runs only transfer what has changed.
 
-Pressing the *Connect* button will initiate the setup process by redirect the user to the Occtoo Studio.
+To get the provider details required by the template, see [Add a data provider](/guides/studio/sources/add-a-data-provider) and [Client/secret](/get-started/get-data-into-occtoo#1a-clientsecret).
 
-![User is redirected to Occtoo](/images/integrations/providers/step-x-redirect-1724e5ec54ce050c973e68348173126f.png)
+## Download and installation
 
-### 2. Authenticate in Occtoo
+Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Provider.Akeneo), then build and deploy it. The [README](https://github.com/Occtoo/Occtoo.Provider.Akeneo?tab=readme-ov-file#running-the-app) lists the application settings the provider needs.
 
-Login to Occtoo Studio with a user, if not already logged in, that has access to the environment that should received the Akeneo PIM data.
-
-![Login to Occtoo Studio](/images/integrations/providers/step-2-authenticate-user-to-occtoo-54b09e96ee388043eeb79d7e4aa9e8b1.png)
-
-### 3. Select environment
-
-The user is informed that a connection will be created between Akeneo PIM and the environment that he has access to. If the user has access to multiple environments, he needs to choose which environment to connect to.
-
-![Confirm environment](/images/integrations/providers/step-3-select-environment-to-connect-to-9085eac3a5082127d880eafd249de0b8.png)
-
-After the user press OK he is transfered back to Akeneo.
-
-### 4. Confirm requested permissions
-
-In Akeneo the user is presented with all the permissions and grants that that the Occtoo app is requesting to setup the connection correctly. The user needs to accept the policy and terms of usage by clicking the checkbox and then pressing the “Allow and Next” button.
-
-![Confirm requested grants](/images/integrations/providers/step-4-grants-02cdf39156f6e0837be4dae791345b6b.png)
-
-In the next screen the user is asked to define permissions for the app for category trees, locales and attribute groups. To secure full functionality and expected behaviour it is highly recommended that the user selects all on all three options.
-
-![Select all requested permissions](/images/integrations/providers/step-4-select-all-option-c539320f582d7bcb21bfcbd8fb11858e.png)
-
-When done the user is redirected to Occtoo.
-
-### 5. Select channel
-
-The final part of the configuration is the selection of what Akeneo channel to use when synchronizing products.
-
-![Select all requested permissions](/images/integrations/providers/step-5-select-channel-2e4d23890303a9ee6086b609360ca832.png)
-
-### 6. View configuration settings
-
-After the completion of the configuration the user is directed to the Akaneo data provider which offers the user more details of the connection, as well as the possibility to initiate a manual synchronization
-
-![Select all requested permissions](/images/integrations/providers/step-6-akeneo-details-b36a32400167a215a75cc0250af3310b.png)
-
-*Done - happy data transferring!* 😉
-
-## Limitations
-
-- Does not handle deletes due to lack of support in REST API
-- Connects a single specific Akeneo channel
-- Only one channel integration can be active at the time
-- Only binary files from fields of type pim\_catalog\_file and pim\_catalog\_image are uploaded into Occtoo

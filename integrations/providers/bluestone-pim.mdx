@@ -1,143 +1,137 @@
 ---
 title: "Bluestone PIM"
-description: "Introduction"
 ---
 
 ## Introduction
 
-The integration adds enriched product data from Bluestone PIM into Occtoo’s Product Orchestration Engine. This enables digital teams to combine the product data with data and content from other sources (e.g. ERP, CRM) to enrich it further and activate it in any channel in real-time for a seamless customer experience. Everything is executed in a no-code studio making the digital teams more autonomous when executing new digital initiatives.
+This integration adds enriched product data from Bluestone PIM into the Occtoo Product Orchestration Engine. Digital teams can then combine that product data with data and content from other sources, such as ERP and CRM systems, enrich it further, and activate it in any channel in real time for a seamless customer experience. Everything is executed in a no-code studio, making digital teams more autonomous when launching new digital initiatives.
 
 ## About Bluestone PIM
 
-With Bluestone PIM, you can get your products to market and in front of customers faster, regardless of channels, regions, or languages.
+With Bluestone PIM, you can get your products to market and in front of customers faster, regardless of channel, region, or language.
 
-Read more at [https://www.bluestonepim.com/](https://www.bluestonepim.com/)
+Read more at [bluestonepim.com](https://www.bluestonepim.com/).
 
 ## Data flow
 
-Updates from Bluestone PIM are automatically transferred to different Occtoo sources. There is an option to run a full synchronizations when needed, and also to have continuous updates run whenever there is sync done to the public API. The full synch will fetch all products and categories and import them in an asynchrounous manner. For the continuous updates to work properly a webhook needs to be configured inside the Bluestone PIM user interface. This will trigger an event every time a synch is done and transfer all data related to the batch of updates. The updates will include both product- and category related changes.
+Updates from Bluestone PIM are transferred automatically to the relevant Occtoo sources. You can run a full synchronization when needed, and continuous updates run whenever a sync is done to the public API.
 
-![bluestone pim transfer overview](/images/integrations/providers/Bluestone_PIM_overview-3a9f7061b864a09b3b0d0774c0748e86.jpg)
+The full synchronization fetches all products and categories and imports them asynchronously. For continuous updates to work, you must configure a webhook in the Bluestone PIM user interface. The webhook triggers an event every time a sync completes and transfers all data related to that batch of updates, including both product- and category-related changes.
 
-## Installation/Setup of provider
+![Overview of the data transfer from Bluestone PIM](/images/integrations/providers/Bluestone_PIM_overview-3a9f7061b864a09b3b0d0774c0748e86.jpg)
+
+## Install and set up the provider
 
 ### Prerequisites
 
+To complete the setup, you need:
+
 - Access to the Bluestone PIM client
-- Bluestone PIM api key
-- Access to code from Github
-- Azure storage account
+- A Bluestone PIM API key
+- Access to the code on GitHub
+- An Azure storage account
 
-### Download code from GitHub
+### Download the code from GitHub
 
-The repository is located at:
-
-[https://github.com/Occtoo/Occtoo.Provider.BluestonePIM](https://github.com/Occtoo/Occtoo.Provider.BluestonePIM)
+The code is available in the [Occtoo.Provider.BluestonePIM repository](https://github.com/Occtoo/Occtoo.Provider.BluestonePIM).
 
 ### Create sources in Occtoo
 
-Create the target sources in Occtoo. Add the identifiers to following settings for the provider:
+Create the target sources in Occtoo, then add their identifiers to the following provider settings:
 
-- CategoriesDataSource
-- ProductsDataSource
-- MediaDataSource
+- `CategoriesDataSource`
+- `ProductsDataSource`
+- `MediaDataSource`
 
-### Register provider in Occtoo
+For instructions, see [Add a data source](/guides/studio/sources/add-a-data-source).
 
-Register a provider and include the target sources from the previous step. Add the values for the data provider id and secret in the settings for the formatter:
+### Register the provider in Occtoo
 
-- DataProviderId
-- DataProviderSecret
+Register a provider and include the target sources from the previous step. Add the data provider ID and secret to the following settings:
 
-![Register provider](/images/integrations/providers/register_provider-5d1af044091e551eddf5a29ac4b3ab6d.png)
+- `DataProviderId`
+- `DataProviderSecret`
+
+For instructions, see [Add a data provider](/guides/studio/sources/add-a-data-provider).
+
+![Register a provider](/images/integrations/providers/register_provider-5d1af044091e551eddf5a29ac4b3ab6d.png)
 
 ### Media
 
-When configuring media there are three options:
+Set the `HandleMedia` setting to one of three values:
 
-- ignore - media is not transferred
-- bluestone - use the original url:s provided by Bluestone PIM
-- occtoo - upload all assets to the Occtoo media service.
+- `ignore` — media is not transferred.
+- `bluestone` — use the original URLs provided by Bluestone PIM.
+- `occtoo` — upload all assets to the Occtoo media service.
 
-The media configuration setting should be specified in the setting for HandleMedia.
+### Configure the Bluestone API
 
-### Configure Bluestone API
+Before any data can be retrieved, you need an API key to connect to the Bluestone API. Add the key to the `BluestoneAPIKeyValue` setting.
 
-Before any data can be retrieved an API key is needed to connect to the Bluestone API. The value for the key should be added to the configuration setting BluestoneAPIKeyValue.
+### Languages and contexts
 
-### Languages/Context
+Configure the languages, or contexts, to transfer up front. Two settings control the contexts:
 
-The languages or contexts that should be transferred needs to be configured up front. There are two properties for specifying the contexts:
+- `DefaultContext`
+- `AdditionalContext`
 
-- DefaultContext
-- AdditionalContext
+The default context holds the data for all non-localized attributes. Its value combines the context key from Bluestone and the language identifier from Occtoo, separated by a colon — for example, `en:en`.
 
-The default context is the context that holds the data for all non-localized attributes. The value should contain the context context key from Bluestone and the language identifier from Occtoo, separated by ':'. Example: "en:en".
+The additional context is optional and can contain one or more contexts to transfer as localized content. This setting works in relation to localized attributes. It follows the same structure as the default context, with multiple contexts separated by a comma — for example, `13472:sv,14373:de`.
 
-The additional context is optional and can contain one or more contexts to be transferred as localized content. This property works in relation with localized attributes. The structure is the same as for the default context, and multiple contexts are separated by ','. Example: "13472:sv,14373:de".
+To retrieve the context keys, call the `/Contexts` endpoint in the Bluestone public API.
 
-To access the keys for the contexts a get call to /Contexts endpoint can be made in the Bluestone public API
-
-![Get contexts](/images/integrations/providers/get_contexts-84a63d645e339d865df0de2a7d93d83c.png)
+![Get contexts from the Bluestone public API](/images/integrations/providers/get_contexts-84a63d645e339d865df0de2a7d93d83c.png)
 
 ### Attributes
 
-All attribute types from Bluestone are automatically transferred to Occtoo. The attribute number is used as an attribute identifier in Occtoo. The complex data types from Bluestone are serialized into Json. For key-value properties both the key and the value are transferred in separate properties. For multi select values the default separator is '|'.
+All attribute types from Bluestone are transferred to Occtoo automatically, and the attribute number is used as the attribute identifier in Occtoo. Complex data types from Bluestone are serialized into JSON. For key-value properties, both the key and the value are transferred as separate properties. For multi-select values, the default separator is `|`.
 
-Properties that should be treated as localized text in Occtoo need to be configured. There are two different settings to configure localized properties:
+Properties that should be treated as localized text in Occtoo need to be configured. Two settings control localized properties:
 
-- LocalizedPropertiesProduct
-- LocalizedPropertiesCategory
+- `LocalizedPropertiesProduct`
+- `LocalizedPropertiesCategory`
 
-If there are multiple properties they should be separated by a comma. Specifying a property as Localized means that it will get the values for all contexts specified.
+Separate multiple properties with a comma. Specifying a property as localized means it receives the values for all configured contexts.
 
-![bluestone attributes](/images/integrations/providers/bluestone_attributes-66310f4ccabc5f64a60338bbb314c52d.png)
+![Bluestone attributes](/images/integrations/providers/bluestone_attributes-66310f4ccabc5f64a60338bbb314c52d.png)
 
 ### Configure webhooks
 
-For the update flow to work there are two webhooks needed - one for the update flow and one for the delete flow.
+The update flow requires two webhooks — one for updates and one for deletes.
 
 #### Update webhook
 
-The update webhook is responsible for publishing all changes to products and categories. When creating it make sure to check the option 'New sync done to public API'. Add the url to the http function 'DataSync'.
+The update webhook publishes all changes to products and categories. When you create it, select the **New sync done to public API** option and add the URL to the `DataSync` HTTP function.
 
-![bluestone update webhook](/images/integrations/providers/add_webhook-2c19001667ed191c0d829eb99eaf7cc8.png)
+![Bluestone update webhook](/images/integrations/providers/add_webhook-2c19001667ed191c0d829eb99eaf7cc8.png)
 
 #### Delete webhook
 
-The delete webhook is used to remove products from Occtoo that are archived in Bluestone. When creating it make sure to check the option 'Change on product state in PIM'.
+The delete webhook removes products from Occtoo that have been archived in Bluestone. When you create it, select the **Change on product state in PIM** option.
 
-![bluestone delete webhook](/images/integrations/providers/delete_webhook-e6fae91485b2fbec55e73f7d9c3c3712.png)
+![Bluestone delete webhook](/images/integrations/providers/delete_webhook-e6fae91485b2fbec55e73f7d9c3c3712.png)
 
-### Full synch
+### Full synchronization
 
-To execute a full synch there are two different endpoints, one for the category synch and one for the product synch. The endpoints accept both GET and POST requests. The category full synch will execute in synchronous manner and get all categories and push them to the Occtoo onboarding API.
+Two endpoints handle full synchronization — one for categories and one for products. Both accept GET and POST requests.
 
-The product synch will iterate all products and import them in an asynchronous manner by placing them in a queue. The queue will then be processed by a separate worker.
+The category synchronization runs synchronously, fetching all categories and pushing them to the Occtoo onboarding API. The product synchronization iterates over all products and imports them asynchronously by placing them in a queue, which is then processed by a separate worker.
 
-```html
-
-// Categories full synch
+```bash
+# Categories full sync
 GET https://[root-url]/CategoriesFullSync
 
-// Products full synch
+# Products full sync
 POST https://[root-url]/ProductFullSync
 ```
 
 #### Storage account
 
-For the full export to work an Azure storage account needs to be configured.
+The full export requires an Azure storage account. Configure it with the following settings:
 
-The connection string should be added in the setting:
+- `StorageConnectionString` — the connection string for the storage account.
+- `ProductQueue` — the name of the queue for the products.
+- `ProductContainer` — the blob container used to persist the data.
 
-- StorageConnectionString
-
-The name of the queue for the products should be added in the setting:
-
-- ProductQueue
-
-The blob container for persisting the data should be added in the setting:
-
-- ProductContainer
-
-![bluestone full synch](/images/integrations/providers/full_export-c83d4663a5fbe319ed04a505cead190c.jpg)
+![Bluestone full synchronization](/images/integrations/providers/full_export-c83d4663a5fbe319ed04a505cead190c.jpg)

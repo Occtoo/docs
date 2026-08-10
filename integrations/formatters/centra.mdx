@@ -1,28 +1,28 @@
 ---
 title: "Centra"
-description: "About Centra"
 ---
 
 ## About Centra
 
-Centra serves both wholesale and direct-to-consumer sales. It enables brands to handle all channels from one platform - both Wholesale B2B and Direct-to-Consumer B2C.
+Centra serves both wholesale and direct-to-consumer sales, enabling brands to handle all channels from one platform — both wholesale B2B and direct-to-consumer B2C.
 
-Read more at [https://centra.com](https://centra.com)
+Read more at [centra.com](https://centra.com).
 
 ## Introduction
 
-This is a template project for creating a Formatter from Occtoo API to [Centra](https://centra.com/). Available via [Github](https://github.com/Occtoo/Occtoo.Formatter.Centra).
+This is a template project for building a formatter that sends data from an Occtoo destination to [Centra](https://centra.com/). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Formatter.Centra).
 
 ## How it works
 
-The solution has functions working as shown below:
+The solution consists of the functions shown below.
 
-![Architectual Overview](/images/integrations/formatters/CentraFormatter-2c985cb54eb069ac0957ff60682f6120.png)
+![Architectural overview of the Centra formatter](/images/integrations/formatters/CentraFormatter-2c985cb54eb069ac0957ff60682f6120.png)
 
-Orchestrator – is called every two minutes and depending on the state of the finite-state machine calls Occtoo API and fills the queue
+- **Orchestrator** — runs every two minutes and, depending on the state of the finite-state machine, calls the Occtoo API and fills the queue.
+- **ProcessProductMasterFromQueue** (queue trigger) — loads the flattened SKU list for a specific product master, creates the product hierarchy required by the import process, and imports the product (variants and SKUs) into the Centra database.
 
-ProcessProductMasterFromQueue (QueueTrigger) – Loads flatten SKU list for specific productMaster, create product hierarchy necessary for import process and import product (variants, SKUs) into Centra DB
+To get the destination details required by the template, see [Create a destination](/guides/studio/destinations/create-a-destination) and [Register an application](/guides/studio/destinations/register-an-application).
 
-## Download and Installation
+## Download and installation
 
-Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Formatter.Centra). Build and deploy to your azure instance
+Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Formatter.Centra), then build and deploy it to your Azure instance.

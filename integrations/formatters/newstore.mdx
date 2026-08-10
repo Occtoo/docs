@@ -1,28 +1,28 @@
 ---
-title: "Newstore"
-description: "About Newstore"
+title: "NewStore"
 ---
 
-## About Newstore
+## About NewStore
 
-Amazing shopping experiences, everywhere. Live in 55 countries, the NewStore Omnichannel Platform is the ONLY retail solution with POS, OMS, inventory, and fully integrated native shopping apps. All delivered as-a-service.
+NewStore is an omnichannel retail platform that combines POS, order management, inventory, and fully integrated native shopping apps, all delivered as a service. It is live in 55 countries.
 
-Read more at [https://www.newstore.com/](https://www.newstore.com/)
+Read more at [newstore.com](https://www.newstore.com/).
 
 ## Introduction
 
-This is a template project for creating a Formatter from Occtoo API to [NewStore](https://www.newstore.com/). Available via [Github](https://github.com/Occtoo/Occtoo.Formatter.Newstore).
+This is a template project for building a formatter that sends data from an Occtoo destination to [NewStore](https://www.newstore.com/). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Formatter.Newstore).
 
 ## How it works
 
-The solution has functions working as shown below:
+The solution consists of the functions shown below.
 
-![Architectual Overview](/images/integrations/formatters/NewstoreFormatter-6a6f051bcb71f5055deab4d8d50af301.png)
+![Architectural overview of the NewStore formatter](/images/integrations/formatters/NewstoreFormatter-6a6f051bcb71f5055deab4d8d50af301.png)
 
-NewStoreExport (HttpTrigger) - Called to get products from the Occtoo API. It creates json files on blobstorage and send a message to the queue
+- **NewStoreExport** (HTTP trigger) — called to get products from the Occtoo API. It writes JSON files to blob storage and sends a message to the queue.
+- **NewStoreOutboxDequeue** (queue trigger) — picks up the queued items and sends them to NewStore.
 
-NewStoreOutboxDequeue (QueueTrigger) – Picks up the queue items and sends it to Newstore
+To get the destination details required by the template, see [Create a destination](/guides/studio/destinations/create-a-destination) and [Register an application](/guides/studio/destinations/register-an-application).
 
-## Download and Installation
+## Download and installation
 
-Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Formatter.Newstore). Build and deploy to your azure instance
+Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Formatter.Newstore), then build and deploy it to your Azure instance.

@@ -1,28 +1,28 @@
 ---
 title: "inRiver"
-description: "About inRiver"
 ---
 
 ## About inRiver
 
-inRiver is a PIM software that’s built to scale, turn product data into a profit maker with the inriver PIM solution.
-Add value at every stage of the product journey with standout, data-driven experiences powered by Product Information Management software from inriver.
+inriver is a PIM platform built to scale, turning product data into a profit driver. It adds value at every stage of the product journey with standout, data-driven experiences.
 
-Read more at [www.inriver.com](https://www.inriver.com/)
+Read more at [inriver.com](https://www.inriver.com/).
 
 ## Introduction
 
-Generic importer is assumed to become universal tool for importing data from inRiver into Occtoo. Basic idea is to control creation of datasources and their structure through a [json configuration file](https://github.com/Occtoo/Occtoo.Provider.Inriver?tab=readme-ov-file#how-it-works).
+The generic importer is a universal tool for importing data from inRiver into Occtoo. Data sources and their structure are controlled through a [JSON configuration file](https://github.com/Occtoo/Occtoo.Provider.Inriver?tab=readme-ov-file#how-it-works).
 
 ## How it works
 
-InRiver extensions to send data over to Occtoo.
+The following inRiver extensions send data to Occtoo:
 
-- EntityListener - Listens to CRUD events in InRiver and creates a Connector state
-- RelationListener - Listens to relation changes and create a Connector state
-- SendToOcctooExtension - Picks up the stored Connector states and transforms into documents and sends over to Occtoo
-- FullExport - Scheduled extension that only runs when manually triggered to export all data to Occtoo
+- **EntityListener** — listens to CRUD events in inRiver and creates a connector state.
+- **RelationListener** — listens to relation changes and creates a connector state.
+- **SendToOcctooExtension** — picks up the stored connector states, transforms them into documents, and sends them to Occtoo.
+- **FullExport** — a scheduled extension that runs only when triggered manually, exporting all data to Occtoo.
 
-## Download and Installation
+To get the provider details required by the extensions, see [Add a data provider](/guides/studio/sources/add-a-data-provider) and [Client/secret](/get-started/get-data-into-occtoo#1a-clientsecret).
 
-Fetch the latest code at our [Github repository](https://github.com/Occtoo/Occtoo.Provider.Inriver). Build and deploy to your inriver instance
+## Download and installation
+
+Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Provider.Inriver), then build and deploy it to your inriver instance.
