@@ -1,40 +1,572 @@
 ---
 title: "Documentation"
-description: "Learn how to work with Occtoo"
-mode: "center"
+description: "Everything you need to connect your data, orchestrate every product, and ship to any channel."
+mode: "custom"
 ---
 
-# Learn how to work with Occtoo
+{/*
+  Home page. Markup and styles both live in this file so the landing page can be
+  restyled without touching the shared stylesheet. Classes are prefixed `occ-` to
+  stay out of the theme's namespace.
 
-<Card title="Introduction to Occtoo" horizontal href="/get-started/introduction">
-  Start here for an overview of the Occtoo Product Orchestration Engine.
-</Card>
+  The stylesheet is injected through dangerouslySetInnerHTML because Mintlify's
+  MDX pipeline strips bare <style> elements.
+*/}
 
-<Columns cols={3}>
-</Columns>
+<div style={{ display: "contents" }} dangerouslySetInnerHTML={{ __html: `<style>
+  /*
+   * Colors come from the theme rather than being invented here: --primary,
+   * --primary-light and --background-dark are the variables Mintlify derives
+   * from docs.json, so changing the brand color there updates this page too.
+   * The neutrals match the mint theme's warm gray ramp (#1d1916 headings,
+   * #565250 secondary text, gray-950/10 borders) used by native components.
+   */
+  .occ-home {
+    --occ-accent: rgb(var(--primary));
+    --occ-accent-text: color-mix(in srgb, rgb(var(--primary)) 82%, #1d1916);
+    --occ-ink: #1d1916;
+    --occ-strong: #2c2825;
+    --occ-muted: #565250;
+    --occ-border: rgb(3 7 18 / 0.1);
+    --occ-card: #ffffff;
+    --occ-tile: rgb(var(--primary) / 0.09);
+    --occ-panel: rgb(var(--primary) / 0.06);
+    --occ-hover-border: rgb(var(--primary) / 0.45);
+    --occ-on-accent: #ffffff;
+    --occ-shadow: rgba(29, 25, 22, 0.22);
 
-<Columns cols={2}>
-  <Card title="Get started" href="/get-started/overview">
-    Get started with the Occtoo platform. Learn how to onboard data and extract data by using our quick step by step guides.
-  </Card>
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+    color: var(--occ-ink);
+    font-size: 15px;
+    line-height: 1.55;
+  }
 
-  <Card title="Concepts" href="/concepts/overview">
-    Learn about the different concepts that make up the Occtoo platform.
-  </Card>
+  .dark .occ-home {
+    --occ-accent: rgb(var(--primary-light));
+    --occ-accent-text: rgb(var(--primary-light));
+    --occ-ink: #e5e1de;
+    --occ-strong: #ffffff;
+    --occ-muted: #a39d97;
+    --occ-border: rgb(255 255 255 / 0.1);
+    --occ-card: rgb(var(--background-dark));
+    --occ-tile: rgb(var(--primary-light) / 0.14);
+    --occ-panel: rgb(var(--primary-light) / 0.07);
+    --occ-hover-border: rgb(var(--primary-light) / 0.45);
+    --occ-on-accent: rgb(var(--background-dark));
+    --occ-shadow: rgba(0, 0, 0, 0.55);
+  }
 
-  <Card title="Occtoo Studio" href="/guides/studio/overview">
-    Find out how the Occtoo no code studio enables digital teams with no coding skills to select and connect data and content anyhow they want.
-  </Card>
+  .occ-home a { text-decoration: none; }
 
-  <Card title="Partner zone" href="/guides/partner-zone/overview">
-    Interested in easily sharing all your product content and campaign assets with resellers and partners from one place? Then the partner zone is for you!
-  </Card>
+  /* Stroked arrow icon, used everywhere instead of the heavier → / ↗ glyphs. */
+  .occ-arrow {
+    flex: none;
+    width: 15px;
+    height: 15px;
+  }
 
-  <Card title="API Reference" href="/api-reference/overview">
-    Interactive reference for the Ingest and Events APIs, with authentication guides and a built-in playground.
-  </Card>
+  /* ---------- hero ---------- */
 
-  <Card title="Integrations" href="/integrations/providers/overview">
-    Ingest providers and consumption formatters for connecting Occtoo to the rest of your stack.
-  </Card>
-</Columns>
+  .occ-hero {
+    text-align: center;
+    padding: 3.75rem 0 2.5rem;
+  }
+
+  .occ-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--occ-accent-text);
+    margin: 0 0 1.25rem;
+  }
+
+  .occ-hero h1 {
+    max-width: 18ch;
+    margin: 0 auto;
+    font-size: clamp(2.25rem, 5.2vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.07;
+    color: var(--occ-ink);
+  }
+
+  .occ-dot { color: var(--occ-accent); }
+  .occ-hl { color: var(--occ-accent-text); }
+
+  .occ-lede {
+    max-width: 44ch;
+    margin: 1.15rem auto 0;
+    color: var(--occ-muted);
+  }
+
+  .occ-popular {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.65rem;
+  }
+
+  .occ-popular-label {
+    margin-right: 0.25rem;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--occ-muted);
+  }
+
+  .occ-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--occ-border);
+    border-radius: 999px;
+    background: var(--occ-card);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--occ-ink);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .occ-pill:hover {
+    border-color: var(--occ-accent);
+    transform: translateY(-1px);
+  }
+
+  .occ-pill svg { flex: none; color: var(--occ-accent); }
+
+  /* ---------- section header ---------- */
+
+  .occ-section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 1.1rem 0 1.1rem;
+  }
+
+  .occ-section-head h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--occ-ink);
+  }
+
+  .occ-section-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--occ-accent);
+    transition: opacity 0.15s ease;
+  }
+
+  .occ-section-link:hover { opacity: 0.75; }
+
+  /* ---------- browse cards ---------- */
+
+  .occ-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .occ-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: 1px solid var(--occ-border);
+    border-radius: 14px;
+    background: var(--occ-card);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .occ-card:hover {
+    border-color: var(--occ-hover-border);
+    box-shadow: 0 8px 22px -14px var(--occ-shadow);
+  }
+
+  .occ-tile {
+    --occ-tile-size: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: var(--occ-tile-size);
+    height: var(--occ-tile-size);
+    border-radius: 10px;
+    background: var(--occ-tile);
+    color: var(--occ-accent);
+  }
+
+  /* Card tiles are larger than the inline ones in the footer cards. */
+  .occ-card .occ-tile {
+    --occ-tile-size: 44px;
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+  }
+
+  .occ-card .occ-tile svg { width: 22px; height: 22px; }
+
+  .occ-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--occ-strong);
+  }
+
+  .occ-card p {
+    margin: 0 0 1.35rem;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--occ-muted);
+  }
+
+  .occ-card-links { margin-top: auto; }
+
+  .occ-sub {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.6rem 0;
+    border-top: 1px solid var(--occ-border);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--occ-accent-text);
+    transition: color 0.15s ease;
+  }
+
+  .occ-sub .occ-arrow { opacity: 0.55; }
+  .occ-sub:hover { color: var(--occ-accent); }
+  .occ-sub:hover .occ-arrow { opacity: 1; }
+
+  /* ---------- four steps panel ---------- */
+
+  .occ-panel {
+    margin-top: 1.75rem;
+    padding: 1.5rem;
+    border: 1px solid var(--occ-border);
+    border-radius: 16px;
+    background: var(--occ-panel);
+  }
+
+  .occ-panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .occ-panel-head h2 {
+    margin: 0.35rem 0 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--occ-ink);
+  }
+
+  .occ-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: var(--occ-accent);
+    color: var(--occ-on-accent);
+    font-size: 12.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: filter 0.15s ease, transform 0.15s ease;
+  }
+
+  .occ-button:hover { filter: brightness(1.07); transform: translateY(-1px); }
+
+  .occ-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .occ-step {
+    padding: 0.9rem;
+    border: 1px solid var(--occ-border);
+    border-radius: 12px;
+    background: var(--occ-card);
+  }
+
+  .occ-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-bottom: 0.85rem;
+    border-radius: 999px;
+    background: var(--occ-accent);
+    color: var(--occ-on-accent);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .occ-step h4 {
+    margin: 0 0 0.25rem;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--occ-strong);
+  }
+
+  .occ-step p {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.45;
+    color: var(--occ-muted);
+  }
+
+  /* ---------- footer cards ---------- */
+
+  .occ-footer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.75rem;
+  }
+
+  .occ-footer-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--occ-border);
+    border-radius: 14px;
+    background: var(--occ-card);
+    transition: border-color 0.15s ease;
+  }
+
+  .occ-footer-card:hover { border-color: var(--occ-hover-border); }
+
+  .occ-footer-card h3 {
+    margin: 0 0 0.15rem;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--occ-strong);
+  }
+
+  .occ-footer-card p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--occ-muted);
+  }
+
+  .occ-footer-arrow {
+    margin-left: auto;
+    color: var(--occ-muted);
+  }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 900px) {
+    .occ-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .occ-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 620px) {
+    .occ-grid,
+    .occ-steps,
+    .occ-footer-grid { grid-template-columns: minmax(0, 1fr); }
+    .occ-hero { padding-top: 2.5rem; }
+  }
+</style>` }} />
+
+<div className="occ-home">
+
+  <div className="occ-hero">
+    <p className="occ-eyebrow">Occtoo documentation</p>
+
+    <h1>Learn how to work with Occtoo<span className="occ-dot">.</span></h1>
+
+    <p className="occ-lede">
+      Everything you need to connect your data, orchestrate every product, and ship to any channel.
+    </p>
+
+    <div className="occ-popular">
+      <span className="occ-popular-label">Popular</span>
+
+      <a className="occ-pill" href="/get-started/get-data-into-occtoo">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" /></svg>
+        Ingest data
+      </a>
+
+      <a className="occ-pill" href="/get-started/my-first-occtoo-experience">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" /></svg>
+        Quickstart
+      </a>
+
+      <a className="occ-pill" href="/api-reference/overview">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15a4 4 0 1 0 8 0 4 4 0 1 0-8 0" /><path d="m10.8 12.2 8-8" /><path d="m17 4 3 3" /><path d="m14.5 6.5 3 3" /></svg>
+        API endpoints
+      </a>
+
+      <a className="occ-pill" href="/api-reference/consumption/overview">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 5a8 3 0 1 0 16 0 8 3 0 1 0-16 0" /><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5" /><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3" /></svg>
+        Data consumption
+      </a>
+    </div>
+  </div>
+
+  <div className="occ-section-head">
+    <h2>Browse the docs</h2>
+    <a className="occ-section-link" href="/get-started/overview">
+      View all sections
+      <svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+    </a>
+  </div>
+
+  <div className="occ-grid">
+
+    <div className="occ-card">
+      <span className="occ-tile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0" /><path d="M12 2v10" /></svg>
+      </span>
+      <h3>Get started</h3>
+      <p>Onboard your data and extract it with quick, step-by-step guides.</p>
+      <div className="occ-card-links">
+        <a className="occ-sub" href="/get-started/introduction"><span>Introduction</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+        <a className="occ-sub" href="/get-started/my-first-occtoo-experience"><span>Quickstart</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+      </div>
+    </div>
+
+    <div className="occ-card">
+      <span className="occ-tile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 21V10" /><path d="M8 6V3" /><path d="M6 8a2 2 0 1 0 4 0 2 2 0 1 0-4 0" /><path d="M16 21v-3" /><path d="M16 14V3" /><path d="M14 16a2 2 0 1 0 4 0 2 2 0 1 0-4 0" /></svg>
+      </span>
+      <h3>Integration</h3>
+      <p>Push and pull data through the Ingest API, providers, and the onboarding SDK.</p>
+      <div className="occ-card-links">
+        <a className="occ-sub" href="/api-reference/ingest/overview"><span>Ingest</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+        <a className="occ-sub" href="/integrations/providers/overview"><span>Providers</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+      </div>
+    </div>
+
+    <div className="occ-card">
+      <span className="occ-tile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 5a3 3 0 1 0 6 0 3 3 0 1 0-6 0" /><path d="M3 12a3 3 0 1 0 6 0 3 3 0 1 0-6 0" /><path d="M15 19a3 3 0 1 0 6 0 3 3 0 1 0-6 0" /><path d="m8.6 10.5 6.8-4" /><path d="m8.6 13.5 6.8 4" /></svg>
+      </span>
+      <h3>Data consumption</h3>
+      <p>Query, filter, and deliver orchestrated data to any channel via ready APIs.</p>
+      <div className="occ-card-links">
+        <a className="occ-sub" href="/api-reference/consumption/overview"><span>Query API</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+        <a className="occ-sub" href="/guides/studio/destinations/create-an-endpoint"><span>Endpoints</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+      </div>
+    </div>
+
+    <div className="occ-card">
+      <span className="occ-tile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="5" rx="1" /><rect x="3" y="17" width="6" height="5" rx="1" /><rect x="15" y="17" width="6" height="5" rx="1" /><path d="M12 7v5" /><path d="M6 17v-3h12v3" /></svg>
+      </span>
+      <h3>Concepts</h3>
+      <p>Understand the building blocks that make up the Occtoo platform.</p>
+      <div className="occ-card-links">
+        <a className="occ-sub" href="/concepts/overview"><span>Data model</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+        <a className="occ-sub" href="/concepts/catalog"><span>Orchestration</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+      </div>
+    </div>
+
+    <div className="occ-card">
+      <span className="occ-tile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
+      </span>
+      <h3>Occtoo Studio</h3>
+      <p>Connect data and content with no code — select, shape, and publish anywhere.</p>
+      <div className="occ-card-links">
+        <a className="occ-sub" href="/guides/studio/overview"><span>Overview</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+        <a className="occ-sub" href="/get-started/my-first-occtoo-experience"><span>Experiences</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+      </div>
+    </div>
+
+    <div className="occ-card">
+      <span className="occ-tile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><path d="M5 7a4 4 0 1 0 8 0 4 4 0 1 0-8 0" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+      </span>
+      <h3>Partner Zone</h3>
+      <p>Share product content and campaign assets with resellers and partners.</p>
+      <div className="occ-card-links">
+        <a className="occ-sub" href="/guides/partner-zone/overview"><span>Get access</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+        <a className="occ-sub" href="/guides/partner-zone/manage/create-a-partner"><span>Sharing</span><svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div className="occ-panel">
+    <div className="occ-panel-head">
+      <div>
+        <p className="occ-eyebrow">New to Occtoo</p>
+        <h2>Get to your first import in four steps.</h2>
+      </div>
+      <a className="occ-button" href="/get-started/introduction">
+        Introduction to Occtoo
+        <svg className="occ-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+      </a>
+    </div>
+
+    <div className="occ-steps">
+      <div className="occ-step">
+        <span className="occ-step-num">1</span>
+        <h4>Create your account</h4>
+        <p>Set up your workspace and invite your team.</p>
+      </div>
+      <div className="occ-step">
+        <span className="occ-step-num">2</span>
+        <h4>Connect a source</h4>
+        <p>Link ERP, PIM, DAM, or a supplier feed.</p>
+      </div>
+      <div className="occ-step">
+        <span className="occ-step-num">3</span>
+        <h4>Ingest your data</h4>
+        <p>Request a token and call the import endpoint.</p>
+      </div>
+      <div className="occ-step">
+        <span className="occ-step-num">4</span>
+        <h4>Consume via API</h4>
+        <p>Query orchestrated data and ship to any channel.</p>
+      </div>
+    </div>
+  </div>
+
+  <div className="occ-footer-grid">
+    <a className="occ-footer-card" href="https://github.com/Occtoo">
+      <span className="occ-tile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5 3.3 9.3 7.8 10.8.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17.9 4.6 19 5 19 5c.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.8C23.5 5.7 18.3.5 12 .5Z" /></svg>
+      </span>
+      <div>
+        <h3>Browse on GitHub</h3>
+        <p>SDKs, code samples, and the onboarding library.</p>
+      </div>
+      <svg className="occ-arrow occ-footer-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7" /><path d="M7 7h10v10" /></svg>
+    </a>
+
+    <a className="occ-footer-card" href="https://www.occtoo.com/book-demo">
+      <span className="occ-tile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.9 9.9 0 0 1-4-.9L3 21l1.9-4.5A8.4 8.4 0 0 1 4 11.5 8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5Z" /></svg>
+      </span>
+      <div>
+        <h3>Talk to us</h3>
+        <p>Stuck on something? Reach the Occtoo team directly.</p>
+      </div>
+      <svg className="occ-arrow occ-footer-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17 17 7" /><path d="M7 7h10v10" /></svg>
+    </a>
+  </div>
+
+</div>
