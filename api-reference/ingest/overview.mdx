@@ -6,10 +6,12 @@ Ingesting data into Occtoo is facilitated by the Ingest API. This powerful API s
 
 ## Data ingest
 
-Data ingestion is performed using the ingest API. Two endpoints, *tokens* and *import*, are necessary for completing a data import. The import sequence always needs to start with a request for a token, as all imports require authentication. Using the token, the import endpoint can then be called.
+Data ingestion is performed using the ingest API. Two endpoints, _tokens_ and _import_, are necessary for completing a data import. The import sequence always needs to start with a request for a token, as all imports require authentication. Using the token, the import endpoint can then be called.
 
 <Accordion title="Data import sequence visualzation">
-![Data ingest](/images/api-reference/ingest/integration-light.png)![Data ingest](/images/api-reference/ingest/integration-dark.png)
+  ![Data ingest](/images/api-reference/ingest/integration-light.png)
+
+  ![Data ingest](/images/api-reference/ingest/integration-dark.png)
 </Accordion>
 
 ### Rules
@@ -24,10 +26,9 @@ There are a set of rules related to the ingest data that need to be respected fo
   - A-Z (uppercase A to Z)
   - 0-9 (numbers 0 to 9)
   - \_ (underscore)
-  - - (hyphen)
 
 <Warning>
-If one of the rules is broken for *any* of the entries in a payload, the **entire import** will be rejected. The API response will indicate what the error is.
+  If one of the rules is broken for _any_ of the entries in a payload, the **entire import** will be rejected. The API response will indicate what the error is.
 </Warning>
 
 ```javascript
@@ -68,7 +69,7 @@ https://ingest.occtoo.com/dataProviders/tokens
 ```
 
 <Tip>
-Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
+  Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
 </Tip>
 
 ##### Request payload
@@ -125,144 +126,144 @@ The import format is structured as follows:
 
 <Tabs>
   <Tab title="Standard">
-<Tip>
-If an entry is to be added or updated, the **delete property** *can optianlly* be omitted.
-</Tip>
+    <Tip>
+      If an entry is to be added or updated, the **delete property** _can optianlly_ be omitted.
+    </Tip>
 
-```javascript
-{
-    "entities" : [
-    {
-        "key" : "Entry-key",
-        "delete" : false,
-        "properties" : [
-        {
-            "id" : "Property-ID",
-            "value" : "Property Value",
-            "language" : "Code"
-        }
-        ]
-    }
-    ]
-}
-```
-  </Tab>
-  <Tab title="Multiple items">
-<Tip>
-It is obviously possible to send both multiple entries with multiple properties in a single payload.
-</Tip>
-
-```javascript
-{
-    "entities" : [
-    {
-        "key" : "item123",
-        "delete" : false,
-        "properties" : [
-        {
-            "id" : "my-property",
-            "value" : "My propery value for item123",
-            "language" : "en-us"
-        }
-        ]
-    },
-    {
-        "key" : "item456",
-        "delete" : false,
-        "properties" : [
-        {
-            "id" : "my-propery",
-            "value" : "My propery value for item456. This text is slightly longer",
-            "language" : "en-us"
-        }
-        ]
-    }
-    ]
-}
-```
-  </Tab>
-  <Tab title="Multiple properties & languages">
-<Tip>
-To provide a property in multiple languages, repeat the property ID with its corresponding language code and value. If a property is not to be localized, the **language property** can optionally be omitted, left blank, or set to null.
-</Tip>
-
-```javascript
+    ```javascript
     {
         "entities" : [
         {
-            "key" : "item123",
+            "key" : "Entry-key",
+            "delete" : false,
             "properties" : [
             {
-                "id": "My-first-prop",
-                "value":"This is the value of my-first-prop in English",
-                "language": "en"
-            },
-            {
-                "id": "My-first-prop",
-                "value":"これがmy-first-propの値です",
-                "language": "jp"
-            },
-            {
-                "id": "My-second-prop",
-                "value":"This is the value of My-second-prop"
-            },
-            {
-                "id": "My-third-prop",
-                "value":"This is the value of My-third-prop",
-                "language": null
-            },
-            {
-                "id": "My-fourth-prop",
-                "value":"This is the value of My-fourth-prop",
-                "language": ""
+                "id" : "Property-ID",
+                "value" : "Property Value",
+                "language" : "Code"
             }
             ]
         }
         ]
     }
-```
+    ```
+  </Tab>
+  <Tab title="Multiple items">
+    <Tip>
+      It is obviously possible to send both multiple entries with multiple properties in a single payload.
+    </Tip>
+
+    ```javascript
+    {
+        "entities" : [
+        {
+            "key" : "item123",
+            "delete" : false,
+            "properties" : [
+            {
+                "id" : "my-property",
+                "value" : "My propery value for item123",
+                "language" : "en-us"
+            }
+            ]
+        },
+        {
+            "key" : "item456",
+            "delete" : false,
+            "properties" : [
+            {
+                "id" : "my-propery",
+                "value" : "My propery value for item456. This text is slightly longer",
+                "language" : "en-us"
+            }
+            ]
+        }
+        ]
+    }
+    ```
+  </Tab>
+  <Tab title="Multiple properties & languages">
+    <Tip>
+      To provide a property in multiple languages, repeat the property ID with its corresponding language code and value. If a property is not to be localized, the **language property** can optionally be omitted, left blank, or set to null.
+    </Tip>
+
+    ```javascript
+        {
+            "entities" : [
+            {
+                "key" : "item123",
+                "properties" : [
+                {
+                    "id": "My-first-prop",
+                    "value":"This is the value of my-first-prop in English",
+                    "language": "en"
+                },
+                {
+                    "id": "My-first-prop",
+                    "value":"これがmy-first-propの値です",
+                    "language": "jp"
+                },
+                {
+                    "id": "My-second-prop",
+                    "value":"This is the value of My-second-prop"
+                },
+                {
+                    "id": "My-third-prop",
+                    "value":"This is the value of My-third-prop",
+                    "language": null
+                },
+                {
+                    "id": "My-fourth-prop",
+                    "value":"This is the value of My-fourth-prop",
+                    "language": ""
+                }
+                ]
+            }
+            ]
+        }
+    ```
   </Tab>
   <Tab title="Delete payload">
-<Tip>
-When removing entities, there is *no need* to send any properties in the payload as the item is to be deleted. Omitting properties also reduces the import payload size and thus saves the planet, one byte at a time 😉.
-</Tip>
+    <Tip>
+      When removing entities, there is _no need_ to send any properties in the payload as the item is to be deleted. Omitting properties also reduces the import payload size and thus saves the planet, one byte at a time 😉.
+    </Tip>
 
-```javascript
+    ```javascript
+        {
+            "entities" : [
+            {
+                "key" : "item123",
+                "delete" : true,
+                "properties" : []
+            }
+            ]
+        }
+    ```
+  </Tab>
+  <Tab title="Mixed actions payload">
+    <Tip>
+      One has the option to mix actions in the payload, adding entities at the same time as updating or removing others.
+    </Tip>
+
+    ```javascript
     {
         "entities" : [
         {
             "key" : "item123",
             "delete" : true,
             "properties" : []
-        }
+        },
+        {
+            "key" : "item456",            
+            "properties" : [
+            {
+                "id": "My-prop",
+                "value":"This is a multi action payload example",
+                "language": "en"
+            },        
         ]
     }
-```
-  </Tab>
-  <Tab title="Mixed actions payload">
-<Tip>
-One has the option to mix actions in the payload, adding entities at the same time as updating or removing others.
-</Tip>
-
-```javascript
-{
-    "entities" : [
-    {
-        "key" : "item123",
-        "delete" : true,
-        "properties" : []
-    },
-    {
-        "key" : "item456",            
-        "properties" : [
-        {
-            "id": "My-prop",
-            "value":"This is a multi action payload example",
-            "language": "en"
-        },        
-    ]
-}
-```
+    ```
   </Tab>
 </Tabs>
 
@@ -292,33 +293,43 @@ All uploads are made asynchronously, and the ingest API allows for multiple uplo
 Media information can be retrieved either using user-provided unique IDs via the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier), or using the Occtoo media file ID via the [Media File Information by File ID API](#media-file-information-by-file-id).
 
 <Accordion title="Media upload via link sequence visualzation">
-Upload media files using links via the [Upload via Links API](#upload-via-links).
+  Upload media files using links via the [Upload via Links API](#upload-via-links).
 
-![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-light.png)![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-dark.png)
+  ![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-light.png)
+
+  ![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-dark.png)
 </Accordion>
 
 <Accordion title="Get media upload status sequence visualzation">
-Get the upload status of a induvidual file using the Occtoo media file ID with the [Upload Status API](#upload-status).
+  Get the upload status of a induvidual file using the Occtoo media file ID with the [Upload Status API](#upload-status).
 
-![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-light.png)![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-dark.png)
+  ![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-light.png)
+
+  ![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-dark.png)
 </Accordion>
 
 <Accordion title="Get media information by ID sequence visualzation">
-Get detailed media information of a induvidual media file using the [Media File Information by File ID API](#media-file-information-by-file-id).
+  Get detailed media information of a induvidual media file using the [Media File Information by File ID API](#media-file-information-by-file-id).
 
-![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-light.png)![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-dark.png)
+  ![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-light.png)
+
+  ![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-dark.png)
 </Accordion>
 
 <Accordion title="Get media information by unique identifier sequence visualzation">
-Get detailed media information for one or multiple media files using the unique ID attribute with the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier).
+  Get detailed media information for one or multiple media files using the unique ID attribute with the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier).
 
-![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-light.png)![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-dark.png)
+  ![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-light.png)
+
+  ![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-dark.png)
 </Accordion>
 
 <Accordion title="Delete media sequence visualzation">
-Delete an uploaded media file with the [Delete Media File endpoint](#delete-media) using the assigned Occtoo Media File ID.
+  Delete an uploaded media file with the [Delete Media File endpoint](#delete-media) using the assigned Occtoo Media File ID.
 
-![Delete media sequence](/images/api-reference/ingest/delete-media-light.png)![Delete media sequence](/images/api-reference/ingest/delete-media-dark.png)
+  ![Delete media sequence](/images/api-reference/ingest/delete-media-light.png)
+
+  ![Delete media sequence](/images/api-reference/ingest/delete-media-dark.png)
 </Accordion>
 
 ### API endpoints
@@ -332,7 +343,7 @@ https://ingest.occtoo.com/dataProviders/tokens
 ```
 
 <Tip>
-Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
+  Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
 </Tip>
 
 ##### Request payload
@@ -383,52 +394,52 @@ The upload via links payload format is structured as follows:
   - **uniqueidentifier** (Optional): Unique identifier of the media to be uploaded
 
 <Tip>
-If the media file that is to be upload contains [illegal characters](#rules-1) one can use the filename attribute to rename the file as this is the name that will be used for the file when uploaded to the Occtoo media service.
+  If the media file that is to be upload contains [illegal characters](#rules-1) one can use the filename attribute to rename the file as this is the name that will be used for the file when uploaded to the Occtoo media service.
 </Tip>
 
 <Tabs>
   <Tab title="Standard">
-<Tip>
-You can mix and match different types of media and locations when uploading.
-</Tip>
+    <Tip>
+      You can mix and match different types of media and locations when uploading.
+    </Tip>
 
-```javascript
-{
-  "links": [
+    ```javascript
     {
-      "filename": "my-media-file-name.png",
-      "link": "https://www.the.url/to/the/media/file/my-media-file-name.png",
-      "uniqueidentifier": "1709807830"
-    },
-    {
-      "filename": "another-media-file.tif",
-      "link": "https://www.another.url/to/a/media/file/location/another-media-file.tif",
-      "uniqueidentifier": "1709808053"
+      "links": [
+        {
+          "filename": "my-media-file-name.png",
+          "link": "https://www.the.url/to/the/media/file/my-media-file-name.png",
+          "uniqueidentifier": "1709807830"
+        },
+        {
+          "filename": "another-media-file.tif",
+          "link": "https://www.another.url/to/a/media/file/location/another-media-file.tif",
+          "uniqueidentifier": "1709808053"
+        }
+      ]
     }
-  ]
-}
-```
+    ```
   </Tab>
   <Tab title="Without unique identifer">
-<Tip>
-It is possible to either set **uniqueidentifer** to *null* or omit it entirely from the payload. Although it is our **strong recommendation** that a unique identifier is used to avoid reuploading the same binary multiple times.
-</Tip>
+    <Tip>
+      It is possible to either set **uniqueidentifer** to _null_ or omit it entirely from the payload. Although it is our **strong recommendation** that a unique identifier is used to avoid reuploading the same binary multiple times.
+    </Tip>
 
-```javascript
-{
-  "links": [
+    ```javascript
     {
-      "filename": "my-media-file-name.png",
-      "link": "https://www.the.url/to/the/media/file/my-media-file-name.png",
-    },
-    {
-      "filename": "another-media-file.tif",
-      "link": "https://www.the.url/to/the/media/file/another-media-file.tif",
-      "uniqueidentifier": null
+      "links": [
+        {
+          "filename": "my-media-file-name.png",
+          "link": "https://www.the.url/to/the/media/file/my-media-file-name.png",
+        },
+        {
+          "filename": "another-media-file.tif",
+          "link": "https://www.the.url/to/the/media/file/another-media-file.tif",
+          "uniqueidentifier": null
+        }
+      ]
     }
-  ]
-}
-```
+    ```
   </Tab>
 </Tabs>
 
