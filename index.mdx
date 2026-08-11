@@ -1,5 +1,5 @@
 ---
-title: "Documentation"
+title: "Start"
 description: "Everything you need to connect your data, orchestrate every product, and ship to any channel."
 mode: "custom"
 hidden: true
@@ -18,126 +18,126 @@ hidden: true
   style={{ display: "contents" }}
   dangerouslySetInnerHTML={{ __html: `<style>
 /*
- * Colors come from the theme rather than being invented here: --primary,
- * --primary-light and --background-dark are the variables Mintlify derives
- * from docs.json, so changing the brand color there updates this page too.
- * The neutrals match the mint theme's warm gray ramp (#1d1916 headings,
- * #565250 secondary text, gray-950/10 borders) used by native components.
- */
+* Colors come from the theme rather than being invented here: --primary,
+* --primary-light and --background-dark are the variables Mintlify derives
+* from docs.json, so changing the brand color there updates this page too.
+* The neutrals match the mint theme's warm gray ramp (#1d1916 headings,
+* #565250 secondary text, gray-950/10 borders) used by native components.
+*/
 .occ-home {
-  --occ-accent: rgb(var(--primary));
-  --occ-accent-text: color-mix(in srgb, rgb(var(--primary)) 82%, #1d1916);
-  --occ-ink: #1d1916;
-  --occ-strong: #2c2825;
-  --occ-muted: #565250;
-  --occ-border: rgb(3 7 18 / 0.1);
-  --occ-card: #ffffff;
-  --occ-tile: rgb(var(--primary) / 0.09);
-  --occ-panel: rgb(var(--primary) / 0.06);
-  --occ-hover-border: rgb(var(--primary) / 0.45);
-  --occ-on-accent: #ffffff;
-  --occ-shadow: rgba(29, 25, 22, 0.22);
+--occ-accent: rgb(var(--primary));
+--occ-accent-text: color-mix(in srgb, rgb(var(--primary)) 82%, #1d1916);
+--occ-ink: #1d1916;
+--occ-strong: #2c2825;
+--occ-muted: #565250;
+--occ-border: rgb(3 7 18 / 0.1);
+--occ-card: #ffffff;
+--occ-tile: rgb(var(--primary) / 0.09);
+--occ-panel: rgb(var(--primary) / 0.06);
+--occ-hover-border: rgb(var(--primary) / 0.45);
+--occ-on-accent: #ffffff;
+--occ-shadow: rgba(29, 25, 22, 0.22);
 
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 0 1.5rem 5rem;
-  color: var(--occ-ink);
-  font-size: 15px;
-  line-height: 1.55;
+max-width: 72rem;
+margin: 0 auto;
+padding: 0 1.5rem 5rem;
+color: var(--occ-ink);
+font-size: 15px;
+line-height: 1.55;
 }
 
 .dark .occ-home {
-  --occ-accent: rgb(var(--primary-light));
-  --occ-accent-text: rgb(var(--primary-light));
-  --occ-ink: #e5e1de;
-  --occ-strong: #ffffff;
-  --occ-muted: #a39d97;
-  --occ-border: rgb(255 255 255 / 0.1);
-  --occ-card: rgb(var(--background-dark));
-  --occ-tile: rgb(var(--primary-light) / 0.14);
-  --occ-panel: rgb(var(--primary-light) / 0.07);
-  --occ-hover-border: rgb(var(--primary-light) / 0.45);
-  --occ-on-accent: rgb(var(--background-dark));
-  --occ-shadow: rgba(0, 0, 0, 0.55);
+--occ-accent: rgb(var(--primary-light));
+--occ-accent-text: rgb(var(--primary-light));
+--occ-ink: #e5e1de;
+--occ-strong: #ffffff;
+--occ-muted: #a39d97;
+--occ-border: rgb(255 255 255 / 0.1);
+--occ-card: rgb(var(--background-dark));
+--occ-tile: rgb(var(--primary-light) / 0.14);
+--occ-panel: rgb(var(--primary-light) / 0.07);
+--occ-hover-border: rgb(var(--primary-light) / 0.45);
+--occ-on-accent: rgb(var(--background-dark));
+--occ-shadow: rgba(0, 0, 0, 0.55);
 }
 
 .occ-home a { text-decoration: none; }
 
 /* Stroked arrow icon, used everywhere instead of the heavier → / ↗ glyphs. */
 .occ-arrow {
-  flex: none;
-  width: 15px;
-  height: 15px;
+flex: none;
+width: 15px;
+height: 15px;
 }
 
 /* ---------- hero ---------- */
 
 .occ-hero {
-  text-align: center;
-  padding: 3.75rem 0 2.5rem;
+text-align: center;
+padding: 3.75rem 0 2.5rem;
 }
 
 .occ-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--occ-accent-text);
-  margin: 0 0 1.25rem;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.14em;
+text-transform: uppercase;
+color: var(--occ-accent-text);
+margin: 0 0 1.25rem;
 }
 
 .occ-hero h1 {
-  max-width: 18ch;
-  margin: 0 auto;
-  font-size: clamp(2.25rem, 5.2vw, 3.4rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.07;
-  color: var(--occ-ink);
+max-width: 18ch;
+margin: 0 auto;
+font-size: clamp(2.25rem, 5.2vw, 3.4rem);
+font-weight: 800;
+letter-spacing: -0.03em;
+line-height: 1.07;
+color: var(--occ-ink);
 }
 
 .occ-dot { color: var(--occ-accent); }
 .occ-hl { color: var(--occ-accent-text); }
 
 .occ-lede {
-  max-width: 44ch;
-  margin: 1.15rem auto 0;
-  color: var(--occ-muted);
+max-width: 44ch;
+margin: 1.15rem auto 0;
+color: var(--occ-muted);
 }
 
 .occ-popular {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1.65rem;
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+justify-content: center;
+gap: 0.5rem;
+margin-top: 1.65rem;
 }
 
 .occ-popular-label {
-  margin-right: 0.25rem;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--occ-muted);
+margin-right: 0.25rem;
+font-size: 12px;
+font-weight: 600;
+color: var(--occ-muted);
 }
 
 .occ-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.8rem;
-  border: 1px solid var(--occ-border);
-  border-radius: 999px;
-  background: var(--occ-card);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--occ-ink);
-  transition: border-color 0.15s ease, transform 0.15s ease;
+display: inline-flex;
+align-items: center;
+gap: 0.4rem;
+padding: 0.35rem 0.8rem;
+border: 1px solid var(--occ-border);
+border-radius: 999px;
+background: var(--occ-card);
+font-size: 12px;
+font-weight: 600;
+color: var(--occ-ink);
+transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 .occ-pill:hover {
-  border-color: var(--occ-accent);
-  transform: translateY(-1px);
+border-color: var(--occ-accent);
+transform: translateY(-1px);
 }
 
 .occ-pill svg { flex: none; color: var(--occ-accent); }
@@ -145,30 +145,30 @@ hidden: true
 /* ---------- section header ---------- */
 
 .occ-section-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 1.1rem 0 1.1rem;
+display: flex;
+align-items: baseline;
+justify-content: space-between;
+gap: 1rem;
+margin: 1.1rem 0 1.1rem;
 }
 
 .occ-section-head h2 {
-  margin: 0;
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--occ-ink);
+margin: 0;
+font-size: 1.35rem;
+font-weight: 700;
+letter-spacing: -0.02em;
+color: var(--occ-ink);
 }
 
 .occ-section-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-  color: var(--occ-accent);
-  transition: opacity 0.15s ease;
+display: inline-flex;
+align-items: center;
+gap: 0.35rem;
+font-size: 13px;
+font-weight: 600;
+white-space: nowrap;
+color: var(--occ-accent);
+transition: opacity 0.15s ease;
 }
 
 .occ-section-link:hover { opacity: 0.75; }
@@ -176,76 +176,76 @@ hidden: true
 /* ---------- browse cards ---------- */
 
 .occ-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 1rem;
 }
 
 .occ-card {
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem;
-  border: 1px solid var(--occ-border);
-  border-radius: 14px;
-  background: var(--occ-card);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+display: flex;
+flex-direction: column;
+padding: 1.5rem;
+border: 1px solid var(--occ-border);
+border-radius: 14px;
+background: var(--occ-card);
+transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .occ-card:hover {
-  border-color: var(--occ-hover-border);
-  box-shadow: 0 8px 22px -14px var(--occ-shadow);
+border-color: var(--occ-hover-border);
+box-shadow: 0 8px 22px -14px var(--occ-shadow);
 }
 
 .occ-tile {
-  --occ-tile-size: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: var(--occ-tile-size);
-  height: var(--occ-tile-size);
-  border-radius: 10px;
-  background: var(--occ-tile);
-  color: var(--occ-accent);
+--occ-tile-size: 34px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+flex: none;
+width: var(--occ-tile-size);
+height: var(--occ-tile-size);
+border-radius: 10px;
+background: var(--occ-tile);
+color: var(--occ-accent);
 }
 
 /* Card tiles are larger than the inline ones in the footer cards. */
 .occ-card .occ-tile {
-  --occ-tile-size: 44px;
-  border-radius: 12px;
-  margin-bottom: 1.25rem;
+--occ-tile-size: 44px;
+border-radius: 12px;
+margin-bottom: 1.25rem;
 }
 
 .occ-card .occ-tile svg { width: 22px; height: 22px; }
 
 .occ-card h3 {
-  margin: 0 0 0.5rem;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--occ-strong);
+margin: 0 0 0.5rem;
+font-size: 17px;
+font-weight: 700;
+letter-spacing: -0.01em;
+color: var(--occ-strong);
 }
 
 .occ-card p {
-  margin: 0 0 1.35rem;
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: var(--occ-muted);
+margin: 0 0 1.35rem;
+font-size: 13.5px;
+line-height: 1.55;
+color: var(--occ-muted);
 }
 
 .occ-card-links { margin-top: auto; }
 
 .occ-sub {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.6rem 0;
-  border-top: 1px solid var(--occ-border);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--occ-accent-text);
-  transition: color 0.15s ease;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 0.5rem;
+padding: 0.6rem 0;
+border-top: 1px solid var(--occ-border);
+font-size: 13px;
+font-weight: 500;
+color: var(--occ-accent-text);
+transition: color 0.15s ease;
 }
 
 .occ-sub .occ-arrow { opacity: 0.55; }
@@ -255,140 +255,140 @@ hidden: true
 /* ---------- four steps panel ---------- */
 
 .occ-panel {
-  margin-top: 1.75rem;
-  padding: 1.5rem;
-  border: 1px solid var(--occ-border);
-  border-radius: 16px;
-  background: var(--occ-panel);
+margin-top: 1.75rem;
+padding: 1.5rem;
+border: 1px solid var(--occ-border);
+border-radius: 16px;
+background: var(--occ-panel);
 }
 
 .occ-panel-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+justify-content: space-between;
+gap: 1rem;
+margin-bottom: 1.25rem;
 }
 
 .occ-panel-head h2 {
-  margin: 0.35rem 0 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--occ-ink);
+margin: 0.35rem 0 0;
+font-size: 1.3rem;
+font-weight: 700;
+letter-spacing: -0.02em;
+color: var(--occ-ink);
 }
 
 .occ-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  background: var(--occ-accent);
-  color: var(--occ-on-accent);
-  font-size: 12.5px;
-  font-weight: 700;
-  white-space: nowrap;
-  transition: filter 0.15s ease, transform 0.15s ease;
+display: inline-flex;
+align-items: center;
+gap: 0.4rem;
+padding: 0.5rem 1rem;
+border-radius: 8px;
+background: var(--occ-accent);
+color: var(--occ-on-accent);
+font-size: 12.5px;
+font-weight: 700;
+white-space: nowrap;
+transition: filter 0.15s ease, transform 0.15s ease;
 }
 
 .occ-button:hover { filter: brightness(1.07); transform: translateY(-1px); }
 
 .occ-steps {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.85rem;
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 0.85rem;
 }
 
 .occ-step {
-  padding: 0.9rem;
-  border: 1px solid var(--occ-border);
-  border-radius: 12px;
-  background: var(--occ-card);
+padding: 0.9rem;
+border: 1px solid var(--occ-border);
+border-radius: 12px;
+background: var(--occ-card);
 }
 
 .occ-step-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  margin-bottom: 0.85rem;
-  border-radius: 999px;
-  background: var(--occ-accent);
-  color: var(--occ-on-accent);
-  font-size: 11px;
-  font-weight: 700;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 20px;
+height: 20px;
+margin-bottom: 0.85rem;
+border-radius: 999px;
+background: var(--occ-accent);
+color: var(--occ-on-accent);
+font-size: 11px;
+font-weight: 700;
 }
 
 .occ-step h4 {
-  margin: 0 0 0.25rem;
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--occ-strong);
+margin: 0 0 0.25rem;
+font-size: 12.5px;
+font-weight: 700;
+color: var(--occ-strong);
 }
 
 .occ-step p {
-  margin: 0;
-  font-size: 11.5px;
-  line-height: 1.45;
-  color: var(--occ-muted);
+margin: 0;
+font-size: 11.5px;
+line-height: 1.45;
+color: var(--occ-muted);
 }
 
 /* ---------- footer cards ---------- */
 
 .occ-footer-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 1.75rem;
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 1rem;
+margin-top: 1.75rem;
 }
 
 .occ-footer-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid var(--occ-border);
-  border-radius: 14px;
-  background: var(--occ-card);
-  transition: border-color 0.15s ease;
+display: flex;
+align-items: flex-start;
+gap: 0.75rem;
+padding: 1rem 1.1rem;
+border: 1px solid var(--occ-border);
+border-radius: 14px;
+background: var(--occ-card);
+transition: border-color 0.15s ease;
 }
 
 .occ-footer-card:hover { border-color: var(--occ-hover-border); }
 
 .occ-footer-card h3 {
-  margin: 0 0 0.15rem;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--occ-strong);
+margin: 0 0 0.15rem;
+font-size: 13.5px;
+font-weight: 700;
+color: var(--occ-strong);
 }
 
 .occ-footer-card p {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.45;
-  color: var(--occ-muted);
+margin: 0;
+font-size: 12px;
+line-height: 1.45;
+color: var(--occ-muted);
 }
 
 .occ-footer-arrow {
-  margin-left: auto;
-  color: var(--occ-muted);
+margin-left: auto;
+color: var(--occ-muted);
 }
 
 /* ---------- responsive ---------- */
 
 @media (max-width: 900px) {
-  .occ-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .occ-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.occ-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.occ-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 620px) {
-  .occ-grid,
-  .occ-steps,
-  .occ-footer-grid { grid-template-columns: minmax(0, 1fr); }
-  .occ-hero { padding-top: 2.5rem; }
+.occ-grid,
+.occ-steps,
+.occ-footer-grid { grid-template-columns: minmax(0, 1fr); }
+.occ-hero { padding-top: 2.5rem; }
 }
 </style>` }}
 />
