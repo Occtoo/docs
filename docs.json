@@ -210,6 +210,7 @@
               "api-reference/events/overview",
               "GET /v1/event-types",
               "GET /v1/events",
+              "GET /v1/events/metadata",
               "GET /v1/events/stream",
               "GET /v1/events/schemas/{type}/{version}",
               "api-reference/events/streaming"

@@ -1,20 +1,56 @@
 ---
 title: "Events"
-description: "Tenant-scoped Occtoo events delivered as CloudEvents, available by pull or as a live Server-Sent Events stream."
+description: "Consume tenant-scoped CloudEvents by pull or live stream, and inspect the retained stream's current position."
 ---
 
 The Occtoo Events API lets you react to changes across your tenant — sources, cards, segments, destinations, endpoints, and users — without polling each resource. Every change is published as a [CloudEvents](https://cloudevents.io/) message (`application/cloudevents+json`).
 
-## Two ways to consume events
+## Consume and inspect events
 
-<Columns cols={2}>
+<Columns cols={3}>
   <Card title="Pull">
     Page through events with `GET /v1/events` using a cursor. Good for batch processing and catch-up jobs.
+  </Card>
+  <Card title="Metadata">
+    Inspect the first and latest retained positions and exact event count with `GET /v1/events/metadata`. Good for consumer health checks.
   </Card>
   <Card title="Stream" href="/api-reference/events/streaming">
     Subscribe to a live, ordered Server-Sent Events stream at `GET /v1/events/stream`. Good for real-time reactions.
   </Card>
 </Columns>
+
+## Inspect stream metadata
+
+Call `GET /v1/events/metadata` to inspect the retained stream without retrieving event payloads. It accepts the same optional `filter` as the pull and stream endpoints.
+
+```bash
+curl --get 'https://api-test.occtoo.com/v1/events/metadata' \
+  --header 'Authorization: Bearer <access-token>' \
+  --data-urlencode 'filter=type eq "source.updated" and sourceId eq "products"'
+```
+
+```json
+{
+  "first": {
+    "sequence": "003.00000000000000184001",
+    "time": "2026-07-04T08:10:00Z"
+  },
+  "latest": {
+    "sequence": "003.00000000000000184467",
+    "time": "2026-07-04T09:15:12.345Z"
+  },
+  "after": "<opaque pull cursor>",
+  "total": 184
+}
+```
+
+- `first` and `latest` identify the boundaries of the retained filtered view. Their `time` is `null` when the CloudEvent has no time.
+- `after` is an opaque pull cursor for the `latest` position. Store it as a checkpoint or pass it to `GET /v1/events`.
+- `total` is the exact count across the complete retained filtered view, not the count after a consumer checkpoint.
+
+Compare `latest.sequence` with your last successfully processed sequence to determine whether a consumer is caught up. Do not use the difference between sequences as a pending-event count because filtered-out events can create gaps.
+
+When no retained event matches, `first`, `latest`, and `after` are `null`, and `total` is `0`.
 
 ## Event types
 
@@ -91,7 +127,7 @@ In the tables, `?` marks a property that is not required — it may be absent or
 
 ## Data property reference
 
-Properties marked **filterable** can be used in the filter grammar of `GET /v1/events` and `GET /v1/events/stream`. The exact set accepted for a given type is returned as `filterableProperties` by `GET /v1/event-types`.
+Properties marked **filterable** can be used in the filter grammar of `GET /v1/events`, `GET /v1/events/metadata`, and `GET /v1/events/stream`. The exact set accepted for a given type is returned as `filterableProperties` by `GET /v1/event-types`.
 
 | Property | Type | Filterable | Description |
 |---|---|---|---|

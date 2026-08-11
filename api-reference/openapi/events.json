@@ -2,9 +2,9 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Occtoo Events API",
-    "description": "Occtoo Events API exposes customer-safe CloudEvents derived from changes across an Occtoo tenant. Use pull for scheduled or batch processing and SSE for low-latency delivery. Both transports read the same ordered, 90-day retained event projection.\n\n## Quick start\n\n1. Select **Authorize** and sign in with the existing Occtoo identity, or provide a bearer token or organization API key.\n2. Inspect the [event catalog](https://api-test.occtoo.com/v1/event-types) to select event types and entity-level filters.\n3. Pull the first page, process it, and persist its `after` cursor.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'limit=100' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\n## Authentication and tenancy\n\nEvent reads require a tenant-scoped credential. Interactive user calls use Authorization Code with PKCE and can reuse the existing Occtoo sign-in session. Machine consumers can send a tenant-scoped Kinde application token as `Authorization: Bearer <token>` or an Occtoo organization API key as `x-api-key: <organization-api-key>`. The gateway validates the credential and supplies its tenant and actor identity to the Events API; the tenant cannot be selected with a query parameter. Version 1 requires a valid tenant credential but does not require an event-specific permission.\n\nNative browser `EventSource` cannot attach either authorization header. Browser applications should consume SSE with streaming `fetch` or relay it through an authenticated backend; server-side SSE clients can set either header directly.\n\n## Delivery and checkpoints\n\nEvents are ordered by the fixed-width `sequence` extension rather than their timestamp. Pull normally transports that position as an opaque `after` cursor, but accepts the raw sequence as a recovery checkpoint when the cursor was not retained. SSE transports the raw sequence as `Last-Event-ID`. Resuming is exclusive: the event at the supplied position is not delivered again. Public event ids are deterministic UUIDv5 values, so replaying the same internal event recreates the same id. Consumers should nevertheless make business processing idempotent and checkpoint only after successful processing.\n\n### Recover from a recorded sequence\n\nIf the returned pull cursor was lost but the last successfully processed CloudEvent `sequence` was retained, pass that sequence directly as `after`. Continue using the same filter as the original subscription.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'after=003.00000000000000184467' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo resume SSE from the same processed position, send `Last-Event-ID: 003.00000000000000184467`. The first event returned has a greater sequence.\n\n## Filtering\n\n`filter` implements a bounded RFC 7644-derived subset: `eq`, `and`, `or`, parentheses and JSON double-quoted strings. `and` binds more tightly than `or`. Use parentheses when combining event families. Only `type` and the entity-level properties advertised by the catalog are accepted; entry/card-level filters are intentionally unavailable.\n\n## Schema compatibility\n\nThe CloudEvent `type` is stable and unversioned. Read the exact payload version from `dataschema`. A new minor version is additive: ignore unknown fields and fetch the new immutable schema asynchronously. Do not deserialize a new major version as an earlier major; retain or quarantine the raw event until the consumer is upgraded.\n\nMachine-readable contracts: [OpenAPI](https://api-test.occtoo.com/openapi/events.json) · [AsyncAPI](https://api-test.occtoo.com/asyncapi/events.json) · [event catalog](https://api-test.occtoo.com/v1/event-types)",
+    "description": "Occtoo Events API exposes customer-safe CloudEvents derived from changes across an Occtoo tenant. Use pull for scheduled or batch processing and SSE for low-latency delivery. Both transports read the same ordered, 90-day retained event projection.\n\n## Quick start\n\n1. Select **Authorize** and sign in with the existing Occtoo identity, or provide a bearer token or organization API key.\n2. Inspect the [event catalog](https://api-test.occtoo.com/v1/event-types) to select event types and entity-level filters.\n3. Pull the first page, process it, and persist its `after` cursor.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'limit=100' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo check whether that consumer has reached the latest event matching the same filter, read stream metadata and compare `latest.sequence` with the last processed CloudEvent sequence. Sequence gaps identify position, not an exact number of pending matching events.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events/metadata' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\n## Authentication and tenancy\n\nEvent reads require a tenant-scoped credential. All delivery endpoints accept the established `read-events` permission. Tenant applications can instead use `events:pull` for pull and metadata or `events:sse` for SSE. Interactive user calls use Authorization Code with PKCE and can reuse the existing Occtoo sign-in session. Machine consumers can send a tenant-scoped Kinde application token as `Authorization: Bearer <token>` or an Occtoo organization API key as `x-api-key: <organization-api-key>`. The gateway validates the credential, projects application scopes directly as permissions, and supplies its tenant and actor identity to the Events API; the tenant cannot be selected with a query parameter.\n\nNative browser `EventSource` cannot attach either authorization header. Browser applications should consume SSE with streaming `fetch` or relay it through an authenticated backend; server-side SSE clients can set either header directly.\n\n## Delivery and checkpoints\n\nEvents are ordered by the fixed-width `sequence` extension rather than their timestamp. A new SSE connection without a cursor starts live at the current tenant-stream tail; it does not replay retained history. Pull normally transports a position as an opaque `after` cursor, but accepts the raw sequence as a recovery checkpoint when the cursor was not retained. SSE transports the raw sequence as `Last-Event-ID`. Resuming is exclusive: the event at the supplied position is not delivered again. Public event ids are deterministic UUIDv5 values, so replaying the same internal event recreates the same id. Consumers should nevertheless make business processing idempotent and checkpoint only after successful processing.\n\n### Recover from a recorded sequence\n\nIf the returned pull cursor was lost but the last successfully processed CloudEvent `sequence` was retained, pass that sequence directly as `after`. Continue using the same filter as the original subscription.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'after=003.00000000000000184467' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo resume SSE from the same processed position, send `Last-Event-ID: 003.00000000000000184467`. The first event returned has a greater sequence.\n\n## Filtering\n\n`filter` implements a bounded RFC 7644-derived subset: `eq`, `and`, `or`, parentheses and JSON double-quoted strings. `and` binds more tightly than `or`. Use parentheses when combining event families. Only `type` and the entity-level properties advertised by the catalog are accepted; entry/card-level filters are intentionally unavailable.\n\n## Schema compatibility\n\nThe CloudEvent `type` is stable and unversioned. Read the exact payload version from `dataschema`. A new minor version is additive: ignore unknown fields and fetch the new immutable schema asynchronously. Do not deserialize a new major version as an earlier major; retain or quarantine the raw event until the consumer is upgraded.\n\nMachine-readable contracts: [OpenAPI](https://api-test.occtoo.com/openapi/events.json) · [AsyncAPI](https://api-test.occtoo.com/asyncapi/events.json) · [event catalog](https://api-test.occtoo.com/v1/event-types)",
     "version": "1.0.0",
-    "summary": "Pull and stream tenant-scoped Occtoo events."
+    "summary": "Pull, inspect and stream tenant-scoped Occtoo events."
   },
   "servers": [
     {
@@ -233,7 +233,7 @@
                   "emptyPage": {
                     "summary": "No events currently match after the cursor",
                     "value": {
-                      "items": [ ],
+                      "items": [],
                       "after": "MDAzLjAwMDAwMDAwMDAwMDAwMTg0NDY3",
                       "hasMore": false
                     }
@@ -262,19 +262,144 @@
           },
           "401": {
             "description": "The credential is missing, invalid or does not identify an Occtoo tenant."
+          },
+          "403": {
+            "description": "Forbidden"
           }
         },
         "security": [
           {
-            "kindeOAuth": [ ]
+            "kindeOAuth": []
           },
           {
-            "bearerAuth": [ ]
+            "bearerAuth": []
           },
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
-        ]
+        ],
+        "x-required-permissions": [
+          "read-events",
+          "events:pull"
+        ],
+        "x-permission-match": "any"
+      }
+    },
+    "/v1/events/metadata": {
+      "get": {
+        "tags": [
+          "Event delivery"
+        ],
+        "summary": "Get public event stream metadata",
+        "description": "Returns metadata for retained events matching the optional `filter`: the first and latest positions, their optional CloudEvent `time`, and the exact retained count.\n\n`after` is the opaque pull cursor for `latest`. `first`, `latest`, and `after` are null when no retained event matches, while `total` is zero. Compare `latest.sequence` with the last processed sequence to detect whether a consumer is caught up. Sequence gaps do not equal a count of pending matching events, and `total` counts the complete retained filtered view rather than events after a consumer checkpoint.",
+        "operationId": "GetPublicEventsMetadata",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types.",
+            "schema": {
+              "maxLength": 4096,
+              "type": "string"
+            },
+            "example": "(type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\")",
+            "x-occtoo-filter-dialect": "rfc7644-subset",
+            "x-occtoo-filter-operators": [
+              "eq",
+              "and",
+              "or"
+            ],
+            "x-occtoo-filterable-properties": [
+              "apiVersion",
+              "apiVersionId",
+              "cardDefinitionId",
+              "destinationId",
+              "endpointId",
+              "segmentDefinitionId",
+              "segmentId",
+              "sourceId",
+              "userId"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The retained event boundaries and exact count matching the filter.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicEventsMetadataResponse"
+                },
+                "examples": {
+                  "matchingPosition": {
+                    "summary": "The retained filtered stream metadata",
+                    "value": {
+                      "first": {
+                        "sequence": "003.00000000000000180001",
+                        "time": "2026-07-04T08:00:00Z"
+                      },
+                      "latest": {
+                        "sequence": "003.00000000000000184467",
+                        "time": "2026-07-04T09:15:12.345Z"
+                      },
+                      "after": "MDAzLjAwMDAwMDAwMDAwMDAwMTg0NDY3",
+                      "total": 42
+                    }
+                  },
+                  "emptyStream": {
+                    "summary": "No retained event matches the filter",
+                    "value": {
+                      "first": null,
+                      "latest": null,
+                      "after": null,
+                      "total": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The filter expression is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
+                "examples": {
+                  "invalidFilter": {
+                    "summary": "An unsupported filter property",
+                    "value": {
+                      "message": "Property 'entryId' is not filterable."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The credential is missing, invalid or does not identify an Occtoo tenant."
+          },
+          "403": {
+            "description": "The credential does not grant event pull access."
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": []
+          },
+          {
+            "bearerAuth": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "x-required-permissions": [
+          "read-events",
+          "events:pull"
+        ],
+        "x-permission-match": "any"
       }
     },
     "/v1/events/stream": {
@@ -283,7 +408,7 @@
           "Event delivery"
         ],
         "summary": "Stream public events using SSE",
-        "description": "Opens a long-lived Server-Sent Events connection and emits the same structured CloudEvents returned by the pull endpoint.\n\nEach SSE frame uses the CloudEvent `sequence` as `id`, its `type` as `event`, and the complete CloudEvent JSON as `data`. Reconnect with `Last-Event-ID`; the `after` query parameter is available for the initial connection. When both are supplied, `Last-Event-ID` takes precedence.\n\nComment-only heartbeats keep the connection and gateway activity window alive. Consumers must ignore comment frames and persist the last successfully processed event id.",
+        "description": "Opens a long-lived Server-Sent Events connection and emits the same structured CloudEvents returned by the pull endpoint.\n\nWith no cursor, the connection starts at the current tenant-stream tail and emits only events that occur after the subscription is established. Each SSE frame uses the CloudEvent `sequence` as `id`, its `type` as `event`, and the complete CloudEvent JSON as `data`.\n\nReconnect with `Last-Event-ID` to resume strictly after the last successfully processed event. The `after` query parameter is available when an explicit historical position is needed for the initial connection. When both are supplied, `Last-Event-ID` takes precedence.\n\nComment-only heartbeats keep the connection and gateway activity window alive. Consumers must ignore comment frames and persist the last successfully processed event id.",
         "externalDocs": {
           "description": "AsyncAPI channel and message contract",
           "url": "/asyncapi/events.json"
@@ -293,7 +418,7 @@
           {
             "name": "after",
             "in": "query",
-            "description": "Opaque pull cursor or raw fixed-width event `sequence` used to position the initial SSE connection. `Last-Event-ID` takes precedence on reconnect.",
+            "description": "Optional opaque pull cursor or raw fixed-width event `sequence` used to position the initial SSE connection. Omit it to receive only events occurring after the connection is established. `Last-Event-ID` takes precedence on reconnect.",
             "schema": {
               "type": "string"
             },
@@ -374,19 +499,27 @@
           },
           "401": {
             "description": "The credential is missing, invalid or does not identify an Occtoo tenant."
+          },
+          "403": {
+            "description": "Forbidden"
           }
         },
         "security": [
           {
-            "kindeOAuth": [ ]
+            "kindeOAuth": []
           },
           {
-            "bearerAuth": [ ]
+            "bearerAuth": []
           },
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
-        ]
+        ],
+        "x-required-permissions": [
+          "read-events",
+          "events:sse"
+        ],
+        "x-permission-match": "any"
       }
     },
     "/v1/events/schemas/{type}/{version}": {
@@ -616,6 +749,58 @@
       "JsonObject": {
         "type": "object"
       },
+      "PublicEventsMetadataResponse": {
+        "required": [
+          "first",
+          "latest",
+          "after",
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "first": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PublicEventStreamPosition"
+              }
+            ],
+            "description": "Earliest retained matching event position, or null when there is no match."
+          },
+          "latest": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PublicEventStreamPosition"
+              }
+            ],
+            "description": "Latest retained matching event position, or null when there is no match."
+          },
+          "after": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Opaque cursor for the same position, suitable for the pull endpoint's `after` parameter, or null when there is no match.",
+            "example": "MDAzLjAwMDAwMDAwMDAwMDAwMTg0NDY3"
+          },
+          "total": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Exact number of retained events matching the filter.",
+            "format": "int64",
+            "example": 42
+          }
+        },
+        "description": "Metadata for the retained filtered tenant event stream."
+      },
       "PublicEventsResponse": {
         "required": [
           "items",
@@ -654,6 +839,30 @@
           }
         },
         "description": "A finite page from the ordered tenant event stream."
+      },
+      "PublicEventStreamPosition": {
+        "required": [
+          "sequence",
+          "time"
+        ],
+        "type": "object",
+        "properties": {
+          "sequence": {
+            "type": "string",
+            "description": "Raw fixed-width tenant stream position.",
+            "example": "003.00000000000000184467"
+          },
+          "time": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Optional CloudEvent time supplied by the source event; null when the source event had no valid timestamp.",
+            "format": "date-time",
+            "example": "2026-07-04T09:15:12.345Z"
+          }
+        },
+        "description": "One retained position in the tenant event stream."
       },
       "PublicEventType": {
         "required": [
@@ -736,7 +945,7 @@
   "tags": [
     {
       "name": "Event delivery",
-      "description": "Consume the ordered tenant event feed by finite pull pages or a resumable SSE connection. Both transports use the same cursor and filter semantics."
+      "description": "Consume the ordered tenant event feed by finite pull pages or a resumable SSE connection, and inspect retained filtered stream metadata. All operations use the same filter semantics."
     },
     {
       "name": "Event discovery",
