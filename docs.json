@@ -195,6 +195,12 @@
             ]
           },
           {
+            "group": "Application authentication",
+            "pages": [
+              "api-reference/authentication/application-token"
+            ]
+          },
+          {
             "group": "Ingest API",
             "openapi": "/api-reference/openapi/ingest.json",
             "pages": [

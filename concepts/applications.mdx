@@ -3,8 +3,6 @@ title: "Applications"
 sidebarTitle: "Applications"
 description: "Use tenant-level machine applications to obtain OAuth tokens for ingest, events, and protected destination APIs."
 keywords: ["applications", "authentication", "OAuth", "client credentials", "access token", "scopes", "audience"]
-openapi: "/api-reference/openapi/applications.json POST /oauth2/token"
-playground: "interactive"
 ---
 
 Applications give backend services a single tenant-level identity for calling Occtoo. An Application is a machine-to-machine OAuth client with a client ID and client secret. You configure its access once, then use the [OAuth 2.0 client credentials flow](https://oauth.net/2/grant-types/client-credentials/) to request short-lived access tokens.
@@ -56,7 +54,9 @@ Every direct token request must include an audience. One Application can be auth
 
 The examples below use the production token endpoint, `https://auth.occtoo.com/oauth2/token`. Use the authentication domain provided for your Occtoo environment when working outside production.
 
-Use **Try it** to request a token directly from this page. Enter the Application's client ID and client secret, then set the audience and optional scope for the API you want to access.
+<Card title="Try it" icon="play" href="/api-reference/authentication/application-token">
+  Request a destination, ingest, or events token in the interactive API playground.
+</Card>
 
 Set the values as environment variables before running the examples:
 
@@ -417,7 +417,7 @@ Cache and reuse the token until shortly before `expires_in` elapses. Then reques
 
 Request a token whose audience is the destination **API version ID**:
 
-In **Try it**, set `audience` to the API version ID and leave `scope` empty.
+In [**Try it**](/api-reference/authentication/application-token), set `audience` to the API version ID and leave `scope` empty.
 
 ```bash
 curl --request POST \
@@ -437,7 +437,7 @@ See [Call a destination API](/get-started/call-a-destination-api) for destinatio
 
 Request the `write:sources` scope using your Tenant ID as the audience:
 
-In **Try it**, set `audience` to the Tenant ID and `scope` to `write:sources`.
+In [**Try it**](/api-reference/authentication/application-token), set `audience` to the Tenant ID and `scope` to `write:sources`.
 
 ```bash
 curl --request POST \
@@ -458,7 +458,7 @@ See the [Ingest API reference](/api-reference/ingest/overview) for endpoints and
 
 Use your Tenant ID as the audience. Choose the narrowest scope that covers the transports your integration needs.
 
-In **Try it**, set `audience` to the Tenant ID and use `read:events`, `read:events:pull`, or `read:events:sse` as the scope.
+In [**Try it**](/api-reference/authentication/application-token), set `audience` to the Tenant ID and use `read:events`, `read:events:pull`, or `read:events:sse` as the scope.
 
 <Tabs>
   <Tab title="All events">
