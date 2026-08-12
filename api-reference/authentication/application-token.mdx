@@ -1,0 +1,27 @@
+---
+title: "Request an Application access token"
+sidebarTitle: "Application access token"
+description: "Exchange tenant-level Application credentials for a destination, ingest, or events access token."
+openapi: "/api-reference/openapi/applications.json POST /oauth2/token"
+playground: "interactive"
+---
+
+Use **Try it** to exchange an Application's client credentials for a short-lived access token. The audience identifies the API the token targets, while the optional scope limits what the token can do.
+
+<Warning>
+  Treat the client secret and returned access token as secrets. Use the playground only for direct testing. Do not copy either value into browser application code, source control, logs, or client-side configuration.
+</Warning>
+
+## Choose an audience and scope
+
+| Use case | Audience | Scope |
+| --- | --- | --- |
+| Call a protected destination API version | API version ID | Leave empty |
+| Ingest data | Tenant ID | `write:sources` |
+| Use every Events API transport | Tenant ID | `read:events` |
+| Pull events and inspect metadata | Tenant ID | `read:events:pull` |
+| Stream events with SSE | Tenant ID | `read:events:sse` |
+
+Omit `scope` with the tenant audience to request every tenant API scope enabled for the Application.
+
+See [Applications](/concepts/applications) for the complete access model, resource restrictions, language examples, and troubleshooting guidance.
