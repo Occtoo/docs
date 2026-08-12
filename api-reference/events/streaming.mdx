@@ -6,7 +6,7 @@ description: "Subscribe to a live, ordered stream of tenant events delivered as 
 An ordered SSE stream. The SSE id field contains the raw resumable event sequence; the initial `after` query accepts either that sequence or a pull cursor.
 
 ```text
-GET https://api-test.occtoo.com/v1/events/stream
+GET https://api.occtoo.com/v1/events/stream
 Accept: text/event-stream
 Authorization: Bearer <token>
 ```
@@ -30,7 +30,7 @@ Every event type the stream can deliver — with its description and `data` prop
   "subject": "products/entry-123",
   "time": "2026-08-04T12:00:00Z",
   "datacontenttype": "application/json",
-  "dataschema": "https://api-test.occtoo.com/v1/events/schemas/source_entry.added/1.0",
+  "dataschema": "https://api.occtoo.com/v1/events/schemas/source_entry.added/1.0",
   "sequence": "001.00000000000000012345",
   "tenantid": "6c9a…",
   "data": {

@@ -2,13 +2,13 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Occtoo Events API",
-    "description": "Occtoo Events API exposes customer-safe CloudEvents derived from changes across an Occtoo tenant. Use pull for scheduled or batch processing and SSE for low-latency delivery. Both transports read the same ordered, 90-day retained event projection.\n\n## Quick start\n\n1. Select **Authorize** and sign in with the existing Occtoo identity, or provide a bearer token or organization API key.\n2. Inspect the [event catalog](https://api-test.occtoo.com/v1/event-types) to select event types and entity-level filters.\n3. Pull the first page, process it, and persist its `after` cursor.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'limit=100' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo check whether that consumer has reached the latest event matching the same filter, read stream metadata and compare `latest.sequence` with the last processed CloudEvent sequence. Sequence gaps identify position, not an exact number of pending matching events.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events/metadata' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\n## Authentication and tenancy\n\nEvent reads require a tenant-scoped credential. All delivery endpoints accept the established `read-events` permission. Tenant applications can instead use `events:pull` for pull and metadata or `events:sse` for SSE. Interactive user calls use Authorization Code with PKCE and can reuse the existing Occtoo sign-in session. Machine consumers can send a tenant-scoped Kinde application token as `Authorization: Bearer <token>` or an Occtoo organization API key as `x-api-key: <organization-api-key>`. The gateway validates the credential, projects application scopes directly as permissions, and supplies its tenant and actor identity to the Events API; the tenant cannot be selected with a query parameter.\n\nNative browser `EventSource` cannot attach either authorization header. Browser applications should consume SSE with streaming `fetch` or relay it through an authenticated backend; server-side SSE clients can set either header directly.\n\n## Delivery and checkpoints\n\nEvents are ordered by the fixed-width `sequence` extension rather than their timestamp. A new SSE connection without a cursor starts live at the current tenant-stream tail; it does not replay retained history. Pull normally transports a position as an opaque `after` cursor, but accepts the raw sequence as a recovery checkpoint when the cursor was not retained. SSE transports the raw sequence as `Last-Event-ID`. Resuming is exclusive: the event at the supplied position is not delivered again. Public event ids are deterministic UUIDv5 values, so replaying the same internal event recreates the same id. Consumers should nevertheless make business processing idempotent and checkpoint only after successful processing.\n\n### Recover from a recorded sequence\n\nIf the returned pull cursor was lost but the last successfully processed CloudEvent `sequence` was retained, pass that sequence directly as `after`. Continue using the same filter as the original subscription.\n\n```bash\ncurl --get 'https://api-test.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'after=003.00000000000000184467' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo resume SSE from the same processed position, send `Last-Event-ID: 003.00000000000000184467`. The first event returned has a greater sequence.\n\n## Filtering\n\n`filter` implements a bounded RFC 7644-derived subset: `eq`, `and`, `or`, parentheses and JSON double-quoted strings. `and` binds more tightly than `or`. Use parentheses when combining event families. Only `type` and the entity-level properties advertised by the catalog are accepted; entry/card-level filters are intentionally unavailable.\n\n## Schema compatibility\n\nThe CloudEvent `type` is stable and unversioned. Read the exact payload version from `dataschema`. A new minor version is additive: ignore unknown fields and fetch the new immutable schema asynchronously. Do not deserialize a new major version as an earlier major; retain or quarantine the raw event until the consumer is upgraded.\n\nMachine-readable contracts: [OpenAPI](https://api-test.occtoo.com/openapi/events.json) · [AsyncAPI](https://api-test.occtoo.com/asyncapi/events.json) · [event catalog](https://api-test.occtoo.com/v1/event-types)",
+    "description": "Occtoo Events API exposes customer-safe CloudEvents derived from changes across an Occtoo tenant. Use pull for scheduled or batch processing and SSE for low-latency delivery. Both transports read the same ordered, 90-day retained event projection.\n\n## Quick start\n\n1. Select **Authorize** and sign in with the existing Occtoo identity, or provide a bearer token or organization API key.\n2. Inspect the [event catalog](https://api.occtoo.com/v1/event-types) to select event types and entity-level filters.\n3. Pull the first page, process it, and persist its `after` cursor.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'limit=100' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo check whether that consumer has reached the latest event matching the same filter, read stream metadata and compare `latest.sequence` with the last processed CloudEvent sequence. Sequence gaps identify position, not an exact number of pending matching events.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events/metadata' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\n## Authentication and tenancy\n\nEvent reads require a tenant-scoped credential. All delivery endpoints accept the established `read-events` permission. Tenant applications can instead use `events:pull` for pull and metadata or `events:sse` for SSE. Interactive user calls use Authorization Code with PKCE and can reuse the existing Occtoo sign-in session. Machine consumers can send a tenant-scoped Kinde application token as `Authorization: Bearer <token>` or an Occtoo organization API key as `x-api-key: <organization-api-key>`. The gateway validates the credential, projects application scopes directly as permissions, and supplies its tenant and actor identity to the Events API; the tenant cannot be selected with a query parameter.\n\nNative browser `EventSource` cannot attach either authorization header. Browser applications should consume SSE with streaming `fetch` or relay it through an authenticated backend; server-side SSE clients can set either header directly.\n\n## Delivery and checkpoints\n\nEvents are ordered by the fixed-width `sequence` extension rather than their timestamp. A new SSE connection without a cursor starts live at the current tenant-stream tail; it does not replay retained history. Pull normally transports a position as an opaque `after` cursor, but accepts the raw sequence as a recovery checkpoint when the cursor was not retained. SSE transports the raw sequence as `Last-Event-ID`. Resuming is exclusive: the event at the supplied position is not delivered again. Public event ids are deterministic UUIDv5 values, so replaying the same internal event recreates the same id. Consumers should nevertheless make business processing idempotent and checkpoint only after successful processing.\n\n### Recover from a recorded sequence\n\nIf the returned pull cursor was lost but the last successfully processed CloudEvent `sequence` was retained, pass that sequence directly as `after`. Continue using the same filter as the original subscription.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'after=003.00000000000000184467' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo resume SSE from the same processed position, send `Last-Event-ID: 003.00000000000000184467`. The first event returned has a greater sequence.\n\n## Filtering\n\n`filter` implements a bounded RFC 7644-derived subset: `eq`, `and`, `or`, parentheses and JSON double-quoted strings. `and` binds more tightly than `or`. Use parentheses when combining event families. Only `type` and the entity-level properties advertised by the catalog are accepted; entry/card-level filters are intentionally unavailable.\n\n## Schema compatibility\n\nThe CloudEvent `type` is stable and unversioned. Read the exact payload version from `dataschema`. A new minor version is additive: ignore unknown fields and fetch the new immutable schema asynchronously. Do not deserialize a new major version as an earlier major; retain or quarantine the raw event until the consumer is upgraded.\n\nMachine-readable contracts: [OpenAPI](https://api.occtoo.com/openapi/events.json) · [AsyncAPI](https://api.occtoo.com/asyncapi/events.json) · [event catalog](https://api.occtoo.com/v1/event-types)",
     "version": "1.0.0",
     "summary": "Pull, inspect and stream tenant-scoped Occtoo events."
   },
   "servers": [
     {
-      "url": "https://api-test.occtoo.com",
+      "url": "https://api.occtoo.com",
       "description": "Occtoo public API"
     }
   ],
@@ -40,7 +40,7 @@
                         "type": "source.updated",
                         "version": "1.0",
                         "description": "A source configuration changed.",
-                        "schemaUrl": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0",
+                        "schemaUrl": "https://api.occtoo.com/v1/events/schemas/source.updated/1.0",
                         "filterableProperties": [
                           "sourceId"
                         ],
@@ -106,7 +106,7 @@
                             "correlationIds"
                           ],
                           "$schema": "https://json-schema.org/draft/2020-12/schema",
-                          "$id": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0",
+                          "$id": "https://api.occtoo.com/v1/events/schemas/source.updated/1.0",
                           "additionalProperties": true
                         }
                       }
@@ -211,7 +211,7 @@
                           "subject": "products",
                           "time": "2026-07-04T09:15:12.345Z",
                           "datacontenttype": "application/json",
-                          "dataschema": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0",
+                          "dataschema": "https://api.occtoo.com/v1/events/schemas/source.updated/1.0",
                           "sequence": "003.00000000000000184467",
                           "tenantid": "9f3c2a10-2e2e-4e67-b941-89e8d3190c47",
                           "data": {
@@ -473,7 +473,7 @@
                 "examples": {
                   "sourceUpdated": {
                     "summary": "One source.updated SSE frame",
-                    "value": "id: 003.00000000000000184467\nevent: source.updated\ndata: {\"specversion\":\"1.0\",\"id\":\"0197a2b4-7c1e-59f3-a8d4-1b2c3d4e5f60\",\"type\":\"source.updated\",\"source\":\"/sources/products\",\"subject\":\"products\",\"time\":\"2026-07-04T09:15:12.345Z\",\"datacontenttype\":\"application/json\",\"dataschema\":\"https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0\",\"sequence\":\"003.00000000000000184467\",\"tenantid\":\"9f3c2a10-2e2e-4e67-b941-89e8d3190c47\",\"data\":{\"sourceId\":\"products\",\"changes\":[\"settings\"],\"correlationIds\":[\"0197a2b4-56bb-7b38-b82c-33b55b61ef2a\"]}}\n\n"
+                    "value": "id: 003.00000000000000184467\nevent: source.updated\ndata: {\"specversion\":\"1.0\",\"id\":\"0197a2b4-7c1e-59f3-a8d4-1b2c3d4e5f60\",\"type\":\"source.updated\",\"source\":\"/sources/products\",\"subject\":\"products\",\"time\":\"2026-07-04T09:15:12.345Z\",\"datacontenttype\":\"application/json\",\"dataschema\":\"https://api.occtoo.com/v1/events/schemas/source.updated/1.0\",\"sequence\":\"003.00000000000000184467\",\"tenantid\":\"9f3c2a10-2e2e-4e67-b941-89e8d3190c47\",\"data\":{\"sourceId\":\"products\",\"changes\":[\"settings\"],\"correlationIds\":[\"0197a2b4-56bb-7b38-b82c-33b55b61ef2a\"]}}\n\n"
                   }
                 }
               }
@@ -626,7 +626,7 @@
                         "correlationIds"
                       ],
                       "$schema": "https://json-schema.org/draft/2020-12/schema",
-                      "$id": "https://api-test.occtoo.com/v1/events/schemas/source.updated/1.0",
+                      "$id": "https://api.occtoo.com/v1/events/schemas/source.updated/1.0",
                       "additionalProperties": true
                     }
                   }
@@ -915,8 +915,8 @@
         "description": "Sign in with the existing Occtoo Studio identity and selected organization.",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://auth-test.occtoo.com/oauth2/auth?audience=https%3A%2F%2Fapi-test.occtoo.com",
-            "tokenUrl": "https://auth-test.occtoo.com/oauth2/token",
+            "authorizationUrl": "https://auth.occtoo.com/oauth2/auth?audience=https%3A%2F%2Fapi-weu.occtoo.com",
+            "tokenUrl": "https://auth.occtoo.com/oauth2/token",
             "scopes": {
               "openid": "Authenticate the user with OpenID Connect.",
               "profile": "Read the user's basic profile.",
@@ -924,7 +924,7 @@
               "offline": "Refresh the access token without another interactive sign-in."
             },
             "x-usePkce": "SHA-256",
-            "x-scalar-redirect-uri": "https://api-test.occtoo.com/docs/"
+            "x-scalar-redirect-uri": "https://api.occtoo.com/docs/"
           }
         }
       },
@@ -958,6 +958,6 @@
   ],
   "externalDocs": {
     "description": "AsyncAPI contract for the SSE channel and all event messages",
-    "url": "https://api-test.occtoo.com/asyncapi/events.json"
+    "url": "https://api.occtoo.com/asyncapi/events.json"
   }
 }
