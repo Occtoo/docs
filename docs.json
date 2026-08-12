@@ -45,7 +45,8 @@
               "concepts/source",
               "concepts/segment",
               "concepts/destination",
-              "concepts/destination-types"
+              "concepts/destination-types",
+              "concepts/applications"
             ]
           },
           {

@@ -1,0 +1,196 @@
+---
+title: "Applications"
+sidebarTitle: "Applications"
+description: "Use tenant-level machine applications to obtain OAuth tokens for ingest, events, and protected destination APIs."
+keywords: ["applications", "authentication", "OAuth", "client credentials", "access token", "scopes", "audience"]
+---
+
+Applications give backend services a single tenant-level identity for calling Occtoo. An Application is a machine-to-machine OAuth client with a client ID and client secret. You configure its access once, then use the [OAuth 2.0 client credentials flow](https://oauth.net/2/grant-types/client-credentials/) to request short-lived access tokens.
+
+Use an Application for unattended integrations such as services, scheduled jobs, command-line tools, and agents. One Application can ingest data, consume tenant events, and call one or more protected destination APIs.
+
+<Warning>
+  Keep the client secret on a trusted server. Do not put it in browser code, mobile applications, source control, or client-side configuration.
+</Warning>
+
+## How access works
+
+Application access has three dimensions:
+
+- **APIs** define which API audiences the Application can request. A protected destination API version has its own audience.
+- **Scopes** define what the Application can do in the tenant API, such as write source data or read events.
+- **Resources** restrict a capability to Occtoo resources. For example, an Application with `write:sources` can be limited to selected sources or allowed to use every current and future source.
+
+A source ID is not an OAuth scope. You select allowed sources when configuring the Application. The token request only asks for the `write:sources` capability.
+
+For destinations, you can authorize a specific protected API version, every version of one destination, or all destinations. Broader destination selections also apply to matching API versions created later.
+
+| Use case | Audience | Scope |
+| --- | --- | --- |
+| Call a protected destination API version | API version ID | Omit |
+| Ingest data | Tenant ID | `write:sources` |
+| Use every Events API transport | Tenant ID | `read:events` |
+| Pull events and inspect metadata | Tenant ID | `read:events:pull` |
+| Stream events with SSE | Tenant ID | `read:events:sse` |
+
+<Note>
+  Existing data-provider and per-destination-version credentials remain supported during migration. Use tenant-level Applications for new integrations.
+</Note>
+
+## Request an access token
+
+You need these values from the Application:
+
+- Client ID
+- Client secret
+- Tenant ID for tenant API access
+- API version ID for each protected destination API you want to call
+
+Every direct token request must include an audience. One Application can be authorized for several APIs, but each token targets one audience. Request a separate token for each API you call, using the same client credentials.
+
+The examples below use the production token endpoint, `https://auth.occtoo.com/oauth2/token`. Use the authentication domain provided for your Occtoo environment when working outside production.
+
+Set the values as environment variables before running the examples:
+
+```bash
+export OCCTOO_CLIENT_ID="<client-id>"
+export OCCTOO_CLIENT_SECRET="<client-secret>"
+export OCCTOO_TENANT_ID="<tenant-id>"
+export OCCTOO_API_VERSION_ID="<api-version-id>"
+```
+
+A successful request returns a response similar to:
+
+```json
+{
+  "access_token": "<access-token>",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "write:sources"
+}
+```
+
+Cache and reuse the token until shortly before `expires_in` elapses. Then request a new one.
+
+## Access a destination API version
+
+Request a token whose audience is the destination **API version ID**:
+
+```bash
+curl --request POST \
+  --url 'https://auth.occtoo.com/oauth2/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'grant_type=client_credentials' \
+  --data-urlencode "client_id=${OCCTOO_CLIENT_ID}" \
+  --data-urlencode "client_secret=${OCCTOO_CLIENT_SECRET}" \
+  --data-urlencode "audience=${OCCTOO_API_VERSION_ID}"
+```
+
+Do not use the destination ID as the audience. Each protected API version validates its own audience, so a tenant API token cannot be used to call it. The Application must also be authorized for that API version through its API access configuration.
+
+See [Call a destination API](/get-started/call-a-destination-api) for destination URLs and request examples.
+
+## Access the Ingest API
+
+Request the `write:sources` scope using your Tenant ID as the audience:
+
+```bash
+curl --request POST \
+  --url 'https://auth.occtoo.com/oauth2/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'grant_type=client_credentials' \
+  --data-urlencode "client_id=${OCCTOO_CLIENT_ID}" \
+  --data-urlencode "client_secret=${OCCTOO_CLIENT_SECRET}" \
+  --data-urlencode "audience=${OCCTOO_TENANT_ID}" \
+  --data-urlencode 'scope=write:sources'
+```
+
+The Application can ingest only into the [sources](/concepts/source) selected in its resource access configuration. Selecting all sources includes sources created later.
+
+See the [Ingest API reference](/api-reference/ingest/overview) for endpoints and payloads.
+
+## Access the Events API
+
+Use your Tenant ID as the audience. Choose the narrowest scope that covers the transports your integration needs.
+
+<Tabs>
+  <Tab title="All events">
+    Use `read:events` for both pull and SSE access.
+
+    ```bash
+    curl --request POST \
+      --url 'https://auth.occtoo.com/oauth2/token' \
+      --header 'Content-Type: application/x-www-form-urlencoded' \
+      --data-urlencode 'grant_type=client_credentials' \
+      --data-urlencode "client_id=${OCCTOO_CLIENT_ID}" \
+      --data-urlencode "client_secret=${OCCTOO_CLIENT_SECRET}" \
+      --data-urlencode "audience=${OCCTOO_TENANT_ID}" \
+      --data-urlencode 'scope=read:events'
+    ```
+  </Tab>
+  <Tab title="Pull">
+    Use `read:events:pull` to pull retained events and inspect stream metadata.
+
+    ```bash
+    curl --request POST \
+      --url 'https://auth.occtoo.com/oauth2/token' \
+      --header 'Content-Type: application/x-www-form-urlencoded' \
+      --data-urlencode 'grant_type=client_credentials' \
+      --data-urlencode "client_id=${OCCTOO_CLIENT_ID}" \
+      --data-urlencode "client_secret=${OCCTOO_CLIENT_SECRET}" \
+      --data-urlencode "audience=${OCCTOO_TENANT_ID}" \
+      --data-urlencode 'scope=read:events:pull'
+    ```
+  </Tab>
+  <Tab title="SSE">
+    Use `read:events:sse` to stream events with Server-Sent Events.
+
+    ```bash
+    curl --request POST \
+      --url 'https://auth.occtoo.com/oauth2/token' \
+      --header 'Content-Type: application/x-www-form-urlencoded' \
+      --data-urlencode 'grant_type=client_credentials' \
+      --data-urlencode "client_id=${OCCTOO_CLIENT_ID}" \
+      --data-urlencode "client_secret=${OCCTOO_CLIENT_SECRET}" \
+      --data-urlencode "audience=${OCCTOO_TENANT_ID}" \
+      --data-urlencode 'scope=read:events:sse'
+    ```
+  </Tab>
+</Tabs>
+
+See the [Events API reference](/api-reference/events/overview) and [SSE guide](/api-reference/events/streaming) for request and resume behavior.
+
+## Request all granted tenant scopes
+
+The `scope` parameter is optional for the tenant audience. If you omit it, the token contains every tenant API scope enabled for the Application:
+
+```bash
+curl --request POST \
+  --url 'https://auth.occtoo.com/oauth2/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'grant_type=client_credentials' \
+  --data-urlencode "client_id=${OCCTOO_CLIENT_ID}" \
+  --data-urlencode "client_secret=${OCCTOO_CLIENT_SECRET}" \
+  --data-urlencode "audience=${OCCTOO_TENANT_ID}"
+```
+
+Prefer an explicit scope for integrations that need only one capability. This limits what a leaked token can do without changing the Application's broader configuration.
+
+## Use the token
+
+Send the access token as a bearer token with every protected API request:
+
+```bash
+curl --request GET \
+  --url 'https://api.occtoo.com/v1/events' \
+  --header "Authorization: Bearer ${OCCTOO_ACCESS_TOKEN}"
+```
+
+Treat the token like a secret. Do not log it or persist it longer than necessary.
+
+## Troubleshooting
+
+- **`unauthorized_client`**: The Application is not authorized for the requested audience.
+- **`invalid_scope`**: The scope is not enabled for the Application, or it does not belong to the requested audience.
+- **`401 Unauthorized` from an API**: The token is missing, expired, malformed, or intended for another audience.
+- **`403 Forbidden` from an API**: The token is valid, but the Application lacks the required scope or access to the requested resource.
