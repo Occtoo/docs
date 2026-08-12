@@ -70,6 +70,335 @@ A successful request returns a response similar to:
 }
 ```
 
+### Code examples
+
+Each example defines a reusable token helper and requests an ingest token. The commented calls show how to request a destination token, each Events API scope, or all scopes enabled for the tenant audience.
+
+The TypeScript example uses the server-side `fetch` API available in Node.js 18 and later. The Python example requires `requests`. The Rust example requires `reqwest`, `serde`, and `tokio`.
+
+<Tabs>
+  <Tab title="cURL">
+    ```bash
+    request_token() {
+      local audience="$1"
+      local scope="${2:-}"
+      local request=(
+        --silent
+        --show-error
+        --fail-with-body
+        --request POST
+        --url "https://auth.occtoo.com/oauth2/token"
+        --header "Content-Type: application/x-www-form-urlencoded"
+        --data-urlencode "grant_type=client_credentials"
+        --data-urlencode "client_id=${OCCTOO_CLIENT_ID}"
+        --data-urlencode "client_secret=${OCCTOO_CLIENT_SECRET}"
+        --data-urlencode "audience=${audience}"
+      )
+    
+      if [ -n "$scope" ]; then
+        request+=(--data-urlencode "scope=${scope}")
+      fi
+    
+      curl "${request[@]}"
+    }
+    
+    # Ingest
+    request_token "$OCCTOO_TENANT_ID" "write:sources"
+    
+    # Destination API version
+    # request_token "$OCCTOO_API_VERSION_ID"
+    
+    # Events: all transports, pull only, or SSE only
+    # request_token "$OCCTOO_TENANT_ID" "read:events"
+    # request_token "$OCCTOO_TENANT_ID" "read:events:pull"
+    # request_token "$OCCTOO_TENANT_ID" "read:events:sse"
+    
+    # Every tenant scope enabled for the Application
+    # request_token "$OCCTOO_TENANT_ID"
+    ```
+  </Tab>
+  <Tab title="C#">
+    ```csharp
+    using System.Net.Http.Json;
+    using System.Text.Json.Serialization;
+    
+    using var http = new HttpClient();
+    
+    var clientId = Required("OCCTOO_CLIENT_ID");
+    var clientSecret = Required("OCCTOO_CLIENT_SECRET");
+    var tenantId = Required("OCCTOO_TENANT_ID");
+    var apiVersionId = Required("OCCTOO_API_VERSION_ID");
+    
+    // Ingest
+    var token = await GetAccessToken(
+        http,
+        clientId,
+        clientSecret,
+        tenantId,
+        "write:sources");
+    
+    Console.WriteLine(token.AccessToken);
+    
+    // Destination API version:
+    // await GetAccessToken(http, clientId, clientSecret, apiVersionId);
+    
+    // Events: all transports, pull only, or SSE only:
+    // await GetAccessToken(http, clientId, clientSecret, tenantId, "read:events");
+    // await GetAccessToken(http, clientId, clientSecret, tenantId, "read:events:pull");
+    // await GetAccessToken(http, clientId, clientSecret, tenantId, "read:events:sse");
+    
+    // Every tenant scope enabled for the Application:
+    // await GetAccessToken(http, clientId, clientSecret, tenantId);
+    
+    static async Task<TokenResponse> GetAccessToken(
+        HttpClient http,
+        string clientId,
+        string clientSecret,
+        string audience,
+        string? scope = null)
+    {
+        var form = new Dictionary<string, string>
+        {
+            ["grant_type"] = "client_credentials",
+            ["client_id"] = clientId,
+            ["client_secret"] = clientSecret,
+            ["audience"] = audience
+        };
+    
+        if (!string.IsNullOrWhiteSpace(scope))
+        {
+            form["scope"] = scope;
+        }
+    
+        using var response = await http.PostAsync(
+            "https://auth.occtoo.com/oauth2/token",
+            new FormUrlEncodedContent(form));
+    
+        response.EnsureSuccessStatusCode();
+    
+        return await response.Content.ReadFromJsonAsync<TokenResponse>()
+            ?? throw new InvalidOperationException("The token response was empty.");
+    }
+    
+    static string Required(string name) =>
+        Environment.GetEnvironmentVariable(name)
+        ?? throw new InvalidOperationException($"Missing environment variable: {name}");
+    
+    internal sealed record TokenResponse(
+        [property: JsonPropertyName("access_token")] string AccessToken,
+        [property: JsonPropertyName("expires_in")] int ExpiresIn,
+        [property: JsonPropertyName("token_type")] string TokenType);
+    ```
+  </Tab>
+  <Tab title="TypeScript">
+    ```typescript
+    type TokenResponse = {
+      access_token: string;
+      expires_in: number;
+      token_type: string;
+      scope?: string;
+    };
+    
+    const clientId = required("OCCTOO_CLIENT_ID");
+    const clientSecret = required("OCCTOO_CLIENT_SECRET");
+    const tenantId = required("OCCTOO_TENANT_ID");
+    const apiVersionId = required("OCCTOO_API_VERSION_ID");
+    
+    // Ingest
+    const token = await getAccessToken(tenantId, "write:sources");
+    console.log(token.access_token);
+    
+    // Destination API version:
+    // await getAccessToken(apiVersionId);
+    
+    // Events: all transports, pull only, or SSE only:
+    // await getAccessToken(tenantId, "read:events");
+    // await getAccessToken(tenantId, "read:events:pull");
+    // await getAccessToken(tenantId, "read:events:sse");
+    
+    // Every tenant scope enabled for the Application:
+    // await getAccessToken(tenantId);
+    
+    async function getAccessToken(
+      audience: string,
+      scope?: string,
+    ): Promise<TokenResponse> {
+      const form = new URLSearchParams({
+        grant_type: "client_credentials",
+        client_id: clientId,
+        client_secret: clientSecret,
+        audience,
+      });
+    
+      if (scope) {
+        form.set("scope", scope);
+      }
+    
+      const response = await fetch(
+        "https://auth.occtoo.com/oauth2/token",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: form,
+        },
+      );
+    
+      if (!response.ok) {
+        throw new Error(
+          `Token request failed: ${response.status} ${await response.text()}`,
+        );
+      }
+    
+      return (await response.json()) as TokenResponse;
+    }
+    
+    function required(name: string): string {
+      const value = process.env[name];
+    
+      if (!value) {
+        throw new Error(`Missing environment variable: ${name}`);
+      }
+    
+      return value;
+    }
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```python
+    import os
+    
+    import requests
+    
+    
+    CLIENT_ID = os.environ["OCCTOO_CLIENT_ID"]
+    CLIENT_SECRET = os.environ["OCCTOO_CLIENT_SECRET"]
+    TENANT_ID = os.environ["OCCTOO_TENANT_ID"]
+    API_VERSION_ID = os.environ["OCCTOO_API_VERSION_ID"]
+    
+    
+    def get_access_token(audience: str, scope: str | None = None) -> dict:
+        form = {
+            "grant_type": "client_credentials",
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+            "audience": audience,
+        }
+    
+        if scope:
+            form["scope"] = scope
+    
+        response = requests.post(
+            "https://auth.occtoo.com/oauth2/token",
+            data=form,
+            timeout=30,
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    
+    # Ingest
+    token = get_access_token(TENANT_ID, "write:sources")
+    print(token["access_token"])
+    
+    # Destination API version:
+    # get_access_token(API_VERSION_ID)
+    
+    # Events: all transports, pull only, or SSE only:
+    # get_access_token(TENANT_ID, "read:events")
+    # get_access_token(TENANT_ID, "read:events:pull")
+    # get_access_token(TENANT_ID, "read:events:sse")
+    
+    # Every tenant scope enabled for the Application:
+    # get_access_token(TENANT_ID)
+    ```
+  </Tab>
+  <Tab title="Rust">
+    ```rust
+    use reqwest::Client;
+    use serde::Deserialize;
+    use std::env;
+    
+    #[derive(Deserialize)]
+    struct TokenResponse {
+        access_token: String,
+        expires_in: u64,
+        token_type: String,
+        scope: Option<String>,
+    }
+    
+    #[tokio::main]
+    async fn main() -> Result<(), reqwest::Error> {
+        let client = Client::new();
+        let client_id = required("OCCTOO_CLIENT_ID");
+        let client_secret = required("OCCTOO_CLIENT_SECRET");
+        let tenant_id = required("OCCTOO_TENANT_ID");
+        let api_version_id = required("OCCTOO_API_VERSION_ID");
+    
+        // Ingest
+        let token = get_access_token(
+            &client,
+            &client_id,
+            &client_secret,
+            &tenant_id,
+            Some("write:sources"),
+        )
+        .await?;
+    
+        println!("{}", token.access_token);
+    
+        // Destination API version:
+        // get_access_token(&client, &client_id, &client_secret, &api_version_id, None).await?;
+    
+        // Events: all transports, pull only, or SSE only:
+        // get_access_token(&client, &client_id, &client_secret, &tenant_id, Some("read:events")).await?;
+        // get_access_token(&client, &client_id, &client_secret, &tenant_id, Some("read:events:pull")).await?;
+        // get_access_token(&client, &client_id, &client_secret, &tenant_id, Some("read:events:sse")).await?;
+    
+        // Every tenant scope enabled for the Application:
+        // get_access_token(&client, &client_id, &client_secret, &tenant_id, None).await?;
+    
+        Ok(())
+    }
+    
+    async fn get_access_token(
+        client: &Client,
+        client_id: &str,
+        client_secret: &str,
+        audience: &str,
+        scope: Option<&str>,
+    ) -> Result<TokenResponse, reqwest::Error> {
+        let mut form = vec![
+            ("grant_type", "client_credentials"),
+            ("client_id", client_id),
+            ("client_secret", client_secret),
+            ("audience", audience),
+        ];
+    
+        if let Some(scope) = scope {
+            form.push(("scope", scope));
+        }
+    
+        client
+            .post("https://auth.occtoo.com/oauth2/token")
+            .form(&form)
+            .send()
+            .await?
+            .error_for_status()?
+            .json::<TokenResponse>()
+            .await
+    }
+    
+    fn required(name: &str) -> String {
+        env::var(name).unwrap_or_else(|_| panic!("Missing environment variable: {name}"))
+    }
+    ```
+
+    This example requires `reqwest`, `serde`, and `tokio`.
+  </Tab>
+</Tabs>
+
 Cache and reuse the token until shortly before `expires_in` elapses. Then request a new one.
 
 ## Access a destination API version
