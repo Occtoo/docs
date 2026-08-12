@@ -11,6 +11,10 @@ Applications give backend services a single tenant-level identity for calling Oc
 
 Use an Application for unattended integrations such as services, scheduled jobs, command-line tools, and agents. One Application can ingest data, consume tenant events, and call one or more protected destination APIs.
 
+<Tip>
+  **Preferred application model:** Tenant-level Applications are intended to supersede legacy data-provider and per-destination-version applications. They provide one identity and one access model across ingest, events, and destinations, making access easier to configure, review, and change. Use them for new integrations and migrate existing integrations when practical.
+</Tip>
+
 <Warning>
   Keep the client secret on a trusted server. Do not put it in browser code, mobile applications, source control, or client-side configuration.
 </Warning>
@@ -36,7 +40,7 @@ For destinations, you can authorize a specific protected API version, every vers
 | Stream events with SSE | Tenant ID | `read:events:sse` |
 
 <Note>
-  Existing data-provider and per-destination-version credentials remain supported during migration. Use tenant-level Applications for new integrations.
+  Legacy data-provider and per-destination-version credentials remain supported for compatibility while existing integrations migrate.
 </Note>
 
 ## Request an access token
