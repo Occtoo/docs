@@ -137,7 +137,8 @@ The TypeScript example uses the server-side `fetch` API available in Node.js 18 
         tenantId,
         "write:sources");
     
-    Console.WriteLine(token.AccessToken);
+    var accessToken = token.AccessToken;
+    // Send accessToken in the Authorization header. Do not log it.
     
     // Destination API version:
     // await GetAccessToken(http, clientId, clientSecret, apiVersionId);
@@ -206,7 +207,8 @@ The TypeScript example uses the server-side `fetch` API available in Node.js 18 
     
     // Ingest
     const token = await getAccessToken(tenantId, "write:sources");
-    console.log(token.access_token);
+    const accessToken = token.access_token;
+    // Send accessToken in the Authorization header. Do not log it.
     
     // Destination API version:
     // await getAccessToken(apiVersionId);
@@ -300,7 +302,8 @@ The TypeScript example uses the server-side `fetch` API available in Node.js 18 
     
     # Ingest
     token = get_access_token(TENANT_ID, "write:sources")
-    print(token["access_token"])
+    access_token = token["access_token"]
+    # Send access_token in the Authorization header. Do not log it.
     
     # Destination API version:
     # get_access_token(API_VERSION_ID)
@@ -346,7 +349,8 @@ The TypeScript example uses the server-side `fetch` API available in Node.js 18 
         )
         .await?;
     
-        println!("{}", token.access_token);
+        let access_token = token.access_token;
+    // Send access_token in the Authorization header. Do not log it.
     
         // Destination API version:
         // get_access_token(&client, &client_id, &client_secret, &api_version_id, None).await?;
