@@ -2,13 +2,13 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Occtoo Ingest API",
-    "description": "Submit source entries to the authenticated Occtoo tenant. Tenant identity always comes from the credential; it is never accepted from the route or request body.\n\n## Authentication and access\n\nSelect **Authorize** to reuse the existing Occtoo browser session, provide a tenant-scoped bearer token, or send an organization API key through `x-api-key`. Protected operations require `import-datasource`.\n\nKinde application credentials represent registered data providers and are additionally restricted to their assigned sources. User and organization API-key access is determined by the gateway-projected permission.\n\nThe credential-exchange endpoint is an anonymous convenience for server-side data-provider integrations. It accepts a provider id and secret in the request body and is not an OAuth client-credentials endpoint.\n\n## Payload rules\n\n- Entry keys must be unique within a request, compared case-insensitively.\n- Property ids are canonicalized to lowercase at rest.\n- A property id may repeat only when its language differs.\n- Reserved system properties are rejected.\n- Request, entry and property-value ceilings are tenant-configured and returned in validation errors when exceeded.\n\n`POST /datasources/<dataSource>/import/verify` runs validation without queueing or consuming the request-rate budget. `POST /datasources/<dataSource>/import` returns `202` when accepted for asynchronous processing.\n\nRetry `429` and transient `5xx` responses with bounded exponential backoff. Do not retry a successful `202` merely because downstream processing has not completed.\n\nMachine-readable contract: [OpenAPI](https://api-test.occtoo.com/openapi/ingest.json)",
+    "description": "Submit source entries to the authenticated Occtoo tenant. Tenant identity always comes from the credential; it is never accepted from the route or request body.\n\n## Authentication and access\n\nSelect **Authorize** to reuse the existing Occtoo browser session, provide a tenant-scoped bearer token, or send an organization API key through `x-api-key`. Protected operations require `import-datasource`.\n\nKinde application credentials represent registered data providers and are additionally restricted to their assigned sources. User and organization API-key access is determined by the gateway-projected permission.\n\nThe credential-exchange endpoint is an anonymous convenience for server-side data-provider integrations. It accepts a provider id and secret in the request body and is not an OAuth client-credentials endpoint.\n\n## Payload rules\n\n- Entry keys must be unique within a request, compared case-insensitively.\n- Property ids are canonicalized to lowercase at rest.\n- A property id may repeat only when its language differs.\n- Reserved system properties are rejected.\n- Request, entry and property-value ceilings are tenant-configured and returned in validation errors when exceeded.\n\n`POST /datasources/<dataSource>/import/verify` runs validation without queueing or consuming the request-rate budget. `POST /datasources/<dataSource>/import` returns `202` when accepted for asynchronous processing.\n\nRetry `429` and transient `5xx` responses with bounded exponential backoff. Do not retry a successful `202` merely because downstream processing has not completed.\n\nMachine-readable contract: [OpenAPI](https://api.occtoo.com/openapi/ingest.json)",
     "version": "1.0.0",
     "summary": "Validate and ingest tenant-scoped source entries."
   },
   "servers": [
     {
-      "url": "https://api-test.occtoo.com",
+      "url": "https://api.occtoo.com",
       "description": "Occtoo public API"
     }
   ],
@@ -384,6 +384,8 @@
           "Authentication"
         ],
         "operationId": "exchangeDataProviderCredentials",
+        "summary": "Exchange data provider credentials for a token",
+        "description": "Exchange a registered data provider's id and secret for a short-lived bearer token. This is an anonymous convenience endpoint for server-side data-provider integrations, not an OAuth client-credentials endpoint.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -923,8 +925,8 @@
         "description": "Sign in with the existing Occtoo Studio identity and selected organization.",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://auth-test.occtoo.com/oauth2/auth?audience=https%3A%2F%2Fapi-test.occtoo.com",
-            "tokenUrl": "https://auth-test.occtoo.com/oauth2/token",
+            "authorizationUrl": "https://auth.occtoo.com/oauth2/auth?audience=https%3A%2F%2Fapi-weu.occtoo.com",
+            "tokenUrl": "https://auth.occtoo.com/oauth2/token",
             "scopes": {
               "openid": "Authenticate the user with OpenID Connect.",
               "profile": "Read the user's basic profile.",
@@ -932,7 +934,7 @@
               "offline": "Refresh the access token without another interactive sign-in."
             },
             "x-usePkce": "SHA-256",
-            "x-scalar-redirect-uri": "https://api-test.occtoo.com/docs/"
+            "x-scalar-redirect-uri": "https://api.occtoo.com/docs/"
           }
         }
       },

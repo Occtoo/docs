@@ -8,7 +8,7 @@ Ingesting data into Occtoo is facilitated by the Ingest API. This powerful API s
 
 Data ingestion is performed using the ingest API. Two endpoints, _tokens_ and _import_, are necessary for completing a data import. The import sequence always needs to start with a request for a token, as all imports require authentication. Using the token, the import endpoint can then be called.
 
-<Accordion title="Data import sequence visualzation">
+<Accordion title="Data import sequence visualization">
   ![Data ingest](/images/api-reference/ingest/integration-light.png)
 
   ![Data ingest](/images/api-reference/ingest/integration-dark.png)
@@ -127,7 +127,7 @@ The import format is structured as follows:
 <Tabs>
   <Tab title="Standard">
     <Tip>
-      If an entry is to be added or updated, the **delete property** _can optianlly_ be omitted.
+      If an entry is to be added or updated, the **delete property** _can optionally_ be omitted.
     </Tip>
 
     ```javascript
@@ -150,7 +150,7 @@ The import format is structured as follows:
   </Tab>
   <Tab title="Multiple items">
     <Tip>
-      It is obviously possible to send both multiple entries with multiple properties in a single payload.
+      It is possible to send multiple entries, each with multiple properties, in a single payload.
     </Tip>
 
     ```javascript
@@ -162,7 +162,7 @@ The import format is structured as follows:
             "properties" : [
             {
                 "id" : "my-property",
-                "value" : "My propery value for item123",
+                "value" : "My property value for item123",
                 "language" : "en-us"
             }
             ]
@@ -172,8 +172,8 @@ The import format is structured as follows:
             "delete" : false,
             "properties" : [
             {
-                "id" : "my-propery",
-                "value" : "My propery value for item456. This text is slightly longer",
+                "id" : "my-property",
+                "value" : "My property value for item456. This text is slightly longer",
                 "language" : "en-us"
             }
             ]
@@ -254,13 +254,15 @@ The import format is structured as follows:
             "properties" : []
         },
         {
-            "key" : "item456",            
+            "key" : "item456",
             "properties" : [
             {
                 "id": "My-prop",
                 "value":"This is a multi action payload example",
                 "language": "en"
-            },        
+            }
+            ]
+        }
         ]
     }
     ```
@@ -292,7 +294,7 @@ All uploads are made asynchronously, and the ingest API allows for multiple uplo
 
 Media information can be retrieved either using user-provided unique IDs via the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier), or using the Occtoo media file ID via the [Media File Information by File ID API](#media-file-information-by-file-id).
 
-<Accordion title="Media upload via link sequence visualzation">
+<Accordion title="Media upload via link sequence visualization">
   Upload media files using links via the [Upload via Links API](#upload-via-links).
 
   ![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-light.png)
@@ -300,23 +302,23 @@ Media information can be retrieved either using user-provided unique IDs via the
   ![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-dark.png)
 </Accordion>
 
-<Accordion title="Get media upload status sequence visualzation">
-  Get the upload status of a induvidual file using the Occtoo media file ID with the [Upload Status API](#upload-status).
+<Accordion title="Get media upload status sequence visualization">
+  Get the upload status of an individual file using the Occtoo media file ID with the [Upload Status API](#upload-status).
 
   ![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-light.png)
 
   ![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-dark.png)
 </Accordion>
 
-<Accordion title="Get media information by ID sequence visualzation">
-  Get detailed media information of a induvidual media file using the [Media File Information by File ID API](#media-file-information-by-file-id).
+<Accordion title="Get media information by ID sequence visualization">
+  Get detailed media information of an individual media file using the [Media File Information by File ID API](#media-file-information-by-file-id).
 
   ![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-light.png)
 
   ![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-dark.png)
 </Accordion>
 
-<Accordion title="Get media information by unique identifier sequence visualzation">
+<Accordion title="Get media information by unique identifier sequence visualization">
   Get detailed media information for one or multiple media files using the unique ID attribute with the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier).
 
   ![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-light.png)
@@ -324,7 +326,7 @@ Media information can be retrieved either using user-provided unique IDs via the
   ![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-dark.png)
 </Accordion>
 
-<Accordion title="Delete media sequence visualzation">
+<Accordion title="Delete media sequence visualization">
   Delete an uploaded media file with the [Delete Media File endpoint](#delete-media) using the assigned Occtoo Media File ID.
 
   ![Delete media sequence](/images/api-reference/ingest/delete-media-light.png)
@@ -388,13 +390,13 @@ https://ingest.occtoo.com/media/uploads/links
 
 The upload via links payload format is structured as follows:
 
-- **links**: Array of links to the media be included in the import
+- **links**: Array of links to the media to be included in the import
   - **filename** (Mandatory): The filename of the media file when uploaded
   - **link** (Mandatory): The URL to the media to be uploaded
   - **uniqueidentifier** (Optional): Unique identifier of the media to be uploaded
 
 <Tip>
-  If the media file that is to be upload contains [illegal characters](#rules-1) one can use the filename attribute to rename the file as this is the name that will be used for the file when uploaded to the Occtoo media service.
+  If the media file that is to be uploaded contains [illegal characters](#rules-1) one can use the filename attribute to rename the file as this is the name that will be used for the file when uploaded to the Occtoo media service.
 </Tip>
 
 <Tabs>
@@ -420,9 +422,9 @@ The upload via links payload format is structured as follows:
     }
     ```
   </Tab>
-  <Tab title="Without unique identifer">
+  <Tab title="Without unique identifier">
     <Tip>
-      It is possible to either set **uniqueidentifer** to _null_ or omit it entirely from the payload. Although it is our **strong recommendation** that a unique identifier is used to avoid reuploading the same binary multiple times.
+      It is possible to either set **uniqueidentifier** to _null_ or omit it entirely from the payload. Although it is our **strong recommendation** that a unique identifier is used to avoid reuploading the same binary multiple times.
     </Tip>
 
     ```javascript
@@ -484,7 +486,7 @@ The response is divided into two parts: `succeeded` and `failures`. Since file u
 
 #### Upload status
 
-The upload status of a induvidual file can be checked by sending a GET request with the provided Occtoo media ID. Upon successful request, the API will respond with an HTTP Code 200 OK.
+The upload status of an individual file can be checked by sending a GET request with the provided Occtoo media ID. Upon successful request, the API will respond with an HTTP Code 200 OK.
 
 ```text
 https://ingest.occtoo.com/media/uploads/{@OCCTOO-MEDIA-ID}
@@ -530,7 +532,7 @@ https://ingest.occtoo.com/media/files/{@OCCTOO-MEDIA-ID}
 
 ##### Response payload
 
-The response contains the **public URL** that is to be used when accessing the media. Additionally, the response contains the `metadata` object, which provides more details about the media object, such as its size and MIME type. If the media object is an image file (e.g., jpg, png) or a video file (e.g., XXXX), there is detailed information about the file encapsulated in the `mediaInfo` object.
+The response contains the **public URL** that is to be used when accessing the media. Additionally, the response contains the `metadata` object, which provides more details about the media object, such as its size and MIME type. If the media object is an image file (e.g., jpg, png) or a video file (e.g., mp4), there is detailed information about the file encapsulated in the `mediaInfo` object.
 
 ```javascript
 {
@@ -584,7 +586,7 @@ The endpoint accepts a JSON payload in the body, which consists of a list of uni
 
 ##### Response payload
 
-The response is divided into two parts: `succeeded` and `failures`. Media information for each media object that could be identified via its unique identifier is listed under `succeeded`. The response contains the **public URL** to access the media. Additionally, it includes the `metadata` object, which provides details such as size and MIME type. If the media object is an image file (e.g., jpg, png) or a video file (e.g., XXXX), detailed information is encapsulated in the `mediaInfo` object.
+The response is divided into two parts: `succeeded` and `failures`. Media information for each media object that could be identified via its unique identifier is listed under `succeeded`. The response contains the **public URL** to access the media. Additionally, it includes the `metadata` object, which provides details such as size and MIME type. If the media object is an image file (e.g., jpg, png) or a video file (e.g., mp4), detailed information is encapsulated in the `mediaInfo` object.
 
 Unique identifiers that were not found are sorted under `failures`.
 
