@@ -104,12 +104,16 @@
                   {
                     "group": "Segments",
                     "pages": [
-                      "guides/studio/segments/create-a-segment-type",
-                      "guides/studio/segments/manage-segment-types",
-                      "guides/studio/segments/delete-a-segment-type",
+                      "guides/studio/segments/find-segments",
                       "guides/studio/segments/create-a-segment",
+                      "guides/studio/segments/filter-segment-entries",
+                      "guides/studio/segments/schedule-a-segment",
+                      "guides/studio/segments/upload-a-fixed-segment",
+                      "guides/studio/segments/create-a-segment-category",
+                      "guides/studio/segments/manage-segment-categories",
                       "guides/studio/segments/edit-a-segment",
                       "guides/studio/segments/search-within-a-segment",
+                      "guides/studio/segments/segment-actions",
                       "guides/studio/segments/track-usage"
                     ]
                   },
@@ -300,6 +304,18 @@
     ]
   },
   "redirects": [
+    {
+      "source": "/guides/studio/segments/create-a-segment-type",
+      "destination": "/guides/studio/segments/create-a-segment-category"
+    },
+    {
+      "source": "/guides/studio/segments/manage-segment-types",
+      "destination": "/guides/studio/segments/manage-segment-categories"
+    },
+    {
+      "source": "/guides/studio/segments/delete-a-segment-type",
+      "destination": "/guides/studio/segments/manage-segment-categories"
+    },
     {
       "source": "/studio/:slug*",
       "destination": "/guides/studio/:slug*"
@@ -530,15 +546,15 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/segments/how-to-create-a-segmenttype",
-      "destination": "/guides/studio/segments/create-a-segment-type"
+      "destination": "/guides/studio/segments/create-a-segment-category"
     },
     {
       "source": "/docs/occtoo-studio/guides/segments/how-to-manage-existing-segment-types",
-      "destination": "/guides/studio/segments/manage-segment-types"
+      "destination": "/guides/studio/segments/manage-segment-categories"
     },
     {
       "source": "/docs/occtoo-studio/guides/segments/how-to-delete-a-segment-type",
-      "destination": "/guides/studio/segments/delete-a-segment-type"
+      "destination": "/guides/studio/segments/manage-segment-categories"
     },
     {
       "source": "/docs/occtoo-studio/guides/segments/how-to-create-a-segment",
