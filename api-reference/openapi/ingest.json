@@ -2,7 +2,7 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Occtoo Ingest API",
-    "description": "Submit source entries to the authenticated Occtoo tenant. Tenant identity always comes from the credential; it is never accepted from the route or request body.\n\n## Authentication and access\n\nSelect **Authorize** to reuse the existing Occtoo browser session, provide a tenant-scoped bearer token, or send an organization API key through `x-api-key`. Protected operations require `import-datasource`.\n\nKinde application credentials represent registered data providers and are additionally restricted to their assigned sources. User and organization API-key access is determined by the gateway-projected permission.\n\nThe credential-exchange endpoint is an anonymous convenience for server-side data-provider integrations. It accepts a provider id and secret in the request body and is not an OAuth client-credentials endpoint.\n\n## Payload rules\n\n- Entry keys must be unique within a request, compared case-insensitively.\n- Property ids are canonicalized to lowercase at rest.\n- A property id may repeat only when its language differs.\n- Reserved system properties are rejected.\n- Request, entry and property-value ceilings are tenant-configured and returned in validation errors when exceeded.\n\n`POST /datasources/<dataSource>/import/verify` runs validation without queueing or consuming the request-rate budget. `POST /datasources/<dataSource>/import` returns `202` when accepted for asynchronous processing.\n\nRetry `429` and transient `5xx` responses with bounded exponential backoff. Do not retry a successful `202` merely because downstream processing has not completed.\n\nMachine-readable contract: [OpenAPI](https://api.occtoo.com/openapi/ingest.json)",
+    "description": "Submit source entries to the authenticated Occtoo tenant. Tenant identity always comes from the credential; it is never accepted from the route or request body.\n\n## Authentication and access\n\nSelect **Authorize** to reuse the existing Occtoo browser session, provide a tenant-scoped bearer token, or send an organization API key through `x-api-key`. The legacy import operations accept either the established `import-datasource` permission or the tenant-application `write:sources` scope. `POST /sources/<sourceId>` accepts only `write:sources`.\n\nKinde application scopes are projected unchanged by the gateway. `AuthorizeAny` gives applications, users, and organization API keys one endpoint policy while preserving the established provider permission. Tenant applications use `write:sources` as the capability and Occtoo-owned resource grants to allow every source or selected sources. Legacy data-provider applications remain restricted to their assigned sources.\n\nThe credential-exchange endpoint is an anonymous convenience for server-side data-provider integrations. It accepts a provider id and secret in the request body and is not an OAuth client-credentials endpoint.\n\n## Payload rules\n\n- Entry keys must be unique within a request, compared case-insensitively.\n- Property ids are canonicalized to lowercase at rest.\n- A property id may repeat only when its language differs.\n- Reserved system properties are rejected.\n- Request, entry and property-value ceilings are tenant-configured and returned in validation errors when exceeded.\n\n`POST /sources/<sourceId>` accepts native JSON strings, numbers, booleans, nulls, and string arrays. Configured properties require the matching JSON shape. Missing or untyped properties are inferred from their JSON values; string arrays use the configured delimiter or `,` when none is set. Values are serialized to strings before they enter the existing asynchronous ingest pipeline.\n\n`POST /datasources/<dataSource>/import/verify` runs validation without queueing or consuming the request-rate budget. `POST /datasources/<dataSource>/import` returns `202` when accepted for asynchronous processing.\n\nRetry `429` and transient `5xx` responses with bounded exponential backoff. Do not retry a successful `202` merely because downstream processing has not completed.\n\nMachine-readable contract: [OpenAPI](https://api.occtoo.com/openapi/ingest.json)",
     "version": "1.0.0",
     "summary": "Validate and ingest tenant-scoped source entries."
   },
@@ -121,7 +121,7 @@
             }
           },
           "403": {
-            "description": "The caller lacks `import-datasource`, or the data-provider application is not assigned to this source.",
+            "description": "The caller has neither `import-datasource` nor `write:sources`, the tenant application is not granted this source, or a legacy data-provider application is inactive or not assigned to this source.",
             "content": {
               "application/json": {
                 "schema": {
@@ -191,7 +191,11 @@
             "apiKey": [ ]
           }
         ],
-        "x-required-permission": "import-datasource"
+        "x-required-permissions": [
+          "import-datasource",
+          "write:sources"
+        ],
+        "x-permission-match": "any"
       }
     },
     "/datasources/{dataSource}/import": {
@@ -305,7 +309,7 @@
             }
           },
           "403": {
-            "description": "The caller lacks `import-datasource`, or the data-provider application is not assigned to this source.",
+            "description": "The caller has neither `import-datasource` nor `write:sources`, the tenant application is not granted this source, or a legacy data-provider application is inactive or not assigned to this source.",
             "content": {
               "application/json": {
                 "schema": {
@@ -375,7 +379,213 @@
             "apiKey": [ ]
           }
         ],
-        "x-required-permission": "import-datasource"
+        "x-required-permissions": [
+          "import-datasource",
+          "write:sources"
+        ],
+        "x-permission-match": "any"
+      }
+    },
+    "/sources/{sourceId}": {
+      "post": {
+        "tags": [
+          "Sources"
+        ],
+        "summary": "Ingest typed JSON into a source",
+        "description": "Validates typed JSON values against the source property configuration and accepts the entries for asynchronous processing.\n\nValues retain their JSON types at the API boundary. They are serialized to the source's string-at-rest representation before queueing. Properties without a configured type are inferred from JSON; list delimiters default to `,` only when no delimiter is already configured.\n\nA successful `202` response returns the ingest batch correlation id, accepted source and entry count, UTC acceptance time, and any previously absent properties inferred from this request. Acceptance means the batch was queued; downstream entry processing and worker-owned property registration may still be running.",
+        "x-mint": {
+          "href": "/api-reference/ingest/typed-source-entries",
+          "metadata": {
+            "tag": "NEW"
+          },
+          "content": "For type rules, inference behavior, and a complete request example, read the [typed ingest guide](/api-reference/ingest/typed-ingest)."
+        },
+        "operationId": "ingestTypedSourceEntries",
+        "parameters": [
+          {
+            "name": "sourceId",
+            "in": "path",
+            "description": "Stable customer-facing source id within the authenticated tenant.",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "example": "products"
+            },
+            "example": "products"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TypedIngestRequest"
+              },
+              "examples": {
+                "example": {
+                  "summary": "Ingest typed source entries",
+                  "value": {
+                    "entries": [
+                      {
+                        "id": "sku-123",
+                        "properties": [
+                          {
+                            "id": "tags",
+                            "value": [
+                              "summer",
+                              "sale"
+                            ]
+                          },
+                          {
+                            "id": "price",
+                            "value": 100.111
+                          },
+                          {
+                            "id": "publishedAt",
+                            "value": "2026-01-01T00:00:00Z"
+                          },
+                          {
+                            "id": "inStock",
+                            "value": true
+                          },
+                          {
+                            "id": "name",
+                            "value": "Blue chair",
+                            "language": "en"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "The typed entries were validated, serialized, and queued for asynchronous processing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TypedIngestAccepted"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "correlationId": "83b538a7-df7c-4cf4-b988-cd3b71c4cd90",
+                      "sourceId": "products",
+                      "acceptedAt": "2026-08-13T10:15:30Z",
+                      "acceptedEntryCount": 1,
+                      "newPropertiesFound": [
+                        {
+                          "id": "tags",
+                          "type": "List",
+                          "delimiter": ","
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The payload is malformed or one or more values do not match the configured source property types.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication is missing or invalid.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The caller lacks `write:sources` or is not granted this source.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested source cannot be resolved.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The source is being purged or is in another conflicting state.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "The tenant request-rate budget is exhausted. Retry after the indicated delay.",
+            "headers": {
+              "Retry-After": {
+                "description": "Optional number of seconds to wait before retrying.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The ingest operation failed unexpectedly.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ],
+        "x-required-permissions": [
+          "write:sources"
+        ],
+        "x-permission-match": "all"
       }
     },
     "/v2/dataproviders/tokens": {
@@ -384,8 +594,6 @@
           "Authentication"
         ],
         "operationId": "exchangeDataProviderCredentials",
-        "summary": "Exchange data provider credentials for a token",
-        "description": "Exchange a registered data provider's id and secret for a short-lived bearer token. This is an anonymous convenience endpoint for server-side data-provider integrations, not an OAuth client-credentials endpoint.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -714,6 +922,47 @@
           }
         }
       },
+      "HttpValidationProblemDetails": {
+        "required": [
+          "errors"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "A URI reference identifying the problem type."
+          },
+          "title": {
+            "type": "string",
+            "description": "A short summary of the validation problem."
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string",
+            "description": "A human-readable explanation of this occurrence."
+          },
+          "instance": {
+            "type": "string",
+            "description": "A URI reference identifying this occurrence."
+          },
+          "traceId": {
+            "type": "string",
+            "description": "W3C OpenTelemetry trace id for diagnostics."
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Validation messages keyed by request path."
+          }
+        }
+      },
       "IngestEntity": {
         "required": [
           "key",
@@ -818,6 +1067,35 @@
         },
         "additionalProperties": false
       },
+      "JsonElement": { },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "A URI reference identifying the problem type."
+          },
+          "title": {
+            "type": "string",
+            "description": "A short summary of the problem."
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string",
+            "description": "A human-readable explanation of this occurrence."
+          },
+          "instance": {
+            "type": "string",
+            "description": "A URI reference identifying this occurrence."
+          },
+          "traceId": {
+            "type": "string",
+            "description": "W3C OpenTelemetry trace id for diagnostics."
+          }
+        }
+      },
       "PropertyType": {
         "enum": [
           "Text",
@@ -917,6 +1195,216 @@
             "type": "string"
           }
         }
+      },
+      "TypedIngestAccepted": {
+        "required": [
+          "correlationId",
+          "sourceId",
+          "acceptedAt",
+          "acceptedEntryCount",
+          "newPropertiesFound"
+        ],
+        "type": "object",
+        "properties": {
+          "correlationId": {
+            "type": "string",
+            "description": "Correlation id assigned to this asynchronous ingest batch. This is distinct from the HTTP trace id.",
+            "format": "uuid",
+            "example": "83b538a7-df7c-4cf4-b988-cd3b71c4cd90"
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Customer-facing id of the source that accepted the entries.",
+            "example": "products"
+          },
+          "acceptedAt": {
+            "type": "string",
+            "description": "UTC time at which the ingest batch was accepted and queued.",
+            "format": "date-time",
+            "example": "2026-08-13T10:15:30Z"
+          },
+          "acceptedEntryCount": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Number of entries accepted in this all-or-nothing request.",
+            "format": "int32",
+            "example": 1
+          },
+          "newPropertiesFound": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypedIngestNewProperty"
+            },
+            "description": "Properties absent from the loaded source configuration and inferred by this request. The ingestion worker registers them asynchronously; they may not be visible in Configuration immediately. Empty when no new properties were found."
+          }
+        },
+        "additionalProperties": false
+      },
+      "TypedIngestAcceptedResponse": {
+        "required": [
+          "correlationId",
+          "sourceId",
+          "acceptedAt",
+          "acceptedEntryCount",
+          "newPropertiesFound"
+        ],
+        "type": "object",
+        "properties": {
+          "correlationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "acceptedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "acceptedEntryCount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "newPropertiesFound": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypedIngestNewProperty"
+            }
+          }
+        }
+      },
+      "TypedIngestEntry": {
+        "required": [
+          "id",
+          "properties"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "Source entry id.",
+            "example": "sku-123"
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypedIngestProperty"
+            },
+            "description": "Typed values to upsert on the entry."
+          }
+        },
+        "additionalProperties": false
+      },
+      "TypedIngestNewProperty": {
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Property id that was absent from the source configuration snapshot.",
+            "example": "tags"
+          },
+          "type": {
+            "enum": [
+              "Text",
+              "LocalizedText",
+              "List",
+              "LocalizedList",
+              "Boolean",
+              "Timestamp",
+              "Integer",
+              "Decimal"
+            ],
+            "type": "string",
+            "description": "Property type inferred from the submitted JSON value.",
+            "example": "List"
+          },
+          "delimiter": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Configured delimiter for inferred list properties; null for scalar properties.",
+            "example": ","
+          }
+        },
+        "additionalProperties": false
+      },
+      "TypedIngestProperty": {
+        "required": [
+          "id",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string",
+            "description": "Source property id, matched case-insensitively against source configuration.",
+            "example": "price"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A JSON string, number, boolean, null, or array of strings. Its shape must match the source property's configured type."
+          },
+          "language": {
+            "maxLength": 10,
+            "minLength": 2,
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Required for LocalizedText and LocalizedList properties; omitted or null for other types.",
+            "example": "en"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TypedIngestRequest": {
+        "required": [
+          "entries"
+        ],
+        "type": "object",
+        "properties": {
+          "entries": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypedIngestEntry"
+            },
+            "description": "Non-empty collection of source entries."
+          }
+        },
+        "additionalProperties": false
       }
     },
     "securitySchemes": {
@@ -956,6 +1444,10 @@
     {
       "name": "Ingest",
       "description": "Verify source-entry payloads and submit them for asynchronous processing."
+    },
+    {
+      "name": "Sources",
+      "description": "Submit strongly typed JSON source entries."
     },
     {
       "name": "Authentication",
