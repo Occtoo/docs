@@ -1,29 +1,68 @@
 ---
 title: "Edit a segment"
+description: "Change the details of a segment, or change which entries it contains."
 ---
 
+A segment is edited in two places: the **Segment details** widget for name, tags, schedule and description, and **Edit segmentation** for the entry selection.
+
+![Segment page](/images/guides/studio/segments/segment-detail.png)
+
+## Edit the details
+
+Press **Edit** in the **Segment details** widget.
+
+![Edit segment details dialog](/images/guides/studio/segments/segment-edit-details-focus.png)
+
+You can change:
+
+- **Segment name**
+- **Tags**
+- **Schedule segment** — start and end date
+- **Description**
+
+Press **Save** to apply the changes.
+
+<Info>
+  The card and the category a segment is based on cannot be changed after the
+  segment is created.
+</Info>
+
+## Edit the entry selection
+
+Press **Edit segmentation** in the **Segmented entries** widget.
+
+![Edit filters to refine segmentation](/images/guides/studio/segments/segment-edit-segmentation-focus.png)
+
 <Steps>
-  <Step title="Open the segment for editing">
+  <Step title="Change the filters">
 
-    You can edit your segment anytime using the 'Edit' button in the right corner
+    Press **Filter** to open the filter panel. The filters already on the segment are preselected. Adjust them, or press **Clear all filters** to start over, and press **Apply** to see the new result.
 
-    ![An image from the static](/images/guides/studio/segments/edit-segment-a8cc8c0349888ada71913fa215ca4a94.png)
+    ![Filter panel](/images/guides/studio/segments/segment-filters-panel-focus.png)
 
-  </Step>
-  <Step title="Clear the query criteria">
-
-    To change the query criteria, simply use the 'Clear' button and proceed with the new selection
-
-    ![An image from the static](/images/guides/studio/segments/clear-query-f372bea6f39688979b16d2cff5d329eb.png)
+    Every filter type is described in [Filter segment entries](/guides/studio/segments/filter-segment-entries).
 
   </Step>
-  <Step title="Apply the new filtering">
+  <Step title="Adjust single entries">
 
-    Now you can easily filter the data that you would like to include in the endpoint. You will see the result of your filtering in the middle column.
-    Once you are happy with the filtering, click 'Apply' to add it to the segment.
-    When changing the query criteria, please allow a few minutes after saving for the new settings to be processed.
+    On a **Query** segment, press **Exclude** on an entry to keep it out of the result, and **Include** to bring it back. The **Included entries** and **Excluded entries** tabs show the current split.
 
-    ![An image from the static](/images/guides/studio/segments/segment-filters-30aa04660dd030fdffd80af902430860.png)
+    On a **Fixed** segment, entries carry a checkbox instead. Tick entries under **All entries** to add them, untick them under **Included entries** to remove them, or press **Clear** to empty the selection.
+
+  </Step>
+  <Step title="Save the segment">
+
+    Press **Save segment** in the lower right corner. **Cancel** discards the changes.
+
+    <Info>
+    When you change the query criteria, allow a few minutes after saving for the new settings to be processed.
+    </Info>
 
   </Step>
 </Steps>
+
+<Info>
+  For a fixed segment you can also replace or extend the entries with a CSV
+  file. See [Upload a fixed
+  segment](/guides/studio/segments/upload-a-fixed-segment).
+</Info>

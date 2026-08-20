@@ -1,10 +1,43 @@
 ---
 title: "Track data usage of segments"
-description: "Segments"
+description: "See what a segment is based on, how large it is and where it is used."
 ---
 
-### Segments
+The segment page opens with four tiles that summarise the segment.
 
-Each segments provides information about what card it is based on and on which destination it is applied.
+![Segment page with the status tiles](/images/guides/studio/segments/segment-detail-focus.png)
 
-![An image from the static](/images/guides/studio/segments/segment-tracking-345c569aa15e034b91f2a20a1f023739.png)
+- **Segment type** — Query or Fixed.
+- **Current segmented** — how many entries the segment holds right now.
+- **Used by** — how many destinations consume the segment.
+- **Status** — Active, Scheduled, Initializing or Archived.
+
+Each tile has an info icon that explains what the value means for this segment.
+
+## Segment details
+
+The **Segment details** widget holds the metadata: name, who created it and when, who last updated it, the category, the card it is **based on**, tags, active period and description. The card name links to the card definition.
+
+## Selected criteria
+
+**Selected criteria** lists the filters the segment is built on. Select a chip to see the operator and the values behind it.
+
+![Selected criteria with a filter chip expanded](/images/guides/studio/segments/segment-criteria-chip-focus.png)
+
+## Destinations using this segment
+
+The widget lists every destination that consumes the segment, with the destination version, the publish status and the endpoint the segment sits on.
+
+![Destinations using this segment](/images/guides/studio/segments/segment-destinations-dialog-focus.png)
+
+- **Add** — connect the segment to another destination, or remove it from one.
+- **Remove all** — disconnect the segment from every destination.
+- The minus icon on a row removes the segment from that destination.
+
+<Info>
+Only destinations with existing endpoints are available. Published destinations without pending changes have their updates published automatically.
+</Info>
+
+<Warning>
+A segment that is used by a destination cannot be archived or deleted. Remove the connections first.
+</Warning>

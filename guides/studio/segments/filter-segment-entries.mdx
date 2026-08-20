@@ -1,0 +1,105 @@
+---
+title: "Filter segment entries"
+description: "Use the filter panel to narrow down which entries a segment contains."
+---
+
+The filter panel is where you define what a segment contains. Open it with the **Filter** button while creating or editing a segment.
+
+![Filter panel with the property list and the value editor](/images/guides/studio/segments/segment-filters-panel-focus.png)
+
+The panel has three parts:
+
+- **Property list** (left) — every filterable property on the card, in alphabetical order, plus **Last updated (system)** at the top. A badge shows how many values you selected for a property.
+- **Value editor** (right) — the filter options for the selected property.
+- **Footer** — the number of matching entries for your current selection, and **Apply** to put the filters on the segment.
+
+Use **Search filter** to find a property by name, and **Clear all filters** to start over.
+
+<Info>
+The number in the footer updates as you change the filters, so you can see the size of the result before you apply anything.
+</Info>
+
+## Text and list properties
+
+Text and list properties are filtered on their values (facets). Pick an operator, then select the values.
+
+![Facet filter with values for a colour property](/images/guides/studio/segments/segment-filter-facet-focus.png)
+
+The operator decides how the selected values are matched:
+
+| Operator | Result |
+| --- | --- |
+| Include any of | Entries that match at least one of the selected values |
+| Include all of | Entries that match all of the selected values (list properties) |
+| Exclude any of | Entries that match at least one of the selected values are left out |
+| Exclude all of | Entries that match all of the selected values are left out |
+| Empty | Entries with no value |
+| Not empty | Entries that have a value |
+| Contain / Don't contain | Entries where the text contains, or does not contain, the value you type |
+| Start with / Don't start with | Entries where the text begins, or does not begin, with the value |
+| End With / Don't end with | Entries where the text ends, or does not end, with the value |
+
+![Operator dropdown for a facet filter](/images/guides/studio/segments/segment-filter-operators-focus.png)
+
+<Info>
+Use **Search facets** when a property has many values. Selected values are counted on the property in the left list, so you can see at a glance where your filters sit.
+</Info>
+
+![Facet filter with one value selected and the matching entry count](/images/guides/studio/segments/segment-filter-selected-focus.png)
+
+## Number properties
+
+Integer and decimal properties are filtered on a value or a range:
+
+- **Equals**
+- **Greater than or equals**
+- **Less than**
+- **In between (range)**
+- **Empty (no values)** and **Is not empty (has values)**
+
+## Date properties
+
+Timestamp properties, including **Last updated (system)**, are filtered on a point in time or a period: **After**, **Before**, or **In between (range)**.
+
+![Date filter with an in between range](/images/guides/studio/segments/segment-filter-date-focus.png)
+
+<Warning>
+The date and time you pick is read in your local timezone and converted to UTC (+00:00) before the filter is applied. On a browser set to UTC+2, a boundary of 00:00 is sent as 22:00 the day before. Studio repeats this on the **In between (range)** option: "We'll use UTC (+00:00) timezone to filter the data".
+</Warning>
+
+## True/false properties
+
+Boolean properties are filtered with **True**, **False**, **Empty (no values)** or **Is not empty (has values)**.
+
+![Boolean filter options](/images/guides/studio/segments/segment-filter-boolean-focus.png)
+
+## Relations
+
+Relations appear in the property list as **Relation [name]**. Filter on whether the entry has the relation at all: **Empty (no values)** or **Is not empty (has values)**.
+
+![Relation filter options](/images/guides/studio/segments/segment-filter-relation-focus.png)
+
+## Localized content
+
+When the data behind the card is localized, the panel header holds a **Localized content** selector. It lists the languages found in the data sources that feed the card, and decides which language the facet values and the entry list are read in. The choice is saved with the segment.
+
+<Warning>
+Switching the localization resets all filters you have set in the panel. Studio asks you to confirm before it does.
+</Warning>
+
+## Properties you cannot filter on
+
+Some properties stay in the list but are greyed out and cannot be selected. Hover one to see why:
+
+- **Conversion properties** — a format-only cast, so they cannot be used as a filter.
+- **Non-indexed properties** — the property is not indexed and cannot be used as a filter.
+
+The tooltip links to **Open source property**, which takes you to the property on its data source, where indexing is configured.
+
+## Applied filters
+
+Press **Apply** to put the filters on the segment. The **Filter** button then shows how many filters are active, and the entry list is reduced to the matching entries.
+
+On the segment page, the applied filters are listed under **Selected criteria**. Select a filter chip to see the operator and the values behind it.
+
+![Selected criteria with a filter chip expanded](/images/guides/studio/segments/segment-criteria-chip-focus.png)

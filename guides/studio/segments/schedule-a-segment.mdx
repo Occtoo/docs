@@ -1,0 +1,46 @@
+---
+title: "Schedule a segment"
+description: "Give a segment a start and end date to control when it is active for destinations."
+---
+
+A schedule decides when a segment sends data to the destinations it is connected to. You set it under **Schedule segment** when you create a segment, and you can change it later from the segment page.
+
+![Schedule segment with a start and end date](/images/guides/studio/segments/new-segment-details-focus.png)
+
+- **Start date** — optional. Before this date the segment is **Scheduled** and inactive.
+- **End date** — optional. On this date the segment is archived automatically.
+
+Both fields use a date and hour picker.
+
+![Date and hour picker for the start date](/images/guides/studio/segments/new-segment-schedule-datepicker-focus.png)
+
+<Info>
+Times are shown in your local timezone. Leave the end date empty to keep the segment active indefinitely.
+</Info>
+
+## Segment statuses
+
+The status is shown next to the segment in the list and in the **Status** tile on the segment page.
+
+| Status | Meaning |
+| --- | --- |
+| Initializing | The segment is being initialized and becomes active shortly. |
+| Scheduled | The segment is inactive. It starts sending data to connected destinations on the start date. |
+| Active | The segment receives data updates and sends them to all connected destinations. With an end date set, it stays active until that date and is then archived automatically. |
+| Archived | The segment is inactive and no longer receives data updates. |
+
+## Change the schedule
+
+Open the segment and press **Edit** in the **Segment details** widget. The dialog holds the same start and end date fields.
+
+![Edit segment details with the schedule fields](/images/guides/studio/segments/segment-edit-details-focus.png)
+
+<Warning>
+The start date cannot be changed once the segment is active — only the end date can.
+</Warning>
+
+## Find scheduled segments
+
+On the **Segments** page, use **Filter** to list segments by status, or by **Active Period** to find segments that start before, end before, or run within a given period.
+
+![Active period filter on the segments list](/images/guides/studio/segments/segments-list-filter-active-period-focus.png)

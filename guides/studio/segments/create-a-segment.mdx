@@ -1,70 +1,81 @@
 ---
 title: "Create a segment"
-description: "A segment can be either build on a query based or be a fixed based selection"
+description: "Build a segment in four steps: details, segment type, entry selection, and save."
 ---
 
-<Info>
-A segment can be either build on a query based or be a fixed based selection
-</Info>
+A segment is a saved selection of entries from one card. You can use a segment in an endpoint to either include or exclude those entries.
 
-<Tip>
-A segment can be used in an endpoint to either include the segment or to exclude the segment from an endpoint
-</Tip>
+To start, press **New segment** in the upper right corner of the **Segments** page.
 
-To create a segment press the **Add segment** button in the upper right corner.
+![Segments list page with the New segment button](/images/guides/studio/segments/segments-list-focus.png)
 
-![An image from the static](/images/guides/studio/segments/add-segment-03a9377338ea77f88551365669f8ed32.png)
+<Steps>
+  <Step title="Fill in the segment details">
 
-Select a segment type based on what you would like it to look like in the final UI and confirm with the **Add [type]** button
+    - **Name your segment** — required, up to 50 characters. The name must be unique within the selected category.
+    - **Which card do you want it to be based on?** — required. The segment can only contain entries from this card.
+    - **Select a category** — required. Categories group similar segments together. See [Create a segment category](/guides/studio/segments/create-a-segment-category).
+    - **Schedule segment** — optional start and end date. See [Schedule a segment](/guides/studio/segments/schedule-a-segment).
+    - **Add a description** — optional, up to 200 characters.
 
-<Info>
-A segment type is build on a card definition
-</Info>
+    ![New segment details step with name, card, category, schedule and description](/images/guides/studio/segments/new-segment-details-focus.png)
 
-![An image from the static](/images/guides/studio/segments/segment-type-65b590b83078d3f6b5d0d52c381be0f1.png)
+    <Info>
+    The card list only contains active cards. Selecting a different card resets the category and any filters you already picked.
+    </Info>
 
-## Filtering
+    Press **Next**.
 
-By using the filters in the left hand column you can easily filter the data that you would like to include in the endpoint. The result of the filtering is reflected in the middle column.
+  </Step>
+  <Step title="Select the segment type">
 
-<Tip>
-If you would like to filter on other attributes that is not shown in the left column, just click on "Add more filter" to be able to serach and add more attributes.
+    The segment type decides how the entry selection behaves over time.
 
-![An image from the static](/images/guides/studio/segments/add-more-filters-95e001dd1150e7b8bf064c8f360526d0.png)
-</Tip>
+    - **Query** — dynamic segmentation. Entries are re-evaluated as data changes, while your filters and exclusions stay the same. A red colour filter, for example, keeps capturing red entries that are added later.
+    - **Fixed** — static segmentation. The entries you pick stay in the segment even when the underlying data changes.
+    - **Fixed · quick upload** — static segmentation built from a CSV list of entry IDs. See [Upload a fixed segment](/guides/studio/segments/upload-a-fixed-segment).
 
-### Dynamic query filter
+    ![Select segment type step with Query, Fixed and Fixed quick upload](/images/guides/studio/segments/new-segment-type-step.png)
 
-If you want your segment to dynamically include all cards that correspond to the applied filter then you want to create a dynamic query filter. This is easily achieved. Basically, once you are done defining what attribute values to filter on, you click **Apply** to add this filter to the segment.
+    Press **Next**.
 
-![An image from the static](/images/guides/studio/segments/segment-filters-30aa04660dd030fdffd80af902430860.png)
+  </Step>
+  <Step title="Select the entries">
 
-The entries that currently corresponds to this filter appears in the right-hand side column. Here you can choose to *exclude* induvidual entries by pressing the **exclude** button on the card. The card will remain in the right-hand column and can be re-included by pressing the **include** button on the card.
+    The selection view lists every entry on the card. Use **Filter** to narrow it down, **Search by entry title** to look for a single entry, and **Sort by** to change the order.
 
-![An image from the static](/images/guides/studio/segments/filter-exclude-1e39b6346804a243814e061e99e332d7.png)
+    ![Entry selection step for a query segment](/images/guides/studio/segments/card-selection-step.png)
 
-Verify that the correct filter type is used by inspecting the badge placed next to the *Selected* text. If it says "Query" you are creating a dynamic query filter segment. When pressing the **Save [type]** button you will be prompted to save the segment you just created.
+    The header shows how many entries the card holds. The tabs and the controls on each entry differ per segment type.
 
-![An image from the static](/images/guides/studio/segments/save-products-d3d904546001158b0fa5c3325cc38c73.png)
+    **Query** — the tabs are **Included entries** and **Excluded entries**. Apply filters and let the result set define the segment, then press **Exclude** on any entry you want to keep out of it.
 
-Give the segment a name, the identifier will be automatically filled in based on the name you choose. Optionally you can add a description and the segment is created by pressing **Save**.
+    ![Entry selection narrowed down by a colour filter](/images/guides/studio/segments/card-selection-filtered.png)
 
-![An image from the static](/images/guides/studio/segments/save-query-f274beb45fae3151f84808dcfbdea6df.png)
+    Excluded entries move to the **Excluded entries** tab, where you can include them again.
 
-You have now created a segment using a dynamic query filter, meaning that any new items matching the filter criteria will be automatically added to the segment.
+    ![Excluded entries tab](/images/guides/studio/segments/card-selection-excluded.png)
 
-### Fixed query filter
+    **Fixed** — the tabs are **All entries** and **Included entries**, and every entry carries a checkbox. Use the filters and search to find entries, tick the ones you want, and review the result under **Included entries**. **Clear** empties the selection.
 
-Start by identifying the induvidual entries you want to include in the segment by using the filters to identify them. When found, press the **include** button on the card in the middle column. The included card is added to the right hand column.
+    <Info>
+    Filtering has its own page with every filter type and operator: [Filter segment entries](/guides/studio/segments/filter-segment-entries).
+    </Info>
 
-![An image from the static](/images/guides/studio/segments/include-items-0b45bae9769594c2367d2380da8b993a.png)
+  </Step>
+  <Step title="Save the segment">
 
-Verify that the correct filter type is used by inspecting the badge placed next to the *Selected* text. If it says "Query" you are creating a dynamic query filter segment. When pressing the **Save [type]** button you will be prompted to save the segment you just created.
+    Press **Save segment** in the lower right corner. The button also shows how many filters the segment is saved with.
 
-Give the segment a name, the identifier will be automatically filled in based on the name you choose. Optionally you can add a description and the segment is created by pressing **Save**.
+    After saving, Studio asks whether the segment should be included in a destination. Choose **Yes, include in Destinations** to pick destinations right away, or **No, I'll do it later** to open the segment page.
 
-![An image from the static](/images/guides/studio/segments/save-query-f274beb45fae3151f84808dcfbdea6df.png)
+    <Info>
+    A new segment starts in **Initializing** status and becomes **Active** once the entries are processed. Allow a few minutes for large segments.
+    </Info>
 
-You have now created a segment using a fixed query filter, meaning that no new items will be added automatically. The only times the result set of this segment will change is when the segment is edited (cards are added or removed) or when a card is removed from the system.
+  </Step>
+</Steps>
 
-## Video walkthrough
+## Leaving the flow
+
+**Cancel** discards the segment, and **Back** returns to the previous step. Both ask for confirmation first, because going back clears the current selections and filters.
