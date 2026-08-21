@@ -13,6 +13,10 @@ A new tenant-scoped Events API is available on the public API: around 30 platfor
 
 The ingest surface is now exposed through the public API gateway: data-provider token issuance, import verification, and import endpoints, fully documented in the [Ingest API reference](/api-reference/ingest/overview).
 
+## Typed source ingest
+
+The new [`POST /sources/{sourceId}` endpoint](/api-reference/ingest/typed-source-entries) accepts native JSON strings, numbers, booleans, `null` values, and arrays of strings. It validates values against configured source property types and infers types for new properties before queueing the complete batch. Tenant-level Applications use the `write:sources` scope and source grants to control access. A successful response includes a correlation ID, the accepted entry count, and any new properties inferred from the request.
+
 ## Smarter card setup
 
 When creating card properties from source properties, Studio now suggests sensible property IDs, and new card definitions default their property groups from the data source's property groups — so cards start organized the way your source data already is.
