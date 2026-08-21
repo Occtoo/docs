@@ -2,7 +2,7 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Occtoo application authentication",
-    "description": "Obtain short-lived access tokens for a tenant-level Occtoo Application.",
+    "description": "Obtain short-lived access tokens for an Occtoo Application or Data Provider.",
     "version": "1.0.0"
   },
   "servers": [
@@ -15,7 +15,7 @@
     "/oauth2/token": {
       "post": {
         "summary": "Request an Application access token",
-        "description": "Exchanges an Application's client credentials for a short-lived access token. Use the tenant ID as the audience for ingest and events. Use an API version ID as the audience for a protected destination API.",
+        "description": "Exchanges an Application's or Data Provider's client credentials for a short-lived access token. Use the tenant ID as the audience for ingest, media, and events. Use an API version ID as the audience for a protected destination API.",
         "operationId": "requestApplicationAccessToken",
         "security": [],
         "requestBody": {
@@ -31,18 +31,18 @@
                       "client_credentials"
                     ],
                     "default": "client_credentials",
-                    "description": "OAuth grant used by machine-to-machine Applications."
+                    "description": "OAuth grant used by machine-to-machine Applications and Data Providers."
                   },
                   "client_id": {
                     "type": "string",
-                    "description": "Client ID of the tenant-level Application.",
+                    "description": "OAuth client ID of the Application or Data Provider.",
                     "example": "<client-id>"
                   },
                   "client_secret": {
                     "type": "string",
                     "format": "password",
                     "writeOnly": true,
-                    "description": "Client secret of the tenant-level Application. Treat this value as a secret.",
+                    "description": "Client secret of the Application or Data Provider. Treat this value as a secret.",
                     "example": "<client-secret>"
                   },
                   "audience": {
@@ -52,9 +52,10 @@
                   },
                   "scope": {
                     "type": "string",
-                    "description": "Optional space-delimited scopes. Omit for destination access or to request every tenant scope granted to the Application.",
+                    "description": "Optional space-delimited scopes. Use import-datasource for a Data Provider. Omit for destination access or to request every tenant scope granted to an Application.",
                     "examples": [
                       "write:sources",
+                      "import-datasource",
                       "read:events",
                       "read:events:pull",
                       "read:events:sse"
@@ -77,6 +78,16 @@
                     "client_secret": "<client-secret>",
                     "audience": "<tenant-id>",
                     "scope": "write:sources"
+                  }
+                },
+                "dataProvider": {
+                  "summary": "Access legacy import and media ingest",
+                  "value": {
+                    "grant_type": "client_credentials",
+                    "client_id": "<data-provider-client-id>",
+                    "client_secret": "<data-provider-client-secret>",
+                    "audience": "<tenant-id>",
+                    "scope": "import-datasource"
                   }
                 },
                 "events": {

@@ -84,38 +84,46 @@ To ingest data into Occtoo, you need a configured data provider. This is a secur
 - Tracked properties: Automatic discovery of data attributes.
 - Reusable data providers: Centralized upload management.
 
-### Generate an Access Token (Authentication)
+### Generate an access token
 
-To securely upload data, you must first generate an access token using your Data Provider credentials (client ID and secret). This token is required for all authenticated API calls.
+To securely upload data, first generate an access token using your Data Provider OAuth client ID and client secret. Send a standard OAuth 2.0 client credentials request to `https://auth.occtoo.com/oauth2/token` with your tenant ID as the audience and `import-datasource` as the scope.
 
 Example: retrieve token
 
 ```cs
-var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "dataProviders/tokens");
-tokenRequest.Content = new StringContent(JsonSerializer.Serialize(new
+var tokenRequest = new HttpRequestMessage(
+    HttpMethod.Post,
+    "https://auth.occtoo.com/oauth2/token");
+tokenRequest.Content = new FormUrlEncodedContent(new Dictionary<string, string>
 {
-    id = dataProviderId,
-    secret = dataProviderSecret
-}), Encoding.UTF8, "application/json");
+    ["grant_type"] = "client_credentials",
+    ["client_id"] = dataProviderClientId,
+    ["client_secret"] = dataProviderClientSecret,
+    ["audience"] = tenantId,
+    ["scope"] = "import-datasource"
+});
 
 var tokenResponse = await httpClient.SendAsync(tokenRequest);
 var tokenResponseContent = await tokenResponse.Content.ReadAsStreamAsync();
 var tokenDocument = JsonSerializer.Deserialize<JsonDocument>(tokenResponseContent);
-var token = tokenDocument.RootElement.GetProperty("result").GetProperty("accessToken").GetString();
+var token = tokenDocument.RootElement.GetProperty("access_token").GetString();
 ```
 
-#### 1a. Client/secret
+#### 1a. Client ID and secret
 
-To be able to call the the ingest service, a provider needs to be created in Occtoo studio; [https://studio.occtoo.com/sources/dataProviders](https://studio.occtoo.com/sources/dataProviders), in order to create a provider the name and a source needs to be selected. When the provider is created the secret needs to be saved.
+To call the Ingest API, create a provider in [Occtoo Studio](https://studio.occtoo.com/sources/dataProviders), select its allowed sources, and save its OAuth client ID and client secret securely.
 
-You can try it out by using postman: POST - [https://destinations.occtoo.com/dataProviders/tokens](https://destinations.occtoo.com/dataProviders/tokens), with the body below.
+In Postman, send a `POST` request to `https://auth.occtoo.com/oauth2/token` with an `application/x-www-form-urlencoded` body:
 
-```json
-{
-    "id" : "{@DATA-PROVIDER-ID}",
-    "secret": "{@DATA-PROVIDER-SECRET}"
-}
+```text
+grant_type=client_credentials
+client_id={DATA-PROVIDER-CLIENT-ID}
+client_secret={DATA-PROVIDER-CLIENT-SECRET}
+audience={TENANT-ID}
+scope=import-datasource
 ```
+
+See [Data Provider access token](/api-reference/authentication/application-token#data-provider-access-token) for the interactive request and response schema.
 
 #### 2. Prepare and Ingest Data (Key-Value Structure)
 
@@ -125,7 +133,7 @@ If your integration requires custom business logic, such as conditional mapping 
 Example: Ingesting Entity Data
 
 ```cs
-var ingestRequest = new HttpRequestMessage(HttpMethod.Post, $"import/{dataSource}");
+var ingestRequest = new HttpRequestMessage(HttpMethod.Post, $"https://api.occtoo.com/datasources/{dataSource}/import");
 ingestRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
 ingestRequest.Content = new StringContent(JsonSerializer.Serialize(new

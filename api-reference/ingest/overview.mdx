@@ -20,7 +20,7 @@ Typed ingest requires a tenant-level Application token with the `write:sources` 
 
 ### Legacy import
 
-The legacy import format serializes property values as strings. Exchange registered data-provider credentials for a token, then use that bearer token to call the import endpoint.
+The legacy import format serializes property values as strings. Exchange registered Data Provider credentials through the Occtoo authorization service, then use that bearer token to call the import endpoint.
 
 <Accordion title="Data import sequence diagrams">
   <Tabs>
@@ -43,10 +43,11 @@ The legacy import format serializes property values as strings. Exchange registe
       sequenceDiagram
         autonumber
         participant Integration
+        participant Auth as Occtoo authorization
         participant API as Ingest API
 
-        Integration->>API: POST /v2/dataproviders/tokens
-        API-->>Integration: 200 bearer token
+        Integration->>Auth: POST /oauth2/token (scope: import-datasource)
+        Auth-->>Integration: 200 access token
         Integration->>API: POST /datasources/{dataSource}/import
         API-->>Integration: 202 correlation ID
       ```
@@ -100,47 +101,15 @@ Adhering to these guidelines will help ensure smooth and efficient handling of p
 
 ### API endpoints
 
-#### Token
+#### Data Provider access token
 
-The tokens endpoint is accessed via a POST request, and upon passing valid credentials, a token is returned. This token remains valid for 60 minutes from its creation and can be reused an unlimited number of times within that timeframe.
-
-```text
-https://api.occtoo.com/v2/dataproviders/tokens
-```
+Request a token through the standard OAuth 2.0 client credentials flow at `https://auth.occtoo.com/oauth2/token`. Use your Data Provider OAuth client ID and client secret, your tenant ID as `audience`, and `import-datasource` as `scope`.
 
 <Tip>
-  Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
+  Cache and reuse the returned `access_token` until it expires instead of requesting a new token for every import.
 </Tip>
 
-##### Request payload
-
-The tokens endpoint accepts a JSON payload in the body, consisting of the properties `id` and `secret`. These properties correspond to the identifiers provided by the [data provider](/guides/studio/sources/add-a-data-provider) used for the import.
-
-```javascript
-{
-    "id" : "{@DATA-PROVIDER-ID}",
-    "secret": "{@DATA-PROVIDER-SECRET}"
-}
-```
-
-##### Response payload
-
-Upon successful authentication of the passed credentials, an **access token** is returned from the API using the format below.
-
-```javascript
-// Response HTTP Code 200 OK
-{
-    "result": {
-        "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKV1QgQnVpbGRlciIsImlhdCI6MTcxMTAwOTE2OCwiZXhwIjoxNzQyNTQ4NzY4LCJhdWQiOiJPY2N0b28gdXNlcnMiLCJzdWIiOiJGYWtlIHRva2VuIGFzIGV4YW1wbGUiLCJkb21haW4iOiJPY2N0b28iLCJyb2xlIjoidXNlciJ9.bzcVlU0yDN9yGNbMMe8B_4jsGJszkczGAlT4ocJL0uA",
-        "expiresIn": 3600,
-        "tokenType": "Bearer",
-        "refreshToken": null,
-        "scope": "occtoo.user.writer"
-    },
-    "errors": [],
-    "requestId": "a4b78c500643fa1271eb84bb6b2d028b"
-}
-```
+See [Data Provider access token](/api-reference/authentication/application-token#data-provider-access-token) for the request fields, interactive playground, and response schema.
 
 #### Import
 
@@ -326,7 +295,7 @@ The status of the import is given by the HTTP response code of the request.
 
 ## Media ingest
 
-Media ingestion can be performed using the ingest API, but the media file to be uploaded must be available at a public URL. The Occtoo [onboarding SDK](/api-reference/overview#onboarding-sdk) supports uploading via streaming content directly. The import sequence must always start with a request for a token, as all imports require authentication. Once the token is obtained, the import endpoint can be called.
+Media ingestion can be performed using the ingest API, but the media file to be uploaded must be available at a public URL. The Occtoo [onboarding SDK](/api-reference/overview#onboarding-sdk) supports uploading via streaming content directly. Before calling a media endpoint, request a Data Provider access token from `https://auth.occtoo.com/oauth2/token`.
 
 All uploaded media files are provided with an Occtoo media file identifier. The media file ID is used for all API interactions related to the file. When uploading a file, users have the option to provide their own unique identifiers as an attribute to the file. The unique ID attribute is respected, meaning that once it is used, any additional upload attempts with that same unique ID will fail. If a media file needs to be replaced, users must first delete the original and then upload the updated file.
 
@@ -335,7 +304,7 @@ All uploads are made asynchronously, and the ingest API allows for multiple uplo
 Media information can be retrieved either using user-provided unique IDs via the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier), or using the Occtoo media file ID via the [Media File Information by File ID API](#media-file-information-by-file-id).
 
 <Accordion title="Media API sequence diagrams">
-  Each flow sends a bearer token from `POST /v2/dataproviders/tokens` in the `Authorization` header.
+  Each flow sends a [Data Provider access token](/api-reference/authentication/application-token#data-provider-access-token) in the `Authorization` header.
 
   <Tabs>
     <Tab title="Upload">
@@ -408,47 +377,15 @@ Media information can be retrieved either using user-provided unique IDs via the
 
 ### API endpoints
 
-#### Token
+#### Data Provider access token
 
-The tokens endpoint is accessed via a POST request, and upon passing valid credentials, a token is returned. This token remains valid for 60 minutes from its creation and can be reused an unlimited number of times within that timeframe.
-
-```text
-https://api.occtoo.com/v2/dataproviders/tokens
-```
+Request a token through the standard OAuth 2.0 client credentials flow at `https://auth.occtoo.com/oauth2/token`. Use your Data Provider OAuth client ID and client secret, your tenant ID as `audience`, and `import-datasource` as `scope`.
 
 <Tip>
-  Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
+  Cache and reuse the returned `access_token` until it expires instead of requesting a new token for every media API call.
 </Tip>
 
-##### Request payload
-
-The tokens endpoint accepts a JSON payload in the body, consisting of the properties `id` and `secret`. These properties correspond to the identifiers provided by the [data provider](/guides/studio/sources/add-a-data-provider) used for the import.
-
-```javascript
-{
-    "id" : "{@DATA-PROVIDER-ID}",
-    "secret": "{@DATA-PROVIDER-SECRET}"
-}
-```
-
-##### Response payload
-
-Upon successful authentication of the passed credentials, an **access token** is returned from the API using the format below.
-
-```javascript
-// Response HTTP Code 200 OK
-{
-    "result": {
-        "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKV1QgQnVpbGRlciIsImlhdCI6MTcxMTAwOTE2OCwiZXhwIjoxNzQyNTQ4NzY4LCJhdWQiOiJPY2N0b28gdXNlcnMiLCJzdWIiOiJGYWtlIHRva2VuIGFzIGV4YW1wbGUiLCJkb21haW4iOiJPY2N0b28iLCJyb2xlIjoidXNlciJ9.bzcVlU0yDN9yGNbMMe8B_4jsGJszkczGAlT4ocJL0uA",
-        "expiresIn": 3600,
-        "tokenType": "Bearer",
-        "refreshToken": null,
-        "scope": "occtoo.user.writer"
-    },
-    "errors": [],
-    "requestId": "a4b78c500643fa1271eb84bb6b2d028b"
-}
-```
+See [Data Provider access token](/api-reference/authentication/application-token#data-provider-access-token) for the request fields, interactive playground, and response schema.
 
 #### Upload via links
 
