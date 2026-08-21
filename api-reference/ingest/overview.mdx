@@ -22,10 +22,36 @@ Typed ingest requires a tenant-level Application token with the `write:sources` 
 
 The legacy import format serializes property values as strings. Exchange registered data-provider credentials for a token, then use that bearer token to call the import endpoint.
 
-<Accordion title="Data import sequence visualization">
-  ![Data ingest](/images/api-reference/ingest/integration-light.png)
+<Accordion title="Data import sequence diagrams">
+  <Tabs>
+    <Tab title="Typed ingest">
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant Auth as Occtoo authorization
+        participant API as Ingest API
 
-  ![Data ingest](/images/api-reference/ingest/integration-dark.png)
+        Integration->>Auth: POST /oauth2/token (scope: write:sources)
+        Auth-->>Integration: 200 access token
+        Integration->>API: POST /sources/{sourceId} with typed JSON
+        API-->>Integration: 202 correlation ID and accepted count
+      ```
+    </Tab>
+    <Tab title="Legacy import">
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
+
+        Integration->>API: POST /v2/dataproviders/tokens
+        API-->>Integration: 200 bearer token
+        Integration->>API: POST /datasources/{dataSource}/import
+        API-->>Integration: 202 correlation ID
+      ```
+    </Tab>
+  </Tabs>
 </Accordion>
 
 ### Rules
@@ -308,44 +334,76 @@ All uploads are made asynchronously, and the ingest API allows for multiple uplo
 
 Media information can be retrieved either using user-provided unique IDs via the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier), or using the Occtoo media file ID via the [Media File Information by File ID API](#media-file-information-by-file-id).
 
-<Accordion title="Media upload via link sequence visualization">
-  Upload media files using links via the [Upload via Links API](#upload-via-links).
+<Accordion title="Media API sequence diagrams">
+  Each flow sends a bearer token from `POST /v2/dataproviders/tokens` in the `Authorization` header.
 
-  ![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-light.png)
+  <Tabs>
+    <Tab title="Upload">
+      Upload media files from public links with the [Upload via Links API](#upload-via-links).
 
-  ![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-dark.png)
-</Accordion>
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-<Accordion title="Get media upload status sequence visualization">
-  Get the upload status of an individual file using the Occtoo media file ID with the [Upload Status API](#upload-status).
+        Integration->>API: PUT /media/uploads/links with bearer token
+        API-->>Integration: 202 accepted media IDs
+      ```
+    </Tab>
+    <Tab title="Status">
+      Check an asynchronous upload with the [Upload Status API](#upload-status).
 
-  ![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-light.png)
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-  ![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-dark.png)
-</Accordion>
+        Integration->>API: GET /media/uploads/{mediaId} with bearer token
+        API-->>Integration: 200 upload progress and state
+      ```
+    </Tab>
+    <Tab title="File ID">
+      Get metadata for one file with the [Media File Information by File ID API](#media-file-information-by-file-id).
 
-<Accordion title="Get media information by ID sequence visualization">
-  Get detailed media information of an individual media file using the [Media File Information by File ID API](#media-file-information-by-file-id).
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-  ![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-light.png)
+        Integration->>API: GET /media/files/{mediaId} with bearer token
+        API-->>Integration: 200 metadata and public URL
+      ```
+    </Tab>
+    <Tab title="Unique ID">
+      Get metadata for several files with the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier).
 
-  ![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-dark.png)
-</Accordion>
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-<Accordion title="Get media information by unique identifier sequence visualization">
-  Get detailed media information for one or multiple media files using the unique ID attribute with the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier).
+        Integration->>API: POST /media/files/batch with bearer token
+        API-->>Integration: 200 results grouped by unique ID
+      ```
+    </Tab>
+    <Tab title="Delete">
+      Delete a file by its Occtoo media ID with the [Delete Media endpoint](#delete-media).
 
-  ![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-light.png)
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-  ![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-dark.png)
-</Accordion>
-
-<Accordion title="Delete media sequence visualization">
-  Delete an uploaded media file with the [Delete Media File endpoint](#delete-media) using the assigned Occtoo Media File ID.
-
-  ![Delete media sequence](/images/api-reference/ingest/delete-media-light.png)
-
-  ![Delete media sequence](/images/api-reference/ingest/delete-media-dark.png)
+        Integration->>API: DELETE /media/files/{mediaId} with bearer token
+        API-->>Integration: 204 no content
+      ```
+    </Tab>
+  </Tabs>
 </Accordion>
 
 ### API endpoints
