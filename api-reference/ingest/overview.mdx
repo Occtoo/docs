@@ -6,12 +6,53 @@ Ingesting data into Occtoo is facilitated by the Ingest API. This powerful API s
 
 ## Data ingest
 
-Data ingestion is performed using the ingest API. Two endpoints, _tokens_ and _import_, are necessary for completing a data import. The import sequence always needs to start with a request for a token, as all imports require authentication. Using the token, the import endpoint can then be called.
+The Ingest API supports typed JSON and the legacy string-based entity format. Both formats validate the complete request before accepting it for asynchronous processing.
 
-<Accordion title="Data import sequence visualization">
-  ![Data ingest](/images/api-reference/ingest/integration-light.png)
+### Typed source entries
 
-  ![Data ingest](/images/api-reference/ingest/integration-dark.png)
+Use `POST https://api.occtoo.com/sources/{sourceId}` to send native JSON strings, numbers, booleans, `null` values, and arrays of strings. Occtoo validates values against configured source property types and infers types for new properties. New list properties use `,` as their delimiter unless the source already defines one.
+
+Typed ingest requires a tenant-level Application token with the `write:sources` scope and access to the target source. A successful `202 Accepted` response includes the batch correlation ID, accepted entry count, and any new properties inferred from the request.
+
+<Card title="Typed source entries" icon="brackets-curly" href="/api-reference/ingest/typed-source-entries">
+  View authentication requirements, type mapping and inference rules, request and response schemas, and the interactive API playground.
+</Card>
+
+### Legacy import
+
+The legacy import format serializes property values as strings. Exchange registered Data Provider credentials through the Occtoo authorization service, then use that bearer token to call the import endpoint.
+
+<Accordion title="Data import sequence diagrams">
+  <Tabs>
+    <Tab title="Typed ingest">
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant Auth as Occtoo authorization
+        participant API as Ingest API
+
+        Integration->>Auth: POST /oauth2/token (scope: write:sources)
+        Auth-->>Integration: 200 access token
+        Integration->>API: POST /sources/{sourceId} with typed JSON
+        API-->>Integration: 202 correlation ID and accepted count
+      ```
+    </Tab>
+    <Tab title="Legacy import">
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant Auth as Occtoo authorization
+        participant API as Ingest API
+
+        Integration->>Auth: POST /oauth2/token (scope: import-datasource)
+        Auth-->>Integration: 200 access token
+        Integration->>API: POST /datasources/{dataSource}/import
+        API-->>Integration: 202 correlation ID
+      ```
+    </Tab>
+  </Tabs>
 </Accordion>
 
 ### Rules
@@ -60,54 +101,22 @@ Adhering to these guidelines will help ensure smooth and efficient handling of p
 
 ### API endpoints
 
-#### Token
+#### Data Provider access token
 
-The tokens endpoint is accessed via a POST request, and upon passing valid credentials, a token is returned. This token remains valid for 60 minutes from its creation and can be reused an unlimited number of times within that timeframe.
-
-```text
-https://ingest.occtoo.com/dataProviders/tokens
-```
+Request a token through the standard OAuth 2.0 client credentials flow at `https://auth.occtoo.com/oauth2/token`. Use your Data Provider OAuth client ID and client secret, your tenant ID as `audience`, and `import-datasource` as `scope`.
 
 <Tip>
-  Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
+  Cache and reuse the returned `access_token` until it expires instead of requesting a new token for every import.
 </Tip>
 
-##### Request payload
-
-The tokens endpoint accepts a JSON payload in the body, consisting of the properties `id` and `secret`. These properties correspond to the identifiers provided by the [data provider](/guides/studio/sources/add-a-data-provider) used for the import.
-
-```javascript
-{
-    "id" : "{@DATA-PROVIDER-ID}",
-    "secret": "{@DATA-PROVIDER-SECRET}"
-}
-```
-
-##### Response payload
-
-Upon successful authentication of the passed credentials, an **access token** is returned from the API using the format below.
-
-```javascript
-// Response HTTP Code 200 OK
-{
-    "result": {
-        "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKV1QgQnVpbGRlciIsImlhdCI6MTcxMTAwOTE2OCwiZXhwIjoxNzQyNTQ4NzY4LCJhdWQiOiJPY2N0b28gdXNlcnMiLCJzdWIiOiJGYWtlIHRva2VuIGFzIGV4YW1wbGUiLCJkb21haW4iOiJPY2N0b28iLCJyb2xlIjoidXNlciJ9.bzcVlU0yDN9yGNbMMe8B_4jsGJszkczGAlT4ocJL0uA",
-        "expiresIn": 3600,
-        "tokenType": "Bearer",
-        "refreshToken": null,
-        "scope": "occtoo.user.writer"
-    },
-    "errors": [],
-    "requestId": "a4b78c500643fa1271eb84bb6b2d028b"
-}
-```
+See [Data Provider access token](/api-reference/authentication/application-token#data-provider-access-token) for the request fields, interactive playground, and response schema.
 
 #### Import
 
 Imports are initiated by sending a POST request to the URL ending with the identifier of the [data source](/guides/studio/sources/add-a-data-source) to which the data is intended for import.
 
 ```text
-https://ingest.occtoo.com/import/{@DATA-SOURCE-IDENTIFIER}
+https://api.occtoo.com/datasources/{@DATA-SOURCE-IDENTIFIER}/import
 ```
 
 The import endpoint accepts a JSON payload consisting of one or several entities. All import requests need to be authenticated by providing a bearer token as the authentication method. Upon successful import, the API will respond with an HTTP Code 202 Accepted, provided that the import content follows the [rules](#rules).
@@ -286,7 +295,7 @@ The status of the import is given by the HTTP response code of the request.
 
 ## Media ingest
 
-Media ingestion can be performed using the ingest API, but the media file to be uploaded must be available at a public URL. The Occtoo [onboarding SDK](/api-reference/overview#onboarding-sdk) supports uploading via streaming content directly. The import sequence must always start with a request for a token, as all imports require authentication. Once the token is obtained, the import endpoint can be called.
+Media ingestion can be performed using the ingest API, but the media file to be uploaded must be available at a public URL. The Occtoo [onboarding SDK](/api-reference/overview#onboarding-sdk) supports uploading via streaming content directly. Before calling a media endpoint, request a Data Provider access token from `https://auth.occtoo.com/oauth2/token`.
 
 All uploaded media files are provided with an Occtoo media file identifier. The media file ID is used for all API interactions related to the file. When uploading a file, users have the option to provide their own unique identifiers as an attribute to the file. The unique ID attribute is respected, meaning that once it is used, any additional upload attempts with that same unique ID will fail. If a media file needs to be replaced, users must first delete the original and then upload the updated file.
 
@@ -294,96 +303,96 @@ All uploads are made asynchronously, and the ingest API allows for multiple uplo
 
 Media information can be retrieved either using user-provided unique IDs via the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier), or using the Occtoo media file ID via the [Media File Information by File ID API](#media-file-information-by-file-id).
 
-<Accordion title="Media upload via link sequence visualization">
-  Upload media files using links via the [Upload via Links API](#upload-via-links).
+<Accordion title="Media API sequence diagrams">
+  Each flow sends a [Data Provider access token](/api-reference/authentication/application-token#data-provider-access-token) in the `Authorization` header.
 
-  ![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-light.png)
+  <Tabs>
+    <Tab title="Upload">
+      Upload media files from public links with the [Upload via Links API](#upload-via-links).
 
-  ![Media upload via link sequence](/images/api-reference/ingest/media-upload-via-links-dark.png)
-</Accordion>
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-<Accordion title="Get media upload status sequence visualization">
-  Get the upload status of an individual file using the Occtoo media file ID with the [Upload Status API](#upload-status).
+        Integration->>API: PUT /media/uploads/links with bearer token
+        API-->>Integration: 202 accepted media IDs
+      ```
+    </Tab>
+    <Tab title="Status">
+      Check an asynchronous upload with the [Upload Status API](#upload-status).
 
-  ![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-light.png)
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-  ![Get media upload status sequence](/images/api-reference/ingest/media-upload-status-dark.png)
-</Accordion>
+        Integration->>API: GET /media/uploads/{mediaId} with bearer token
+        API-->>Integration: 200 upload progress and state
+      ```
+    </Tab>
+    <Tab title="File ID">
+      Get metadata for one file with the [Media File Information by File ID API](#media-file-information-by-file-id).
 
-<Accordion title="Get media information by ID sequence visualization">
-  Get detailed media information of an individual media file using the [Media File Information by File ID API](#media-file-information-by-file-id).
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-  ![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-light.png)
+        Integration->>API: GET /media/files/{mediaId} with bearer token
+        API-->>Integration: 200 metadata and public URL
+      ```
+    </Tab>
+    <Tab title="Unique ID">
+      Get metadata for several files with the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier).
 
-  ![Get media information by ID sequence](/images/api-reference/ingest/media-information-by-id-dark.png)
-</Accordion>
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-<Accordion title="Get media information by unique identifier sequence visualization">
-  Get detailed media information for one or multiple media files using the unique ID attribute with the [Media File Information by Unique Identifier API](#media-file-information-by-unique-identifier).
+        Integration->>API: POST /media/files/batch with bearer token
+        API-->>Integration: 200 results grouped by unique ID
+      ```
+    </Tab>
+    <Tab title="Delete">
+      Delete a file by its Occtoo media ID with the [Delete Media endpoint](#delete-media).
 
-  ![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-light.png)
+      ```mermaid
+      sequenceDiagram
+        autonumber
+        participant Integration
+        participant API as Ingest API
 
-  ![Get media information by unique identifier sequence](/images/api-reference/ingest/media-information-by-unique-identifier-dark.png)
-</Accordion>
-
-<Accordion title="Delete media sequence visualization">
-  Delete an uploaded media file with the [Delete Media File endpoint](#delete-media) using the assigned Occtoo Media File ID.
-
-  ![Delete media sequence](/images/api-reference/ingest/delete-media-light.png)
-
-  ![Delete media sequence](/images/api-reference/ingest/delete-media-dark.png)
+        Integration->>API: DELETE /media/files/{mediaId} with bearer token
+        API-->>Integration: 204 no content
+      ```
+    </Tab>
+  </Tabs>
 </Accordion>
 
 ### API endpoints
 
-#### Token
+#### Data Provider access token
 
-The tokens endpoint is accessed via a POST request, and upon passing valid credentials, a token is returned. This token remains valid for 60 minutes from its creation and can be reused an unlimited number of times within that timeframe.
-
-```text
-https://ingest.occtoo.com/dataProviders/tokens
-```
+Request a token through the standard OAuth 2.0 client credentials flow at `https://auth.occtoo.com/oauth2/token`. Use your Data Provider OAuth client ID and client secret, your tenant ID as `audience`, and `import-datasource` as `scope`.
 
 <Tip>
-  Since the number of possible requests to the token endpoint for a single data provider is limited, it is **highly** recommended to employ mechanisms to store and reuse the received token for the time period it is valid.
+  Cache and reuse the returned `access_token` until it expires instead of requesting a new token for every media API call.
 </Tip>
 
-##### Request payload
-
-The tokens endpoint accepts a JSON payload in the body, consisting of the properties `id` and `secret`. These properties correspond to the identifiers provided by the [data provider](/guides/studio/sources/add-a-data-provider) used for the import.
-
-```javascript
-{
-    "id" : "{@DATA-PROVIDER-ID}",
-    "secret": "{@DATA-PROVIDER-SECRET}"
-}
-```
-
-##### Response payload
-
-Upon successful authentication of the passed credentials, an **access token** is returned from the API using the format below.
-
-```javascript
-// Response HTTP Code 200 OK
-{
-    "result": {
-        "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJKV1QgQnVpbGRlciIsImlhdCI6MTcxMTAwOTE2OCwiZXhwIjoxNzQyNTQ4NzY4LCJhdWQiOiJPY2N0b28gdXNlcnMiLCJzdWIiOiJGYWtlIHRva2VuIGFzIGV4YW1wbGUiLCJkb21haW4iOiJPY2N0b28iLCJyb2xlIjoidXNlciJ9.bzcVlU0yDN9yGNbMMe8B_4jsGJszkczGAlT4ocJL0uA",
-        "expiresIn": 3600,
-        "tokenType": "Bearer",
-        "refreshToken": null,
-        "scope": "occtoo.user.writer"
-    },
-    "errors": [],
-    "requestId": "a4b78c500643fa1271eb84bb6b2d028b"
-}
-```
+See [Data Provider access token](/api-reference/authentication/application-token#data-provider-access-token) for the request fields, interactive playground, and response schema.
 
 #### Upload via links
 
 Media uploads are initiated by sending a PUT request containing a list of one or more media files to be uploaded. Upon successful acceptance of the payload, the API will respond with an HTTP Code 202 Accepted.
 
 ```text
-https://ingest.occtoo.com/media/uploads/links
+https://api.occtoo.com/media/uploads/links
 ```
 
 ##### Request payload
@@ -489,7 +498,7 @@ The response is divided into two parts: `succeeded` and `failures`. Since file u
 The upload status of an individual file can be checked by sending a GET request with the provided Occtoo media ID. Upon successful request, the API will respond with an HTTP Code 200 OK.
 
 ```text
-https://ingest.occtoo.com/media/uploads/{@OCCTOO-MEDIA-ID}
+https://api.occtoo.com/media/uploads/{@OCCTOO-MEDIA-ID}
 ```
 
 ##### Response payload
@@ -527,7 +536,7 @@ The response payload contains detailed information on the current status of the 
 Detailed media information can be fetched by doing a GET request with the Occtoo media ID. Upon successful request, the API will respond with an HTTP Code 200 OK.
 
 ```text
-https://ingest.occtoo.com/media/files/{@OCCTOO-MEDIA-ID}
+https://api.occtoo.com/media/files/{@OCCTOO-MEDIA-ID}
 ```
 
 ##### Response payload
@@ -567,7 +576,7 @@ The response contains the **public URL** that is to be used when accessing the m
 To fetch detailed media information for multiple objects simultaneously, you can make a POST request to the batch endpoint, providing a list of unique identifiers. Upon a successful request, the API will respond with an HTTP Code 200 OK.
 
 ```text
-https://ingest.occtoo.com/media/files/batch
+https://api.occtoo.com/media/files/batch
 ```
 
 ##### Request payload
@@ -653,5 +662,5 @@ Unique identifiers that were not found are sorted under `failures`.
 To delete a media object one sends a DELETE request containing the Occtoo media ID. Upon successful request, the API will respond with an HTTP Code 204 No Content.
 
 ```text
-https://ingest.occtoo.com/media/files/{@OCCTOO-MEDIA-ID}
+https://api.occtoo.com/media/files/{@OCCTOO-MEDIA-ID}
 ```

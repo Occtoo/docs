@@ -209,9 +209,9 @@
             "openapi": "/api-reference/openapi/ingest.json",
             "pages": [
               "api-reference/ingest/overview",
+              "POST /sources/{sourceId}",
               "POST /datasources/{dataSource}/import/verify",
-              "POST /datasources/{dataSource}/import",
-              "POST /v2/dataproviders/tokens"
+              "POST /datasources/{dataSource}/import"
             ]
           },
           {

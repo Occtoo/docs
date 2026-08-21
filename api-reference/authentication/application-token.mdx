@@ -1,12 +1,12 @@
 ---
 title: "Request an Application access token"
 sidebarTitle: "Application access token"
-description: "Exchange tenant-level Application credentials for a destination, ingest, or events access token."
+description: "Exchange Application or Data Provider credentials for a short-lived Occtoo access token."
 openapi: "/api-reference/openapi/applications.json POST /oauth2/token"
 playground: "interactive"
 ---
 
-Use **Try it** to exchange an Application's client credentials for a short-lived access token. The audience identifies the API the token targets, while the optional scope limits what the token can do.
+Use **Try it** to exchange an Application's or Data Provider's client credentials for a short-lived access token. The audience identifies the API the token targets, while the optional scope limits what the token can do.
 
 <Warning>
   Treat the client secret and returned access token as secrets. Use the playground only for direct testing. Do not copy either value into browser application code, source control, logs, or client-side configuration.
@@ -18,10 +18,15 @@ Use **Try it** to exchange an Application's client credentials for a short-lived
 | --- | --- | --- |
 | Call a protected destination API version | API version ID | Leave empty |
 | Ingest data | Tenant ID | `write:sources` |
+| Legacy import or media ingest with a Data Provider | Tenant ID | `import-datasource` |
 | Use every Events API transport | Tenant ID | `read:events` |
 | Pull events and inspect metadata | Tenant ID | `read:events:pull` |
 | Stream events with SSE | Tenant ID | `read:events:sse` |
 
 Omit `scope` with the tenant audience to request every tenant API scope enabled for the Application.
+
+## Data Provider access token
+
+For legacy import and media ingest, send a `client_credentials` request to `https://auth.occtoo.com/oauth2/token`. Use the OAuth client ID and client secret for your [Data Provider](/guides/studio/sources/add-a-data-provider), your tenant ID as `audience`, and `import-datasource` as `scope`. Send the returned `access_token` as a bearer token to the Ingest API and reuse it until it expires.
 
 See [Applications](/concepts/applications) for the complete access model, resource restrictions, language examples, and troubleshooting guidance.
