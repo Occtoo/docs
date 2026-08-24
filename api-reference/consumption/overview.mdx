@@ -1,5 +1,5 @@
 ---
-title: "Data consumption"
+title: "Destination"
 ---
 
 Data consumption in Occtoo involves retrieving and utilizing data from various custom destinations. Occtoo allows users to create destinations in Occtoo Studio, specifying properties such as identifier, languages, regions, and endpoints. These destinations can be either public — accessible via a unique URL without authentication — or protected, requiring an access token. Users can fetch destination data using various [filtering](#filtering) and querying capabilities provided by the Occtoo API. This flexibility enables efficient data retrieval tailored to specific needs, supporting a wide range of use cases and integrations.
@@ -408,6 +408,36 @@ The POST request uses the filter syntax and can be combined freely with other fi
   </Tab>
 </Tabs>
 
+#### select
+
+**Type: string (array)**
+
+Return only the specified properties for each entry instead of the full result object. This reduces the response size and is useful when a client only needs a few properties from an endpoint that exposes many. The property names are the ones exposed by the endpoint, meaning the [alias](/technical/destinations#endpoint-configuration) if one is configured.
+
+If 'select' is omitted, all properties configured on the endpoint are returned.
+
+For the GET request, the 'select' parameter can be repeated to return multiple properties at once. For the POST request, an array of one or more property names is required.
+
+<Tabs>
+  <Tab title="GET">
+```text
+https://{@DESTINATION-ENDPOINT-ADDRESS}?select=propertyA&select=propertyB
+```
+  </Tab>
+  <Tab title="POST">
+```javascript
+//Payload body
+{
+  "select": ["propertyA", "propertyB"]
+}
+```
+  </Tab>
+</Tabs>
+
+<Tip>
+'Select' can be combined freely with filtering, sorting, and searching — those operate on all properties of the endpoint, not just the selected ones. If only the IDs of the entries are needed, use [listIds](#listids) instead.
+</Tip>
+
 #### listIds
 
 **Type: boolean**
@@ -752,6 +782,8 @@ The parameter 'periodSince' can be combined with 'periodBefore' to get all updat
 ### API response
 
 The structure of the response object remains consistent whether it's a POST or a GET request. It always includes the language being retrieved and an array of result objects. If there are no results, an empty array is returned. The result objects vary between endpoints and destinations, as they are configured individually. To view the structure of a specific endpoint, an OpenAPI URL is generated, as described in the [OpenAPI documentation](#openapi-documentation) section.
+
+If the API parameter [`select`](#select) is used, each result object contains only the requested properties.
 
 If the endpoint contains facets, they are included as an array. The structure of the facet response is described under [facets](#facets). If facets are not configured, the "facet" property is omitted from the response.
 
