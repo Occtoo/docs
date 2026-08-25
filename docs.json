@@ -268,7 +268,8 @@
               "integrations/formatters/newstore"
             ]
           }
-        ]
+        ],
+        "hidden": true
       },
       {
         "tab": "Changelog",
