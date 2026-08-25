@@ -10,16 +10,20 @@ Read more at [norce.io](https://www.norce.io/).
 
 ## Introduction
 
-This is a template project for building a provider that onboards data from the [Norce API](https://docs.norce.io/api-reference/). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Norce).
+This is a template project for building a provider that onboards data from the [Norce API](https://docs.norce.io/api-reference/).
 
 ## How it works
 
 The solution consists of the functions shown below.
 
-![Architectural overview of the Norce provider](/images/integrations/providers/NorceProvider-0bce99a5f9b5424e6abd4ab6ac90c031.png)
+![Data flow of the Norce provider](/images/integrations/providers/norce-provider-dataflow.png)
+
+- **Get Url** (timer trigger) — calls the Norce API for the file URL and saves the URL, onboarded flag, and timestamp to table storage.
+- **Read File** (timer trigger) — picks up a pending URL from table storage, downloads the file from Norce file storage, stages it in blob storage, and adds a message to the queue.
+- **Queue-triggered function** — reads the staged file from blob storage, parses it, and onboards the data to Occtoo.
 
 To get the provider details required by the template, see [Add a data provider](/guides/studio/sources/add-a-data-provider) and [Client/secret](/get-started/get-data-into-occtoo#1a-clientsecret).
 
 ## Download and installation
 
-Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Provider.Norce), then build and deploy it to your Azure instance.
+Request the latest code from [developer@occtoo.com](mailto:developer@occtoo.com), then build and deploy it to your Azure instance.

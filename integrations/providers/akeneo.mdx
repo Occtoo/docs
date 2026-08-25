@@ -10,23 +10,18 @@ Read more at [akeneo.com](https://www.akeneo.com).
 
 ## Introduction
 
-This is a template project for building a provider that onboards products, categories, and media from [Akeneo PIM](https://www.akeneo.com). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Akeneo).
+This is a template project for building a provider that onboards products, categories, and media from [Akeneo PIM](https://www.akeneo.com).
 
 <Note>
-The provider is no longer distributed as an app on the Akeneo marketplace. Download the source code from GitHub and deploy it yourself, in the same way as the other boilerplate providers.
+The provider is no longer distributed as an app on the Akeneo marketplace. Request the source code and deploy it yourself, in the same way as the other boilerplate providers.
 </Note>
 
 ## How it works
 
-The solution has three function pairs working as shown below.
-
-![Architectural overview of the Akeneo provider](/images/integrations/providers/AkeneoProvider.jpg)
-
-Two HTTP-triggered functions act as entry points. `PrepareAkeneoConnection` registers a connection for a tenant, and `StartDataSynchronization` starts the synchronization. From there, the start orchestration fans out into sub-orchestrations for categories, products, and media, which page through the Akeneo API and push the results to the Occtoo onboarding API. The date of the last successful synchronization is recorded per source, so subsequent runs only transfer what has changed.
+The provider is an Azure Functions app built on Durable Functions. One HTTP endpoint registers an Akeneo connection for a tenant, and another starts a synchronization for that tenant. Each run imports categories, products, and media in parallel, paging through the Akeneo API and onboarding the results to Occtoo, and transfers only what has changed since the last successful run.
 
 To get the provider details required by the template, see [Add a data provider](/guides/studio/sources/add-a-data-provider) and [Client/secret](/get-started/get-data-into-occtoo#1a-clientsecret).
 
 ## Download and installation
 
-Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Provider.Akeneo), then build and deploy it. The [README](https://github.com/Occtoo/Occtoo.Provider.Akeneo?tab=readme-ov-file#running-the-app) lists the application settings the provider needs.
-
+Request the latest code from [developer@occtoo.com](mailto:developer@occtoo.com), then build and deploy it. The included README lists the application settings the provider needs.

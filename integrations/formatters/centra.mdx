@@ -10,13 +10,13 @@ Read more at [centra.com](https://centra.com).
 
 ## Introduction
 
-This is a template project for building a formatter that sends data from an Occtoo destination to [Centra](https://centra.com/). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Formatter.Centra).
+This is a template project for building a formatter that sends data from an Occtoo destination to [Centra](https://centra.com/).
 
 ## How it works
 
 The solution consists of the functions shown below.
 
-![Architectural overview of the Centra formatter](/images/integrations/formatters/CentraFormatter-2c985cb54eb069ac0957ff60682f6120.png)
+![Data flow of the Centra formatter](/images/integrations/formatters/centra-formatter-dataflow.png)
 
 - **Orchestrator** — runs every two minutes and, depending on the state of the finite-state machine, calls the Occtoo API and fills the queue.
 - **ProcessProductMasterFromQueue** (queue trigger) — loads the flattened SKU list for a specific product master, creates the product hierarchy required by the import process, and imports the product (variants and SKUs) into the Centra database.
@@ -25,4 +25,4 @@ To get the destination details required by the template, see [Create a destinati
 
 ## Download and installation
 
-Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Formatter.Centra), then build and deploy it to your Azure instance.
+Request the latest code from [developer@occtoo.com](mailto:developer@occtoo.com), then build and deploy it to your Azure instance.

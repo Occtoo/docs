@@ -10,16 +10,20 @@ Read more at [shopify.com](https://www.shopify.com/).
 
 ## Introduction
 
-This is a template project for building a provider that onboards data from the [Shopify API](https://shopify.dev/docs/api). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Shopify).
+This is a template project for building a provider that onboards data from the [Shopify API](https://shopify.dev/docs/api).
 
 ## How it works
 
 The solution consists of the functions shown below.
 
-![Architectural overview of the Shopify provider](/images/integrations/providers/ShopifyProvider-0ca43482e74056aab52e68877a605b4a.png)
+![Data flow of the Shopify provider](/images/integrations/providers/shopify-provider-dataflow.png)
+
+- **FullImport** — adds all items to the queue for a full import.
+- **Incremental** — adds only the changed items to the queue.
+- **Queue-triggered provider** — picks up each queued message, gets the data from the Shopify API, and onboards it to Occtoo.
 
 To get the provider details required by the template, see [Add a data provider](/guides/studio/sources/add-a-data-provider) and [Client/secret](/get-started/get-data-into-occtoo#1a-clientsecret).
 
 ## Download and installation
 
-Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Provider.Shopify), then build and deploy it to your Azure instance.
+Request the latest code from [developer@occtoo.com](mailto:developer@occtoo.com), then build and deploy it to your Azure instance.
