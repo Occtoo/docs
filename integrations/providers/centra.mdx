@@ -10,19 +10,19 @@ Read more at [centra.com](https://centra.com).
 
 ## Introduction
 
-This is a template project for building a provider that onboards data from [Centra](https://centra.com). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Provider.Centra).
+This is a template project for building a provider that onboards data from [Centra](https://centra.com).
 
 ## How it works
 
 The solution consists of the functions shown below.
 
-![Architectural overview of the Centra provider](/images/integrations/providers/CentraProvider-fe9cec1129f812c7007288ad9373fc91.png)
+![Data flow of the Centra provider](/images/integrations/providers/centra-provider-dataflow.png)
 
 - **FillQueueFromCentra** (HTTP trigger) — called to start moving products from the Centra API into the queue.
-- **ImportQueuedItemsToOcctoo** (queue trigger) — picks up the queued items, creates a key-value entity ([dynamic entity](https://github.com/Occtoo/Occtoo.Onboarding.Sdk/blob/main/src/Occtoo.Onboarding.Sdk/Models/DynamicEntity.cs)), and sends it to Occtoo onboarding.
+- **ImportQueuedItemsToOcctoo** (queue trigger) — picks up the queued items, creates a key-value dynamic entity and sends it to Occtoo onboarding.
 
 To get the provider details required by the template, see [Add a data provider](/guides/studio/sources/add-a-data-provider) and [Client/secret](/get-started/get-data-into-occtoo#1a-clientsecret).
 
 ## Download and installation
 
-Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Provider.Centra), then build and deploy it to your Azure instance.
+Request the latest code from [developer@occtoo.com](mailto:developer@occtoo.com), then build and deploy it to your Azure instance.

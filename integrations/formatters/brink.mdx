@@ -10,16 +10,19 @@ Read more at [brinkcommerce.com](https://www.brinkcommerce.com/).
 
 ## Introduction
 
-This is a template project for building a formatter that sends data from an Occtoo destination to [Brink Commerce](https://www.brinkcommerce.com/). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Formatter.Brink).
+This is a template project for building a formatter that sends data from an Occtoo destination to [Brink Commerce](https://www.brinkcommerce.com/).
 
 ## How it works
 
 The solution consists of the functions shown below.
 
-![Architectural overview of the Brink formatter](/images/integrations/formatters/BrinkFormatter-c5ae3d8be6c75fb1cccdb7596ed5ab19.png)
+![Data flow of the Brink formatter](/images/integrations/formatters/brink-formatter-dataflow.png)
+
+- **AddToQueue** (HTTP trigger) — called to get data from the Occtoo destination API, then adds a message to the storage queue.
+- **BrinkFormatter** (queue trigger) — picks up the queued message and puts the data to the Brink API.
 
 To get the destination details required by the template, see [Create a destination](/guides/studio/destinations/create-a-destination) and [Register an application](/guides/studio/destinations/register-an-application).
 
 ## Download and installation
 
-Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Formatter.Brink), then build and deploy it to your Azure instance.
+Request the latest code from [developer@occtoo.com](mailto:developer@occtoo.com), then build and deploy it to your Azure instance.

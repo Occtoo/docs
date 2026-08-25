@@ -10,13 +10,13 @@ Read more at [newstore.com](https://www.newstore.com/).
 
 ## Introduction
 
-This is a template project for building a formatter that sends data from an Occtoo destination to [NewStore](https://www.newstore.com/). The code is available on [GitHub](https://github.com/Occtoo/Occtoo.Formatter.Newstore).
+This is a template project for building a formatter that sends data from an Occtoo destination to [NewStore](https://www.newstore.com/).
 
 ## How it works
 
 The solution consists of the functions shown below.
 
-![Architectural overview of the NewStore formatter](/images/integrations/formatters/NewstoreFormatter-6a6f051bcb71f5055deab4d8d50af301.png)
+![Data flow of the NewStore formatter](/images/integrations/formatters/newstore-formatter-dataflow.png)
 
 - **NewStoreExport** (HTTP trigger) — called to get products from the Occtoo API. It writes JSON files to blob storage and sends a message to the queue.
 - **NewStoreOutboxDequeue** (queue trigger) — picks up the queued items and sends them to NewStore.
@@ -25,4 +25,4 @@ To get the destination details required by the template, see [Create a destinati
 
 ## Download and installation
 
-Fetch the latest code from our [GitHub repository](https://github.com/Occtoo/Occtoo.Formatter.Newstore), then build and deploy it to your Azure instance.
+Request the latest code from [developer@occtoo.com](mailto:developer@occtoo.com), then build and deploy it to your Azure instance.
