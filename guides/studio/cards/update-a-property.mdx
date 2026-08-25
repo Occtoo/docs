@@ -1,14 +1,52 @@
 ---
-title: "Update an existing property"
+title: "Update a property"
+description: "What can be changed on an existing card property, and what is fixed for good."
 ---
 
-- Open the card in a detailed view.
-- Select the property you would like to update and press **Edit**.
+Open the card, find the property in the **Properties** widget and press the pencil on its row.
 
-![An image from the static](/images/guides/studio/cards/card-update-1-b8068af07d531e504eea6ac3f27e3f0c.png)
+![Property row actions](/images/guides/studio/cards/property-row-actions-focus.png)
 
-You can update the **Name** and **Description** of the property after the card has been published.
+The **Edit property** dialog is the same dialog as [Add a property](/guides/studio/cards/add-a-property), with the mapping fields locked.
+
+![Edit property dialog](/images/guides/studio/cards/edit-property-dialog.png)
+
+## What you can change
+
+- **Display name**
+- **Description**
+- **Allow enrichment**
+- **Assign tag** and **Use the key of the tag**
+- **Display section**
+- **Display option**
+- **Show on interface**
+
+## What is locked
+
+- **Identifier**
+- **Property selection**
+- **Data source**
+- **Data source property ID**
+- **Data type** and **Delimiter**
+
+<Warning>
+The identifier and the source mapping are fixed once a property has been added. To point a card at a different source property, or to change a property's data type, remove the property and add it again — see [Remove a property](/guides/studio/cards/remove-a-property).
+</Warning>
 
 <Info>
-If you need to change the identifier or the dataType of a property you will need to delete it first and create it again.
+A property that is still pending — added but not yet activated — is the exception: its mapping fields are still editable until the card is activated.
+</Info>
+
+## Changes on an active card
+
+On a **Draft** card an edit applies immediately. On an **Active** card the property moves to **Pending changes** and the edit is applied when you press **Activate card**. See [Work with pending changes](/guides/studio/cards/pending-changes).
+
+## The id property
+
+Every card has a built-in `id` property. It has its own dialog, **Edit 'id' property**, with a single field: **Display option**.
+
+![Edit id property dialog](/images/guides/studio/cards/edit-id-property.png)
+
+<Info>
+The `id` property cannot be renamed, retyped or removed, and it has no source mapping of its own.
 </Info>

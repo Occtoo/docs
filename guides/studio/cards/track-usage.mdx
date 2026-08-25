@@ -1,10 +1,31 @@
 ---
-title: "Track usage of data in card"
-description: "Cards"
+title: "Track usage of a card"
+description: "See which sources a card is built on, and which segments and destinations depend on it."
 ---
 
-### Cards
+Every card page shows what it depends on and what depends on it, so you can tell what a change will affect before you make it.
 
-By simply clicking a card you can find out which sources it's based on, which segments it is used in and also which destinations it's included in.
+![Card details, segments and destinations widgets](/images/guides/studio/cards/card-usage-widgets.png)
 
-![An image from the static](/images/guides/studio/cards/card-tracking-972b500c0f82daee72cc97f29b9f903d.png)
+## What the card is built on
+
+**Card details** lists the data sources under **Based on**. Each is a link to the source page.
+
+## Segments using this card
+
+**Segments using this card** lists every segment built on the card, with its entry count. Each name links to the segment.
+
+## Destinations using this card
+
+**Destinations using this card** lists the destinations that include the card, with the endpoint **Version** and whether it is **Published** or **Not published**.
+
+<Info>
+  The **Used by** counts in the page header and the counts in the widget titles
+  can differ: the header counts endpoint versions, while the widget counts
+  distinct destinations.
+</Info>
+
+<Warning>
+  Anything listed here is affected when you activate a change to the card,
+  archive it or remove one of its properties. Check these widgets first.
+</Warning>

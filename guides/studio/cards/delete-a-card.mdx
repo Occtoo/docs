@@ -1,23 +1,26 @@
 ---
 title: "Delete a card"
+description: "Remove a card and all its details for good."
 ---
 
-Select the Card that you would like to delete, click on the menu at the top right corner and then select "Delete"
+Open the card, open the menu in the upper right corner and pick **Delete card**. Confirm with **Yes, delete card**. Studio returns to the **Cards** page.
+
+![Delete card dialog](/images/guides/studio/cards/delete-card-dialog.png)
+
+<Warning>
+Deleting is permanent: "This card and all its details will be deleted. This action cannot be undone." To take a card out of use but keep it, [archive it](/guides/studio/cards/archive-and-restore-a-card) instead.
+</Warning>
+
+## When deletion is blocked
+
+The menu item is disabled when the card is in use, with the tooltip "Cards used in destinations, segments or relations cannot be deleted."
+
+To delete such a card, first remove it from every destination and segment, and delete the relations it takes part in. The [usage widgets](/guides/studio/cards/track-usage) on the card page list everything you need to clear.
 
 <Info>
-You are only able to delete a card that has not been in Status: Active
+Deletion is also blocked while the card is **Updating**: "Card is currently being updated and cannot be deleted." It needs the card delete permission — the same one as archiving.
 </Info>
 
 <Info>
-You might come across the following card statuses:
-
-- **Draft** - The card is not in use yet, properties can be added, changed and removed
-- **Active** - The card is active and any changes will need a new version of the destination
-- **Pending changes** - Changes have been done to an already active card and need to be activated
-- **Updating** - Changes are being processed
-- **Archived** - The card is archived and not in use anymore
+A card's status does not by itself prevent deletion. An **Active** card with no segments, destinations or relations can be deleted; an unused **Archived** card can be deleted too.
 </Info>
-
-delete-card2.png
-![An image from the static](/images/guides/studio/cards/delete-card1-0469598bedb1debe2e241b13610b652e.png)
-![An image from the static](/images/guides/studio/cards/delete-card2-e89c329ce00d60464f914a8f2a81929c.png)

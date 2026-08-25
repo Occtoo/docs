@@ -88,16 +88,18 @@
                   {
                     "group": "Cards",
                     "pages": [
+                      "guides/studio/cards/find-cards",
                       "guides/studio/cards/create-a-card",
-                      "guides/studio/cards/display-name-description-and-image",
-                      "guides/studio/cards/card-summary",
+                      "guides/studio/cards/card-page",
                       "guides/studio/cards/add-a-property",
                       "guides/studio/cards/update-a-property",
-                      "guides/studio/cards/delete-a-property",
+                      "guides/studio/cards/remove-a-property",
+                      "guides/studio/cards/display-sections-and-options",
                       "guides/studio/cards/pending-changes",
                       "guides/studio/cards/card-relations",
                       "guides/studio/cards/track-usage",
-                      "guides/studio/cards/archive-a-card",
+                      "guides/studio/cards/copy-a-card",
+                      "guides/studio/cards/archive-and-restore-a-card",
                       "guides/studio/cards/delete-a-card"
                     ]
                   },
@@ -506,11 +508,11 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/card/how-to-create-card-name-card-descrtiption-card-image",
-      "destination": "/guides/studio/cards/display-name-description-and-image"
+      "destination": "/guides/studio/cards/display-sections-and-options"
     },
     {
       "source": "/docs/occtoo-studio/guides/card/how-to-see-card-summery",
-      "destination": "/guides/studio/cards/card-summary"
+      "destination": "/guides/studio/cards/card-page"
     },
     {
       "source": "/docs/occtoo-studio/guides/card/how-to-add-property-existing-card",
@@ -534,11 +536,11 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/card/how-to-archive-a-card",
-      "destination": "/guides/studio/cards/archive-a-card"
+      "destination": "/guides/studio/cards/archive-and-restore-a-card"
     },
     {
       "source": "/docs/occtoo-studio/guides/card/delete-properties-card",
-      "destination": "/guides/studio/cards/delete-a-property"
+      "destination": "/guides/studio/cards/remove-a-property"
     },
     {
       "source": "/docs/occtoo-studio/guides/card/how-to-delete-card",
@@ -791,6 +793,22 @@
     {
       "source": "/docs/Integration/Consumption/Formatters/newstore",
       "destination": "/integrations/formatters/newstore"
+    },
+    {
+      "source": "/guides/studio/cards/card-summary",
+      "destination": "/guides/studio/cards/card-page"
+    },
+    {
+      "source": "/guides/studio/cards/display-name-description-and-image",
+      "destination": "/guides/studio/cards/display-sections-and-options"
+    },
+    {
+      "source": "/guides/studio/cards/delete-a-property",
+      "destination": "/guides/studio/cards/remove-a-property"
+    },
+    {
+      "source": "/guides/studio/cards/archive-a-card",
+      "destination": "/guides/studio/cards/archive-and-restore-a-card"
     }
   ]
 }
