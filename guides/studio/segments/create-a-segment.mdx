@@ -15,13 +15,20 @@ To start, press **New segment** in the upper right corner of the **Segments** pa
     - **Name your segment** — required, up to 50 characters. The name must be unique within the selected category.
     - **Which card do you want it to be based on?** — required. The segment can only contain entries from this card.
     - **Select a category** — required. Categories group similar segments together. See [Create a segment category](/guides/studio/segments/create-a-segment-category).
+    - **Tags** — optional. Free-text labels on the segment, described below.
     - **Schedule segment** — optional start and end date. See [Schedule a segment](/guides/studio/segments/schedule-a-segment).
     - **Add a description** — optional, up to 200 characters.
 
-    ![New segment details step with name, card, category, schedule and description](/images/guides/studio/segments/new-segment-details-focus.png)
+    ![New segment details step with name, card, category, tags, schedule and description](/images/guides/studio/segments/new-segment-tags-focus.png)
 
     <Info>
     The card list only contains active cards. Selecting a different card resets the category and any filters you already picked.
+    </Info>
+
+    Open **Tags** to pick from the tags already used in the tenant, or type a new one and press **Create "…"** to add it. A segment can carry several tags, and they can be changed later from the segment page.
+
+    <Info>
+    Tags travel with the segment as metadata: a destination can fetch the tags of the segments it serves, so the receiving side can act on them without hard-coding segment names.
     </Info>
 
     Press **Next**.
