@@ -1,26 +1,53 @@
 ---
 title: "Work with pending changes"
+description: "Review, revert and activate changes made to an active card."
 ---
 
-Select the card and open it.
-Press the tab **Changes** to see the pending changes.
+Changes to a **Draft** card apply immediately. Changes to an **Active** card are held as pending changes until you activate the card, so a live destination keeps serving the old shape until you decide otherwise.
+
+The card then has status **Pending Changes**, and its status card reads "Uncommitted changes were made to this card's properties or relations. Activate the card to apply these changes."
+
+## Where pending changes are shown
+
+Pending changes are shown in the **Status** column of the properties table, on the rows that changed.
+
+![Status column in the properties table](/images/guides/studio/cards/properties-widget.png)
+
+| Status              | Meaning                                    |
+| ------------------- | ------------------------------------------ |
+| **New**             | The property was added and is not live yet |
+| **Pending changes** | An existing property was edited            |
+| **Pending delete**  | The property is queued for removal         |
+| **Active**          | Live on the card                           |
+
+**Pending changes** and **Pending delete** carry the tooltip "This property has uncommitted changes. Activate the card to apply them."
 
 <Info>
-You can work with several pending changes before deciding to activate them.
+  On a card that has never been activated, every property is still a pending
+  addition, so the whole table reads **New** until you press **Activate card**
+  for the first time. The built-in `id` property has no status of its own and its
+  cell stays empty.
 </Info>
 
-![An image from the static](/images/guides/studio/cards/card-changes-1-10654c48a2b8746f43035de479f92073.png)
+## Revert one change
+
+A row with a pending edit or a pending removal shows a revert button in place of the edit pencil. Pressing it drops that pending change and leaves the property as it is live, confirmed with "Property reverted successfully".
 
 <Info>
-If your card is active and you make changes to the card your changes will appear as 'Pending' until you Activate them. You can review them under the tab **Changes**.
+  You can collect as many pending changes as you like before activating, and
+  revert them one row at a time.
 </Info>
 
-<Info>
-You might come across the following card statuses:
+## Activate the changes
 
-- **Draft** - The card is not in use yet, properties can be added, changed and removed
-- **Active** - The card is active and any changes will need a new version of the destination
-- **Pending changes** - Changes have been done to an already active card and need to be activated
-- **Updating** - Changes are being processed
-- **Archived** - The card is archived and not in use anymore
+Press **Activate card** in the top right of the card page. The card moves to **Updating** while the changes are applied.
+
+<Warning>
+  While a card is **Updating** you cannot add, edit or remove properties, and
+  the card cannot be archived, deleted or copied. Wait for the update to finish.
+</Warning>
+
+<Info>
+  Activating needs the card activation permission. Without it the **Activate
+  card** button is disabled.
 </Info>

@@ -1,41 +1,100 @@
 ---
-title: "Add a property on an existing card"
+title: "Add a property to a card"
+description: "Map a data source property onto a card, or create a new source property from the card."
 ---
 
+Properties are added from the **Properties** widget on the card page. You can add properties to a card in any status except **Archived** and **Updating**.
+
 <Steps>
-  <Step title="Open the card">
+  <Step title="Open the Properties widget">
 
-    Select the card and open it.
+    Open the card and press **Add Property** in the **Properties** widget.
 
-  </Step>
-  <Step title="Select Add Property">
-
-    Select **Add Property**.
-
-    ![An image from the static](/images/guides/studio/cards/how-to-add-property-1-4a6ae0a628d97988f65fe59817366255.png)
+    ![Add Property button in the Properties widget](/images/guides/studio/cards/properties-widget-add-focus.png)
 
   </Step>
-  <Step title="Add property details">
+  <Step title="Fill in the basic settings">
 
-    Add the following information
+    The **Add new property** dialog groups its fields into **Basic settings**, **Interface settings** and **Advanced settings**. The first two are open by default.
 
-    - **Name** – Choose the name for your card
-    - **Identifier** - Identifier will be automatically filled using the name you chose in the previous step. You will have the possiblity to change it if needed.
-    - **Data source** - Select the data source for the field
-    - **Data source property Id** - Select the property id from the data source dropdown
-    - **Description** – Add a description if needed
-    - **Data type** - Select the data type for the field
+    ![Basic settings in the Add new property dialog](/images/guides/studio/cards/add-property-basic-settings.png)
+
+    - **Display name** — required, up to 50 characters. The name shown in Studio.
+    - **Identifier** — required, up to 50 characters. This is the name destinations using this card will see. It is derived from the display name as you type, until you edit it yourself.
+    - **Property selection** — **Choose an existing property** maps a property that already exists in the data source. **Create a new property** writes a new property to the source instead.
+    - **Data source** — required. Only sources the card is built on, plus sources that share IDs with them, are listed.
+    - **Data source property ID** — required. Searchable list of the properties in the selected source.
+    - **Data type** — required.
+    - **Delimiter** — required for **List** and **Localized list**: the character that separates values in the source, such as `|`.
+    - **Description** — optional, up to 200 characters.
+    - **Allow enrichment** — whether the value can be edited on an entry in the catalog.
+    - **Assign tag** — connects the property to a managed tag list.
 
     <Info>
-    If you are adding a type="List", you need to select the delimiter that seperates the value in the source of this field (such as "|").
+    Picking a property in **Data source property ID** replaces **Identifier** with the identifier suggested by the source, so set the identifier after choosing the property, not before.
     </Info>
 
-    ![An image from the static](/images/guides/studio/cards/how-to-add-property-2-98e498f7aa1b2a7f426a4e925badf863.png)
+    ![Data source property ID list](/images/guides/studio/cards/add-property-source-property.png)
+
+    <Warning>
+    The identifier has to be unique on the card. If it is already taken, "Identifier must be unique" appears under the field.
+    </Warning>
+
+  </Step>
+  <Step title="Set the interface settings">
+
+    ![Interface settings in the Add new property dialog](/images/guides/studio/cards/add-property-interface-settings.png)
+
+    - **Display section** — **Choose an existing display section** picks one of the card's sections; **Create a new display section** lets you type a new name.
+    - **Display option** — which slot on an entry card this property fills. See [Display sections and display options](/guides/studio/cards/display-sections-and-options).
+    - **Show on interface** — **Yes** shows the property on entries in the catalog, **No** hides it while keeping it available to destinations.
+
+  </Step>
+  <Step title="Save">
+
+    Press **Save**. **Save** stays disabled until you change something.
+
+    On a **Draft** card the property is added straight away. On an **Active** card it is added as a pending change and appears with status **New** until you press **Activate card** — see [Work with pending changes](/guides/studio/cards/pending-changes).
 
   </Step>
 </Steps>
 
+## Data type and delimiter come from the source
+
+When you map an existing source property, the source decides the type. If the source pins a type and offers no conversions, **Data type** and **Delimiter** are locked and the tooltip reads "Inherited from the data source property. Edit it on the data source page to change." — with an **Open data source page** link.
+
+![Locked data type with its tooltip](/images/guides/studio/cards/add-property-data-type-locked.png)
+
+If the source property defines allowed conversions, **Data type** offers the source type plus those conversion targets, and the tooltip reads "Type and delimiter options are defined by the data source property. Edit the allowed conversions on the data source page to change." Choosing a conversion target fills in that target's delimiter for you.
+
 <Info>
-If your card is in the **Draft** status you are able to do all the changes.
-If your card is in the **Active** status your changes will appear as **Pending** until you activate them. You can review them under the tab **Changes**.
+To use a type the source does not offer, change the property, or its allowed conversions, on the data source itself.
 </Info>
+
+## Creating a new source property from the card
+
+Pick **Create a new property** when the value does not exist in the source yet. The first field becomes **Save property to data source** and **Data source property ID** becomes a free-text field, prefilled from the identifier. **Data type** is yours to choose, because no source property constrains it.
+
+![Create a new property selected](/images/guides/studio/cards/add-property-new-source-property.png)
+
+<Warning>
+Saving creates the property in the data source as well as on the card. The data source property ID has to be unique in that source — "Custom data source property ID must be unique" appears if it is taken. Studio lowercases the ID it sends to the source.
+</Warning>
+
+## Advanced settings
+
+**Advanced settings** is collapsed by default and only appears for the **Text** and **List** data types. It holds **List values**, a comma-separated list, with the note "For supporting legacy data structure".
+
+![Advanced settings](/images/guides/studio/cards/add-property-advanced-settings.png)
+
+<Info>
+**Advanced settings** is behind a feature flag, so it may not appear in your tenant.
+</Info>
+
+## Tags
+
+**Assign tag** connects the property to a managed tag list. When a tag is set and the data type is **Text** or **List**, an extra **Use the key of the tag** choice appears: **Yes** stores the tag's key, **No** stores its value.
+
+<Warning>
+For **Text** and **List** properties, a Localized Text tag list can only be used key-based. Choosing **No** raises "For Text and List data types, only Key based tags can be selected for Localized Text tag type."
+</Warning>

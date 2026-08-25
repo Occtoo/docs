@@ -1,71 +1,99 @@
 ---
 title: "Create a card"
+description: "Build a card in four steps: card details, property selection, property details, and display sections."
 ---
 
+A card is a unified dataset built on one or more data sources. Creating one is a four-step flow that opens full screen.
+
+To start, press **New card** in the upper right corner of the **Cards** page.
+
 <Steps>
-  <Step title="Add a new card">
+  <Step title="Fill in the card details">
 
-    To create a card click on the Button **+Add new card** in the right-hand corner.
+    - **Name your card** — required, up to 50 characters. The name has to be unique; if it is taken, Studio answers "A cardDefinition with this name already exists. Please choose another." when you press **Next**.
+    - **Add a description** — optional, up to 200 characters.
+    - **Choose data source** — required. You can pick several.
+    - **Allow properties enrichment** — **Yes** or **No**. This sets the default for every property selected in this flow. **No** is preselected.
 
-    ![An image from the static](/images/guides/studio/cards/create-a-card-1-49389037114af08707bdb87ba251d17a.png)
-
-  </Step>
-  <Step title="Add card details">
-
-    Add the following information:
-
-    - **Name** – Choose the name for your card.
-    - **Identifier** – Identifier will be automatically filled using the name you chose in the previous step. You will have the possiblity to change it if needed.
-    - **Description** – Describe what data you are selecting for the card e.g. Product and Stock data.
-    - **Available data source** – Select one or several sources.
-
-    ![An image from the static](/images/guides/studio/cards/create-a-card-2-0ae38982f543ae7cb063274a714fe4d1.png)
+    ![New card step with name, description, data source and enrichment](/images/guides/studio/cards/create-card-details.png)
 
     <Info>
-    To be able to select more then one souce you have to define in your source what sources that shares the same ID
-    </Info>
-
-    <Info>
-    If you do not have the possiblity to have the same ID on the source, there is a possiblity to create a relation but it will need to be done programmatically.
+    After the first source is picked, the list narrows to sources that share IDs with it, and a note under the field reads either "<i>source</i> shares ID with <i>other sources</i>" or "<i>source</i> does not share any IDs". Sources that share no IDs cannot be combined on one card. You define which sources share IDs on the source itself.
     </Info>
 
   </Step>
-  <Step title="Add properties">
+  <Step title="Select the properties to include">
 
-    Select the properties that you need to use on your card from the list. When you are ready press "Select". There is no limit on the amount of properties that you can use.
+    The table lists every property in the selected sources, with **Source property ID**, **Source** and **Data origin** (**Source based** or **User created**). Tick the properties the card should hold.
 
-    ![An image from the static](/images/guides/studio/cards/create-a-card-3-0757f9a71917eb30808a4512a26fa4e5.png)
+    ![Property selection step](/images/guides/studio/cards/create-card-select-properties.png)
 
-    <Tip>
-    If you have several properties to select from, use the search or the filter functionality to narrow down your results.
-    </Tip>
-
-    Give the property a Name. The Identifier will be again filled automatically and select the type of the property. When you are ready press the "Create" button.
+    Narrow the list with **Search values** or the **Data sources** filter. There is no limit on how many properties you select.
 
     <Info>
-    The Identifier is the name that will be used in the destinations that uses this card.
+    With nothing selected, the button reads **Save card without properties** and creates an empty card. It changes to **Next** as soon as you tick a property.
     </Info>
 
-    <Info>
-    If you are adding a Type = List, you need to select the delimiter that seperates the value in the source of this field.
-    </Info>
+    **Create property** adds a property that does not exist in the source yet. Enter a **Property ID**, pick the **Data Source**, and use **Add another** for more rows. The dialog notes "Once the card is created, the property is added to the source".
 
-    ![An image from the static](/images/guides/studio/cards/create-a-card-4-275fbaccc59b8abbbf5518c54f889ed3.png)
+    ![Create property dialog](/images/guides/studio/cards/create-card-create-property.png)
 
   </Step>
-  <Step title="Activate the card">
+  <Step title="Fill in the property details">
 
-    Your card will appear as a: "Draft" which means that you are able to modify the card until you choose to publish your card
+    Set how each selected property behaves on the card. **Identifier** is prefilled from the source's suggestion.
+
+    ![Property details step](/images/guides/studio/cards/create-card-property-details.png)
+
+    - **Display name** — required, the name shown in Studio.
+    - **Identifier** — the name destinations use for this property.
+    - **Data type** and **Delimiter** — inherited from the source property. See [Add a property](/guides/studio/cards/add-a-property) for when these can be changed.
+    - **Display section** — which section the property sits in on the entry interface.
+    - **Display option (opt.)** — see [Display sections and display options](/guides/studio/cards/display-sections-and-options).
+    - **Show on interface** — whether the property is visible on entries.
+    - **Assign tag** and **Key based tag** — connect the property to a managed tag list.
+
+    <Warning>
+    The identifier is fixed once the card is created. Everything else on this step can be changed later.
+    </Warning>
+
+    Selecting rows reveals two bulk actions.
+
+    ![Bulk actions on the property details step](/images/guides/studio/cards/create-card-bulk-edit-focus.png)
+
+    - **Copy Suggested ID & Display Name** — fills identifier and display name for the selected rows from the source property.
+    - **Bulk edit display section** — moves the selected rows into one section.
+
+    ![Bulk edit display section dialog](/images/guides/studio/cards/create-card-bulk-display-section.png)
+
+    Pick **Add new section** in that dialog to type a **New section name**.
 
     <Info>
-    You might come across the following card statuses:
+    The **Allow enrichment** column only appears when you answered **Yes** to **Allow properties enrichment** in the first step.
+    </Info>
 
-    - **Draft** - The card is not in use yet, properties can be added, changed and removed
-    - **Active** - The card is active and any changes will need a new version of the destination
-    - **Pending changes** - Changes have been done to an already active card and need to be activated
-    - **Updating** - Changes are being processed
-    - **Archived** - The card is archived and not in use anymore
+  </Step>
+  <Step title="Reorganize the display sections">
+
+    Drag sections and the properties inside them into the order you want. **Add new section** creates another section; the handles on each section row remove, rename and reorder it.
+
+    ![Reorganize display sections step](/images/guides/studio/cards/create-card-reorganize.png)
+
+    Press **Save card** to create the card. It is created with status **Draft**.
+
+    <Info>
+    Only sections that hold properties are shown on the interface, and all of this can be changed later from the card page.
     </Info>
 
   </Step>
 </Steps>
+
+## Activate the card
+
+A new card stays in **Draft** until you activate it. Open the card and press **Activate card**. Only then can it be used in segments and destinations.
+
+<Warning>
+Leaving the flow discards everything. **Cancel**, the browser back button and closing the tab all raise "Are you sure you want to cancel?" — "All your progress will be lost and the Card will not be created."
+</Warning>
+
+![Cancel confirmation dialog](/images/guides/studio/cards/create-card-cancel-dialog.png)

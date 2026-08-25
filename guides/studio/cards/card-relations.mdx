@@ -1,65 +1,92 @@
 ---
 title: "Create a relation between cards"
+description: "Link two cards on a shared property, label both directions, and optionally sort the related entries."
 ---
 
+A relation connects two cards on a matching property, so an entry on one card can reach the entries related to it on another.
+
+Relations live in the **Relations** widget at the bottom of the card page.
+
+![Relations widget](/images/guides/studio/cards/relations-widget.png)
+
+<Warning>
+  **Add Relation** only works on an **Active** card. On any other status the
+  button is disabled with the tooltip "You can add relation only to active
+  card".
+</Warning>
+
 <Steps>
-  <Step title="Open the Relations tab">
+  <Step title="Open Add Relation">
 
-    In order to create a relation between two cards, first select an active card and open it. Then select the tab **Relations**.
-
-    <Info>
-    The **Relations** tab offers the possibility to create new relations but also manage already active relations.
-    </Info>
-
-    ![An image from the static](/images/guides/studio/cards/create-a-relation1-7b5ac5aa22f8dbd8e28a07a46999c013.png)
+    Press **Add Relation**. Creating and editing relations needs the relation edit permission.
 
   </Step>
-  <Step title="Add a relation">
+  <Step title="Name the relation">
 
-    **Press the '+Add relation' button and define the relation from your needs!**
-
-    Add the following information:
-
-    - **Name** – Choose the name for your relation.
-    - **Identifier** – Identifier will be automatically filled using the name you chose in the previous step. You will have the possiblity to change it if needed.
-    - **Description** – Describe what data you are selecting for the relation e.g. Product and Media data.
-    - **Create the relation to another card** – Select the other card you wish to create the relation between.
+    - **Name** — required, up to 50 characters.
+    - **Identifier** — required, up to 50 characters, derived from the name. This is what destinations use.
+    - **Description** — optional, up to 200 characters.
+    - **Display category** — **Default**, **Show sources**, **Show targets** or **Show target and source**. Controls how the relation is presented in the catalog.
 
     <Warning>
-    The relation needs to be setup with one corresponding property from each card. The property needs to be a unique identifier.
-    Example:
-    ID (Card1) -> ID (Card2)
+    The identifier must not match any property ID on either card — "The identifier must not match any property ID from the target or source card." It also cannot be changed after the relation is created.
     </Warning>
 
-    ![An image from the static](/images/guides/studio/cards/create-a-relation2-e2cfe5b955610d7fb5dcdf5530a597d6.png)
+  </Step>
+  <Step title="Pick the two sides">
+
+    ![Add Relation dialog](/images/guides/studio/cards/add-relation-dialog.png)
+
+    **Related From** is the card you are on. **Related to** is the card you are linking to; only **Active** cards are listed.
+
+    On each side choose the **Property** that holds the matching value, and optionally a **Label** (up to 50 characters) naming that direction of the relation.
 
     <Info>
-    After the relation is created, it's visible and can be edited.
+    The labels are display names used inside Studio: on the **Relations** tab and the entry hierarchy panel of an entry, and on relation-based filters in the segment builder. Where a label is empty, Studio falls back to the relation's **Name**.
     </Info>
 
-    ![An image from the static](/images/guides/studio/cards/create-a-relation3-9880bf533959e769840823361ee2a606.png)
-
-  </Step>
-  <Step title="Choose the endpoint">
+    <Info>
+    The dialog states the rule for the property lists: "Relations are matched by index lookup, so only indexed properties can be selected. To use another property, enable its indexing capability first. The Id property is always available."
+    </Info>
 
     <Warning>
-    When the relation is created, it needs to be activated in the desired endpoint to start working.
+    Two constraints are enforced when you save: the two sides cannot both be the `id` property ("Both source and target properties cannot be the ID property."), and a list property cannot be related to another list property ("A list property can not be related to a list property.").
     </Warning>
 
-    Choose your endpoint
-    ![An image from the static](/images/guides/studio/cards/create-a-relation4-cd85abe3480188301a3473d7bbdf6d45.png)
+  </Step>
+  <Step title="Sort the related entries (optional)">
+
+    Tick **Enable relation sorting** to control the order related entries come back in. This is only available once a **Related to** card is chosen.
+
+    ![Relation sorting options](/images/guides/studio/cards/add-relation-sorting.png)
+
+    **Select sorting property** picks which of the two cards the sort property comes from, then **Sortable property** picks the property itself.
+
+    <Info>
+    The sortable property list is filtered by side: from the target card only **Integer** and **Decimal** properties are offered; from the source card only **List** properties are, because the list's order defines the sequence.
+    </Info>
 
   </Step>
-  <Step title="Go to advanced settings">
+  <Step title="Save">
 
-    Go to advanced settings
-    ![An image from the static](/images/guides/studio/cards/create-a-relation5-0b1df37371ab1eaec5592c2b688690e9.png)
-
-  </Step>
-  <Step title="Activate the relation">
-
-    Click your created relation to activate it.
-    ![An image from the static](/images/guides/studio/cards/create-a-relation6-0265a6a59b30b23a6ee2687ff73ae0f6.png)
+    Press **Save**. The relation appears in the table, with the status of each card next to it.
 
   </Step>
 </Steps>
+
+## Edit or delete a relation
+
+The menu at the end of a relation row holds **Edit relation** and **Delete relation**.
+
+![Relation row menu](/images/guides/studio/cards/relation-row-menu.png)
+
+On edit, the two cards are fixed — name, description, labels, display category and sorting can be changed. Both items are disabled while either card is **Updating** or **Archived**.
+
+<Warning>
+  **Delete relation** is disabled while the relation is in use: "You can't
+  delete relation if it used in any destination or segment."
+</Warning>
+
+## Using a relation in a destination
+
+Creating a relation makes it available; it does not switch it on anywhere. To return related data from an endpoint, enable the relation on that endpoint in **Destinations**.

@@ -1,0 +1,44 @@
+---
+title: "Archive and restore a card"
+description: "Take a card out of use without deleting it, and bring it back later."
+---
+
+Archiving takes a card out of use while keeping it and its setup intact. An archived card cannot be selected in segments or destinations, and no data updates are processed for it.
+
+## Archive a card
+
+Open the card, open the menu in the upper right corner and pick **Archive card**. Confirm with **Yes, archive card**.
+
+![Archive card dialog](/images/guides/studio/cards/archive-card-dialog.png)
+
+The card moves to **Archiving** while the work runs, then to **Archived**.
+
+<Warning>
+A card that is in use cannot be archived. The menu item is disabled with the tooltip "Cards used in destinations or segments cannot be archived." Remove the card from those segments and destinations first.
+</Warning>
+
+![Archive blocked on a card in use](/images/guides/studio/cards/card-menu-archive-blocked.png)
+
+<Info>
+Archiving needs the card delete permission, and is not possible while the card is **Updating**: "Card is currently being updated and cannot be archived."
+</Info>
+
+## Find archived cards
+
+Archived cards are hidden from the **Cards** list by default. Set the **Status** filter to **Archived** to list them — see [Find cards](/guides/studio/cards/find-cards).
+
+## What an archived card page allows
+
+![An archived card page](/images/guides/studio/cards/archived-card-restore-focus.png)
+
+The page keeps its widgets, but the editing controls are gone: **Card details** cannot be edited, and the **Properties** widget has no search, filter, **Edit order and sections** or **Add Property**. The properties themselves are still listed, so the card remains readable as documentation.
+
+The menu still offers **Copy card** and **Delete card**.
+
+## Restore a card
+
+Press **Restore card** in the top right of an archived card page. The card returns to use and can be selected again in segments and destinations.
+
+<Info>
+Restoring needs the card activation permission — the same permission as **Activate card**.
+</Info>
