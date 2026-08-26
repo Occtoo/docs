@@ -1,25 +1,36 @@
 ---
 title: "Delete an entry"
+description: "Remove a single entry and all its property values from a source."
 ---
 
-You have the possibility to Delete an entry if needed
-
 <Steps>
-  <Step title="Open the source">
+  <Step title="Open the entry">
 
-    Open the source that you would like to delete an entry for
-
-  </Step>
-  <Step title="Search for the entry">
-
-    Serach for the entry you would like to delete
+    Open the source, find the entry in the **Entries** widget — searching by entry ID if the source is large — and click its row.
 
   </Step>
-  <Step title="Click on delete entry">
+  <Step title="Press Delete entry">
 
-    Click on delete entry
+    The button sits in the footer of the entry panel.
 
-    ![An image from the static](/images/guides/studio/sources/delete-entry-51eadd2cbd86cd5a56cf5b71b7d3d9bf.png)
+  </Step>
+  <Step title="Confirm">
+
+    ![The Delete entry dialog](/images/guides/studio/sources/delete-entry-dialog.png)
+
+    The dialog names the entry. Press **Yes, delete entry** and the panel closes.
 
   </Step>
 </Steps>
+
+<Warning>
+Deleting an entry cannot be undone. If the entry came from an integration it will be recreated on the next ingest run that includes it, so deleting by hand is not a way to keep data out of a source — remove it at the integration instead.
+</Warning>
+
+<Info>
+**Delete entry** needs the data source delete permission, and is disabled while the source is being purged.
+</Info>
+
+## Clearing a whole source
+
+To delete every entry at once, [purge the source](/guides/studio/sources/purge-a-source) instead of deleting entries one by one.

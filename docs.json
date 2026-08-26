@@ -70,18 +70,28 @@
                     "group": "Sources",
                     "pages": [
                       "guides/studio/sources/data-sources-and-providers",
-                      "guides/studio/sources/add-a-data-provider",
+                      "guides/studio/sources/find-sources",
+                      "guides/studio/sources/source-page",
                       "guides/studio/sources/add-a-data-source",
+                      "guides/studio/sources/edit-a-source",
+                      "guides/studio/sources/purge-a-source",
+                      "guides/studio/sources/delete-a-data-source",
+                      "guides/studio/sources/source-properties",
+                      "guides/studio/sources/add-and-edit-a-property",
+                      "guides/studio/sources/property-capabilities",
+                      "guides/studio/sources/order-and-sections",
+                      "guides/studio/sources/delete-a-property",
+                      "guides/studio/sources/browse-entries",
+                      "guides/studio/sources/edit-an-entry",
+                      "guides/studio/sources/delete-an-entry",
                       "guides/studio/sources/import-data",
                       "guides/studio/sources/manual-import",
-                      "guides/studio/sources/search-in-a-source",
-                      "guides/studio/sources/search-in-an-entry",
-                      "guides/studio/sources/edit-a-source",
-                      "guides/studio/sources/edit-a-data-provider",
+                      "guides/studio/sources/monitor-ingest",
                       "guides/studio/sources/track-usage",
+                      "guides/studio/sources/add-a-data-provider",
+                      "guides/studio/sources/edit-a-data-provider",
                       "guides/studio/sources/reset-a-client-secret",
-                      "guides/studio/sources/delete-an-entry",
-                      "guides/studio/sources/delete-a-data-source",
+                      "guides/studio/sources/code-examples",
                       "guides/studio/sources/remove-a-data-provider"
                     ]
                   },
@@ -465,11 +475,11 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/sources/how-to-search-in-source",
-      "destination": "/guides/studio/sources/search-in-a-source"
+      "destination": "/guides/studio/sources/browse-entries"
     },
     {
       "source": "/docs/occtoo-studio/guides/sources/how-to-search-a-entry",
-      "destination": "/guides/studio/sources/search-in-an-entry"
+      "destination": "/guides/studio/sources/browse-entries"
     },
     {
       "source": "/docs/occtoo-studio/guides/sources/how-to-import-data-manual",
@@ -810,6 +820,14 @@
     {
       "source": "/guides/studio/cards/archive-a-card",
       "destination": "/guides/studio/cards/archive-and-restore-a-card"
+    },
+    {
+      "source": "/guides/studio/sources/search-in-a-source",
+      "destination": "/guides/studio/sources/browse-entries"
+    },
+    {
+      "source": "/guides/studio/sources/search-in-an-entry",
+      "destination": "/guides/studio/sources/browse-entries"
     }
   ]
 }

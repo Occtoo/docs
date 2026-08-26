@@ -10,8 +10,8 @@ To start, press **New card** in the upper right corner of the **Cards** page.
 <Steps>
   <Step title="Fill in the card details">
 
-    - **Name your card** — required, up to 50 characters. The name has to be unique; if it is taken, Studio answers "A cardDefinition with this name already exists. Please choose another." when you press **Next**.
-    - **Add a description** — optional, up to 200 characters.
+    - **Name your card** — required, and unique across cards. A clash is reported when you press **Next**.
+    - **Add a description** — optional.
     - **Choose data source** — required. You can pick several.
     - **Allow properties enrichment** — **Yes** or **No**. This sets the default for every property selected in this flow. **No** is preselected.
 
@@ -34,7 +34,7 @@ To start, press **New card** in the upper right corner of the **Cards** page.
     With nothing selected, the button reads **Save card without properties** and creates an empty card. It changes to **Next** as soon as you tick a property.
     </Info>
 
-    **Create property** adds a property that does not exist in the source yet. Enter a **Property ID**, pick the **Data Source**, and use **Add another** for more rows. The dialog notes "Once the card is created, the property is added to the source".
+    **Create property** adds a property that does not exist in the source yet. Enter a **Property ID**, pick the **Data Source**, and use **Add another** for more rows. The property is written to the source once the card is created.
 
     ![Create property dialog](/images/guides/studio/cards/create-card-create-property.png)
 
@@ -93,7 +93,7 @@ To start, press **New card** in the upper right corner of the **Cards** page.
 A new card stays in **Draft** until you activate it. Open the card and press **Activate card**. Only then can it be used in segments and destinations.
 
 <Warning>
-Leaving the flow discards everything. **Cancel**, the browser back button and closing the tab all raise "Are you sure you want to cancel?" — "All your progress will be lost and the Card will not be created."
+Leaving the flow discards everything. **Cancel**, the browser back button and closing the tab all ask you to confirm first.
 </Warning>
 
 ![Cancel confirmation dialog](/images/guides/studio/cards/create-card-cancel-dialog.png)

@@ -1,27 +1,39 @@
 ---
 title: "Edit a data provider"
+description: "Rename a provider or change which sources it may write to."
 ---
 
 <Steps>
-  <Step title="Open Data providers">
-
-    Select the tab Data providers.
-
-  </Step>
   <Step title="Open the provider menu">
 
-    Select the menu at the right on the specific data provider that you would like to edit
+    On the **Data providers** tab, press the menu on the provider you want to change.
 
-    ![An image from the static](/images/guides/studio/sources/edit-data-provider1-e3c689bd6fd619cbf6632bc6c2128985.png)
+    ![The provider menu](/images/guides/studio/sources/provider-menu.png)
+
+    The menu holds **Edit**, **Reset secret**, **View code examples** and **Delete**.
 
   </Step>
-  <Step title="Edit the provider details">
+  <Step title="Press Edit">
 
-    <Info>
-    You are able to edit the name of the data provider and the "Allowed sources" that you are able to onBoard data into, by adding them to allowed
-    </Info>
+    ![The Update Data Provider dialog](/images/guides/studio/sources/edit-provider-dialog.png)
 
-    ![An image from the static](/images/guides/studio/sources/edit-data-provider2-7df7fdf3f77f932a5c76cf7525d4c2de.png)
+    - **Name**.
+    - **Allowed Sources** — add or remove sources. Each allowed source appears as a chip; removing a chip revokes the provider's access to that source.
+
+  </Step>
+  <Step title="Press Update">
+
+    **Update** stays disabled until you change something.
 
   </Step>
 </Steps>
+
+<Warning>
+Removing a source from **Allowed Sources** takes effect immediately. Any integration still pushing to that source with this provider will start failing. Check the source's **Providers** chip row first to see whether another provider still covers it.
+</Warning>
+
+<Info>
+The provider ID does not change when you rename a provider, so integrations keep working. Editing needs the data provider edit permission; without it the menu item is disabled.
+</Info>
+
+The secret is not editable here — to replace it, see [Reset a provider secret](/guides/studio/sources/reset-a-client-secret).

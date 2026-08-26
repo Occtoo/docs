@@ -1,56 +1,54 @@
 ---
 title: "Add a data provider"
+description: "Register an integration that may write to sources, and store its secret."
 ---
 
-Before we add a data source in Occtoo Studio - we need to add a data provider.
+A data provider is the identity an integration uses to write into sources. Before an integration can onboard anything, it needs a provider with access to the sources it will write to.
 
 <Steps>
-  <Step title="Log in to Occtoo Studio">
+  <Step title="Open the Data providers tab">
 
-    To do this please navigate towards the Occtoo Studio and login with your provided credentials.
+    Open **Sources** in the left navigation and switch to the **Data providers** tab.
 
-    After you've logged in - you have a link named "Sources" on the left side of the interface.
+    ![The Data providers tab](/images/guides/studio/sources/providers-list.png)
 
-    ![An image from the static](/images/guides/studio/sources/data-providers-895706a8495e087c26c5663c51ba2591.png)
-
-  </Step>
-  <Step title="Open Data providers">
-
-    From there - you can choose either:
-
-    - **Sources**
-    - **Data providers**
-
-    Press "Data providers".
-
-    ![An image from the static](/images/guides/studio/sources/data-providers1-d397a17dbcf2b18cab66763b7b8c2dbc.png)
-
-  </Step>
-  <Step title="Fill in the details">
-
-    In the upper right corner - press the "Add data provider"-button and you'll be asked to fill in:
-
-    - **Name**
-    - **Allowed Sources**
-
-    ![An image from the static](/images/guides/studio/sources/data-providers2-970e3102cec524d2535dfd082773634c.png)
+    Each provider shows its name, its provider ID with a copy button, the identifiers of its allowed sources, and when it was last modified.
 
     <Info>
-    You can control and set limitations on what sources a provider can enrich.
+    The tab is only reachable with the data provider edit permission. Without it, opening it lands you on the access denied page.
     </Info>
 
-    <Tip>
-    In theory this means that we could limit the what kind of data each data provider can upload to a data source, i.e:
+  </Step>
+  <Step title="Press New data provider">
 
-    - Several providers can upload data for the Content data source.
-    - One provider can upload data for the Authors data source.
-    - Or any other way we choose to configure and/or limit the data providers.
-    </Tip>
+    ![The Create Data Provider dialog](/images/guides/studio/sources/create-provider-dialog.png)
+
+    - **Name** — required.
+    - **Allowed Sources** — the sources this provider may write to. Pick as many as needed.
+
+  </Step>
+  <Step title="Press Create">
+
+    The dialog stays open and shows the generated secret. Copy it with the copy button.
+
+  </Step>
+  <Step title="Confirm you have copied the secret">
+
+    <Warning>
+    The secret is shown once and never again. Closing the dialog without copying it loses it for good, and the only way forward is to [reset the secret](/guides/studio/sources/reset-a-client-secret). Studio warns you once if you try, but a second attempt closes anyway.
+    </Warning>
 
   </Step>
 </Steps>
 
-After you've created your data provider - and saved the changes you'll be able to see what sources are allowed on the data provider.
+## Allowed sources
 
-In the example below - we've created a data provider named "Author" where the allowed source data is also "Author".
-![An image from the static](/images/guides/studio/sources/data-providers-895706a8495e087c26c5663c51ba2591.png)
+**Allowed Sources** is the whole of a provider's authorisation: it can write to those sources and nothing else. That lets you scope integrations — several providers writing to one source, or one provider restricted to a single source.
+
+<Info>
+A source's own page lists the providers that may write to it, in the **Providers** chip row — see [Track usage of source data](/guides/studio/sources/track-usage).
+</Info>
+
+## Next
+
+With the provider ID and secret, the integration can get a token and start onboarding. See [Import data](/guides/studio/sources/import-data), or copy a working snippet from [View code examples](/guides/studio/sources/code-examples).

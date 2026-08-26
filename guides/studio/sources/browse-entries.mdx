@@ -1,0 +1,50 @@
+---
+title: "Browse and search entries"
+description: "Read the entries table, search by entry ID, and sort on indexed properties."
+---
+
+The **Entries** widget on the source page holds the onboarded entries.
+
+![The Entries widget](/images/guides/studio/sources/entries-widget.png)
+
+## Columns
+
+**Entry ID** comes first, then up to six property columns, then **Last modified** and **Created** as relative times ("1 year ago").
+
+<Info>
+The table shows at most six property columns, chosen by display order among the properties whose **Show on interface** is **Yes**. Every property, shown or not, is still visible on the entry itself — click a row to open it. To change which six appear, adjust the display order in [Display sections and order](/guides/studio/sources/order-and-sections).
+</Info>
+
+A cell with no value shows `—`. List values are joined for display, and a localized property shows the value for one language — the tenant's default when the source carries it, otherwise the first language found in the source.
+
+## Search
+
+**Search by entry id** filters the table.
+
+<Info>
+The search matches anywhere in the entry ID, not just the beginning — searching `0324` finds `715332-0324`. It searches entry IDs only, not property values.
+</Info>
+
+No match gives **No matching entries**.
+
+## Sort
+
+Click a column header to sort. Only properties with the **Indexing** capability are sortable — the rest render as plain headers, because the search index can only order on what it indexes. **Entry ID** is always sortable. **Last modified** and **Created** are not.
+
+Sorting is applied by the backend across the whole source, not just the rows already loaded.
+
+## Loading more
+
+Entries load 25 at a time and the next page fetches as you scroll.
+
+## Refresh
+
+**Refresh** re-runs the query. It is worth pressing after an import: entries appear as the background job writes them. While an import you started is still running the widget polls on its own and shows **Import is in progress**.
+
+## Empty source
+
+A source with no entries shows **No entries** with an **Import data** button. CSV is the only format Studio imports; for anything else, contact support@occtoo.com.
+
+## Opening an entry
+
+Click any row to open the entry panel, which lists every property with its value and the change history. See [View and edit an entry](/guides/studio/sources/edit-an-entry).

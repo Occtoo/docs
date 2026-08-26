@@ -5,7 +5,7 @@ description: "Review, revert and activate changes made to an active card."
 
 Changes to a **Draft** card apply immediately. Changes to an **Active** card are held as pending changes until you activate the card, so a live destination keeps serving the old shape until you decide otherwise.
 
-The card then has status **Pending Changes**, and its status card reads "Uncommitted changes were made to this card's properties or relations. Activate the card to apply these changes."
+The card then has status **Pending Changes** until you activate it.
 
 ## Where pending changes are shown
 
@@ -20,7 +20,7 @@ Pending changes are shown in the **Status** column of the properties table, on t
 | **Pending delete**  | The property is queued for removal         |
 | **Active**          | Live on the card                           |
 
-**Pending changes** and **Pending delete** carry the tooltip "This property has uncommitted changes. Activate the card to apply them."
+**Pending changes** and **Pending delete** mark rows whose edits are not live yet.
 
 <Info>
   On a card that has never been activated, every property is still a pending
@@ -31,7 +31,7 @@ Pending changes are shown in the **Status** column of the properties table, on t
 
 ## Revert one change
 
-A row with a pending edit or a pending removal shows a revert button in place of the edit pencil. Pressing it drops that pending change and leaves the property as it is live, confirmed with "Property reverted successfully".
+A row with a pending edit or a pending removal shows a revert button in place of the edit pencil. Pressing it drops that pending change and leaves the property as it is live.
 
 <Info>
   You can collect as many pending changes as you like before activating, and

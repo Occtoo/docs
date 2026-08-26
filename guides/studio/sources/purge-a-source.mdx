@@ -1,0 +1,46 @@
+---
+title: "Purge a source"
+description: "Delete every entry in a source while keeping the source and its properties."
+---
+
+Purging empties a source. The source, its properties and its links to providers and cards stay; every entry goes.
+
+<Steps>
+  <Step title="Open the source menu">
+
+    Open the source and press the menu in the top right corner, then **Purge source**.
+
+    <Info>
+    **Purge source** is disabled on a source with no entries, and while a purge is already running.
+    </Info>
+
+  </Step>
+  <Step title="Confirm by typing the source name">
+
+    ![The Purge source dialog](/images/guides/studio/sources/purge-source-dialog.png)
+
+    Type the source name to confirm. It has to match exactly.
+
+  </Step>
+  <Step title="Press Yes, purge source">
+
+    The purge starts in the background.
+
+  </Step>
+</Steps>
+
+<Warning>
+A purge cannot be undone. Every entry in the source is deleted, and any card or destination reading from this source will see the data disappear. If the data came from an integration, it only comes back on the next ingest run.
+</Warning>
+
+## While the purge runs
+
+The source is locked until the purge completes. Importing is unavailable, entries cannot be edited or deleted, and both **Purge source** and **Delete source** are disabled.
+
+## Purge or delete?
+
+Purge keeps the shape of the source and throws away the content, which is what you want when you are reloading data or clearing test entries. [Delete](/guides/studio/sources/delete-a-data-source) removes the source itself, and only works once the source is already empty and unused.
+
+<Info>
+Purging needs the data source delete permission.
+</Info>

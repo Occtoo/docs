@@ -1,11 +1,43 @@
 ---
 title: "Import data"
+description: "How a data provider onboards data into a source through the ingest API."
 ---
 
-A provider is a custom integration used to populate the data sources sources inside Occtoo.
+For anything recurring, data is onboarded by a **data provider** — a custom integration that calls the ingest API. The provider is where system-specific business logic lives: reading from the source system, mapping fields, and pushing entries to Occtoo.
 
-In the provider, custom business logic can be added to meet the specific requirements. If you want to ingest data into a source - a data provider needs to be created and a provider ID has to be used in conjunction with a provider secret to write data.
+## What you need
 
-Follow our quick start guides to quickly get started with onboarding data:
+1. A source to write into — see [Create a source](/guides/studio/sources/add-a-data-source).
+2. A data provider that lists that source under **Allowed Sources** — see [Add a data provider](/guides/studio/sources/add-a-data-provider).
+3. The provider's **ID** and **secret**, used to get a token.
 
-- [Get data into Occtoo](/get-started/get-data-into-occtoo)
+The provider ID is shown on the provider in the **Data providers** tab. The secret is only shown once, when the provider is created or its secret is reset — see [Reset a provider secret](/guides/studio/sources/reset-a-client-secret).
+
+<Info>
+Studio can generate a working snippet for you, prefilled with the provider ID and the source identifier: [View code examples](/guides/studio/sources/code-examples).
+</Info>
+
+## What arrives in the source
+
+Entries are written by key. An entry whose key already exists in the source is updated; a new key creates a new entry. Each property carries an ID, a value and, for localized properties, a language code.
+
+Properties the source has not seen before are created automatically. Occtoo infers a type, which you can then correct, along with capabilities and interface settings — see [Add or edit a property](/guides/studio/sources/add-and-edit-a-property).
+
+## Watching a run
+
+After an ingest run, the source page shows what happened:
+
+- **Updates over time** breaks the run into added, updated, deleted and ignored entries, and reports the request rate — see [Monitor onboarding](/guides/studio/sources/monitor-ingest).
+- The freshness badge in the header moves back to **Fresh**.
+- An entry's **Changelog** attributes each change to the provider that made it.
+
+## Reference
+
+- [Get data into Occtoo](/get-started/get-data-into-occtoo) — the quick start, end to end.
+- [Ingest API overview](/api-reference/ingest/overview) — endpoints and payload shape.
+- [Application token](/api-reference/authentication/application-token) — getting a token from a provider ID and secret.
+- [Integrations](/integrations/providers/csv) — ready-made providers for common systems.
+
+## Without an integration
+
+For a one-off load, or while you are still modelling the data, upload a CSV in Studio instead: [Import data from a CSV file](/guides/studio/sources/manual-import). No data provider is needed for that route.

@@ -1,15 +1,35 @@
 ---
 title: "What is a data source & data provider?"
+description: "The two building blocks of onboarding: where data lands, and what is allowed to write it."
 ---
 
-A data source is a location where data can be gathered and stored from different sources. Data can have different origins from PIM, ERP, and CRM but it can also be manual imports directly in the source itself throughout the built in CSV importer.
+A **data source** is where onboarded data lands in Occtoo. Data can come from a PIM, ERP, CRM or any other system, and one system usually maps to several sources — an ERP might feed a prices source, a stock source and a customer source.
 
-Follow our quick start guides to quickly get started with onboarding data:
+Each source holds **entries** (rows, identified by an entry ID) and **properties** (the fields those entries carry). Properties are created automatically the first time data arrives for them, or you can define them up front. See [Source properties](/guides/studio/sources/source-properties).
 
-- [Get data into Occtoo](/get-started/get-data-into-occtoo)
+A **data provider** represents the integration application that writes to sources. Each provider has a provider ID and a secret, used to get a token for the ingest API. A provider can be granted access to several sources, and a source can accept data from several providers.
 
 <Info>
-Data can be consolidated in Occtoo from multiple systems, one system can have multiple sources inside occtoo, for example ERP can have prices, stock and customer as different sources.
+Sources and providers live on the same page, in two tabs: **Sources** and **Data providers**. Both tabs are under **Sources** in the left navigation.
 </Info>
 
-A data provider, as represented in the Occtoo Studio, is embodying the integration application that is providing a source with data. Each data provider has a unique provider id and secret that is used to get the necessary token for pushing data to the ingest API. A data provider can have grants to several sources.
+## Which route gets data in
+
+There are two ways to put data into a source:
+
+- **A data provider calling the ingest API** — the normal route for anything recurring. See [Import data](/guides/studio/sources/import-data).
+- **The built-in CSV importer** — a manual upload in Studio, no provider needed. See [Import data from a CSV file](/guides/studio/sources/manual-import).
+
+<Info>
+Follow the quick start guide to get data onboarded end to end: [Get data into Occtoo](/get-started/get-data-into-occtoo).
+</Info>
+
+## Sharing IDs between sources
+
+Sources that describe the same thing under the same entry IDs can be linked with **Shares ID with**. That link is what lets a card combine properties from several sources into one view. See [Create a source](/guides/studio/sources/add-a-data-source).
+
+## Permissions
+
+Viewing sources needs the data source view permission. Creating and editing sources and their properties needs the data source edit permission, deleting and purging need the data source delete permission, and importing needs the data source import permission. The **Data providers** tab is only reachable with the data provider edit permission.
+
+Where you lack a permission the control is disabled and its tooltip says so.

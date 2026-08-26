@@ -1,0 +1,50 @@
+---
+title: "Display sections and order"
+description: "Group source properties into sections and set the order they appear in."
+---
+
+Sections and order control how properties are laid out in the **Properties** widget and in the entry panel. They are presentation only — they change nothing about the data or what destinations receive.
+
+<Steps>
+  <Step title="Press Edit order and sections">
+
+    In the **Properties** widget on the source page. The button is disabled when the source has no properties.
+
+  </Step>
+  <Step title="Rearrange">
+
+    ![Reorganize display sections and their properties](/images/guides/studio/sources/order-and-sections.png)
+
+    - Drag a property by its handle to move it within a section or into another one.
+    - Drag a section header to move the whole section.
+    - **Collapse sections** folds every section; the button then reads **Expand sections**.
+    - **Add new section** creates an empty section at the top.
+    - The pencil on a section header renames it, and the remove icon deletes it.
+
+    <Info>
+    Deleting a section does not delete its properties — they move into the section above it, or the one below if it was first. The last remaining section cannot be deleted.
+    </Info>
+
+  </Step>
+  <Step title="Press Save">
+
+    **Save** stays disabled until you move something.
+
+  </Step>
+</Steps>
+
+<Warning>
+**Cancel** discards every change made in the dialog. There is no per-property undo.
+</Warning>
+
+## The General section
+
+**General** is where properties with no section assigned appear. It is not stored as a real section — leaving a property in **General** simply means it belongs to none. That is why **General** always exists, and why you cannot rename it away.
+
+## Working with a filtered table
+
+The reorder dialog always loads the source's full property list, even when the **Properties** widget behind it has a search filter applied. A save can never rewrite the order from a filtered subset.
+
+<Info>
+Reordering needs the data source edit permission. You can also set a single property's section from the property form — see [Add or edit a property](/guides/studio/sources/add-and-edit-a-property).
+</Info>
