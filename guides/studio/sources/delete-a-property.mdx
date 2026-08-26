@@ -1,0 +1,41 @@
+---
+title: "Delete a property"
+description: "Remove a source property and its values from every entry."
+---
+
+<Steps>
+  <Step title="Find the property">
+
+    Open the source and find the row in the **Properties** widget. The remove icon is the second button on the row.
+
+    <Info>
+    It is disabled while a card uses the property — "This property can't be deleted while in use by a card." — and while the property is not **Active**: "Property is being updated. Wait until it becomes active."
+    </Info>
+
+  </Step>
+  <Step title="Confirm">
+
+    ![The Delete property dialog](/images/guides/studio/sources/delete-property-dialog.png)
+
+    The dialog reads: "The property &lt;display name&gt; and its data will be removed from all entries in this source. This action cannot be undone."
+
+  </Step>
+  <Step title="Press Yes, delete property">
+
+    Occtoo confirms with "Property &lt;display name&gt; is being deleted". The property shows status **Deleting** until the removal finishes.
+
+  </Step>
+</Steps>
+
+<Warning>
+  Deleting a property removes its values from every entry in the source, not
+  just the property itself. If the data came from an integration, the property
+  will reappear the next time an ingest run sends it — but the old values are
+  gone.
+</Warning>
+
+## When delete stays disabled
+
+Only live cards block a deletion, so the remove icon lines up with what the **Used by** column shows: a property listing cards there cannot be deleted, and one showing `—` can. References from cards that have since been deleted do not count.
+
+<Info>Deleting a property needs the data source edit permission.</Info>

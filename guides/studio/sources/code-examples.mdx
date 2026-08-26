@@ -1,0 +1,44 @@
+---
+title: "View code examples"
+description: "Copy a ready-made ingest snippet, prefilled with a provider ID and source identifier."
+---
+
+Studio can generate a working onboarding snippet for any data provider, so you do not have to assemble the token call and the ingest call by hand.
+
+<Steps>
+  <Step title="Open the provider menu">
+
+    On the **Data providers** tab, press the menu on the provider and choose **View code examples**.
+
+  </Step>
+  <Step title="Pick a language and a source">
+
+    ![The code examples dialog](/images/guides/studio/sources/code-examples.png)
+
+    - **Language** — **C#** or **JavaScript**.
+    - **Source** — one of the provider's allowed sources. The snippet is written for the identifier of the source you pick.
+    - **Secret** — optional. Paste the provider secret and it is written into the snippet; leave it empty and the snippet carries a placeholder instead.
+
+    The provider ID is filled in for you.
+
+  </Step>
+  <Step title="Copy it">
+
+    Use the copy button above the snippet, or **Copy & close** to copy and dismiss the dialog.
+
+  </Step>
+</Steps>
+
+## What the snippet does
+
+Both languages follow the same two steps: post the provider ID and secret to get an access token, then post entries to the import endpoint for the chosen source, with the token as a bearer header.
+
+The entity shape is visible in the snippet — a `key` for the entry ID, a `delete` flag, and a `properties` array where each property has an `id`, a `value` and an optional `language`.
+
+<Warning>
+The dialog carries its own note: "do not include secrets in frontend JavaScript code or add to source control. Remove secrets that are no longer needed." If you paste the secret to generate the snippet, strip it before committing the code.
+</Warning>
+
+<Info>
+The snippet is a starting point for the token and ingest calls. For the full API, see [Ingest API overview](/api-reference/ingest/overview) and [Application token](/api-reference/authentication/application-token).
+</Info>

@@ -1,0 +1,53 @@
+---
+title: "Purge a source"
+description: "Delete every entry in a source while keeping the source and its properties."
+---
+
+Purging empties a source. The source, its properties and its links to providers and cards stay; every entry goes.
+
+<Steps>
+  <Step title="Open the source menu">
+
+    Open the source and press the menu in the top right corner, then **Purge source**.
+
+    <Info>
+    **Purge source** is disabled on a source with no entries — "This source has no entries to purge." — and while a purge is already running: "This source is already being purged."
+    </Info>
+
+  </Step>
+  <Step title="Confirm by typing the source name">
+
+    ![The Purge source dialog](/images/guides/studio/sources/purge-source-dialog.png)
+
+    The dialog reads: "All entries belonging to this source will be deleted in the background. The source will be unavailable for ingestion or edits until the purge completes. This action cannot be undone."
+
+    Type the source name into **Type in the name of the source to confirm**. The name has to match exactly.
+
+  </Step>
+  <Step title="Press Yes, purge source">
+
+    Occtoo confirms with "Purging &lt;name&gt; entries" and starts the purge in the background.
+
+  </Step>
+</Steps>
+
+<Warning>
+A purge cannot be undone. Every entry in the source is deleted, and any card or destination reading from this source will see the data disappear. If the data came from an integration, it only comes back on the next ingest run.
+</Warning>
+
+## While the purge runs
+
+The source is locked until the purge completes:
+
+- **Import data** is disabled — "Source is being purged. Import is unavailable until it completes."
+- Entries cannot be saved — "Source is being purged. Entries cannot be edited until it completes."
+- Entries cannot be deleted — "Source is being purged. Entries cannot be deleted until it completes."
+- **Purge source** and **Delete source** are both disabled.
+
+## Purge or delete?
+
+Purge keeps the shape of the source and throws away the content, which is what you want when you are reloading data or clearing test entries. [Delete](/guides/studio/sources/delete-a-data-source) removes the source itself, and only works once the source is already empty and unused.
+
+<Info>
+Purging needs the data source delete permission.
+</Info>

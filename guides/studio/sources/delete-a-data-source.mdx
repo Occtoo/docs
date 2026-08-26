@@ -1,29 +1,40 @@
 ---
-title: "Delete a data source"
+title: "Delete a source"
+description: "Remove a source that is empty and no longer referenced."
 ---
 
 <Steps>
-  <Step title="Select the source">
+  <Step title="Check that the source can be deleted">
 
-    Select the Source that you would like to delete
+    Open the source and press the menu in the top right corner.
+
+    ![The source menu with Delete source disabled](/images/guides/studio/sources/source-menu.png)
+
+    **Delete source** is disabled unless the source is empty and unreferenced. The tooltip reads "Sources can only be deleted if they are empty and not currently in use by any card or referenced by any provider."
 
     <Info>
-    You are only able to delete a data source where no data is entered
+    To clear the blockers: [purge the source](/guides/studio/sources/purge-a-source) to remove its entries, remove the source from any card built on it, and remove it from the **Allowed Sources** of every data provider that lists it.
     </Info>
 
   </Step>
-  <Step title="Click the Delete icon">
+  <Step title="Press Delete source">
 
-    Click on the Delete icon in the right hand corner
+    ![The Delete source dialog](/images/guides/studio/sources/delete-source-dialog.png)
 
-    ![An image from the static](/images/guides/studio/sources/delete-source1-49b1ed385051cd431835a4ac4657dea5.png)
+    The dialog reads "This source and all its details will be deleted. This action cannot be undone."
 
   </Step>
-  <Step title="Confirm the deletion">
+  <Step title="Press Yes, delete source">
 
-    Confirm the Delete with the popup
-
-    ![An image from the static](/images/guides/studio/sources/delete-source2-738037debac17571061a0ab77d0e6c00.png)
+    Occtoo confirms with "&lt;name&gt; was deleted" and returns you to the source list.
 
   </Step>
 </Steps>
+
+<Warning>
+Deletion cannot be undone. The source, its properties and its configuration are all removed.
+</Warning>
+
+<Info>
+Deleting needs the data source delete permission. While a purge is running the item is disabled with "This source is currently being purged."
+</Info>

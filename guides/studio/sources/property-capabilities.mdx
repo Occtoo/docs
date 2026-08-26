@@ -1,0 +1,54 @@
+---
+title: "Property capabilities"
+description: "Make a property searchable, filterable, or exposable as another type on a card."
+---
+
+Capabilities decide what Occtoo can do with a property beyond storing it. They are set in the **Capabilities** section of the add and edit property form, and shown as icons in the **Capabilities** column of the property table.
+
+![The Capabilities section](/images/guides/studio/sources/property-capabilities.png)
+
+## The three capabilities
+
+**Full-text search** — "Enables flexible text search on this property, including partial word matches, substring queries, and keyword lookups. Apply to text-based properties where users need to find content without knowing the exact value."
+
+**Indexing** — "Makes the property available for search and filtering. Without this capability the property can still be included in destination output but cannot be used in any search criteria, segments, or relations."
+
+**Format conversions** — "Allows exposing this property on a card definition as a different, format-only data type. Converted values are reshaped on read and in destination output but cannot be used in segments or relations."
+
+<Info>
+Which capabilities appear depends on the property's data type. A **Text** property offers all three; a **List** property offers **Indexing** and **Format conversions** but not **Full-text search**. If none apply to the type, the whole section is hidden.
+</Info>
+
+## Indexing decides what is sortable
+
+Only indexed properties can be ordered on. In the entries table, a column header is clickable for sorting when its property has **Indexing**, and plain text when it does not. The same applies to using the property in segments and relations.
+
+### Source format, for timestamps
+
+Turn **Indexing** on for a **Timestamp** property and a **Source format** field appears. It is optional, with the note "Optional. Set when source values aren't ISO-8601 dates (e.g. 2/4/2026)." and the placeholder `d/M/yyyy`.
+
+<Info>
+**Source format** is only valid for **Timestamp**. On any other data type the value is dropped rather than sent.
+</Info>
+
+## Format conversions
+
+Turn **Format conversions** on and a target list appears: "Choose the target types this property may be exposed as on a card."
+
+![Conversion targets for a Text property](/images/guides/studio/sources/property-conversions.png)
+
+The available targets come from the source data type. A **Text** property can be exposed as **Localized text**, **List** or **Localized list**; a **List** property can be exposed as **Text**. List targets need their own delimiter, since the source type has none to inherit.
+
+At least one target has to be selected — otherwise you get "Select at least one target type."
+
+<Warning>
+Once a card uses a converted type, that target is locked: its checkbox stays checked and disabled, and the **Format conversions** switch itself cannot be turned off. The tooltip names the cards — "In use by card(s): &lt;names&gt;. Remove the converted card property before removing this type." Remove the converted property from those cards first.
+</Warning>
+
+<Info>
+A conversion changes only the shape of the value on read and in destination output. It does not make the property usable in segments or relations — that needs **Indexing** on the source property itself.
+</Info>
+
+## Reading the icons
+
+In the property table each enabled capability shows one icon, named on hover: a magnifier for **Full-text search**, a database for **Indexing**, and a compare icon for **Format conversions**. `—` means the property has none.

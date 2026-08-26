@@ -1,40 +1,42 @@
 ---
-title: "Add a source"
+title: "Create a source"
+description: "Add a data source, and link it to the sources it shares entry IDs with."
 ---
 
 <Steps>
-  <Step title="Press the Add data source button">
+  <Step title="Press New data source">
 
-    in the upper right corner you will have a blue “Add data source”-button, press it and you’ll be met with a new pop-up.
+    On the **Sources** tab, press **New data source** in the upper right corner.
 
   </Step>
   <Step title="Fill in the details">
 
-    From here – you have to add the following data:
+    ![The New source dialog](/images/guides/studio/sources/new-source-dialog.png)
 
-    - **Name** - Name of the data source.
-    - **Identifier** - Unique identifier of the data source.
-    - **Description** - A short description of what the data source is/will be used for.
-    - **Shares ID with** - Select if your source is sharing the same Idetifier as another source.
+    - **Name** — required, 2 to 50 characters. It has to be unique; a name already taken gives "A data source with this name already exists. Please choose another." It cannot start or end with a space.
+    - **Description** — optional, up to 200 characters.
+    - **Shares ID with** — optional. The sources whose entry IDs match this one's. The info icon reads "Link this source to a source that shares the same ID in order to combine sources in a card." You can leave it empty and set it later.
 
-    <Tip>
-    Example: Shares ID with - If you would like to build a card that is using data from several data sources use this property to defined what sources that is sharing the same ID
-    </Tip>
+    <Info>
+    There is no identifier field. Occtoo derives the source identifier from the name: it strips any leading non-letters and camel-cases the rest, so "Variant from PIM" becomes `variantFromPim`. That identifier is what the ingest API and destinations use.
+    </Info>
 
-    ![An image from the static](/images/guides/studio/sources/data-sources-350a6251f17b6df11992e4c2ce5be8c6.png)
+    <Warning>
+    The identifier is fixed at creation. Renaming the source later changes the display name only — the identifier keeps its original value. Pick the name with that in mind.
+    </Warning>
 
   </Step>
-  <Step title="Save the data source">
+  <Step title="Save">
 
-    Fill in the required information and press “Add data source” – your data-source will now appear under “Sources”.
+    Press **Save**. **Save** stays disabled until you change something. Occtoo creates the source and opens it, so you land straight on the new source page.
 
   </Step>
 </Steps>
 
-<Info>
-A data provider is needs when adding data using a provider to populate the source. If the CSV import feature is used there is no need to add a data provider
-</Info>
+## Sharing IDs
 
-<Tip>
-You can use the import data-function to import a CSV file
-</Tip>
+Two sources share IDs when the same entry ID means the same thing in both — for example an article number that exists in both a PIM source and an ERP price source. Linking them lets a card pull properties from both and present one entry.
+
+## Next
+
+A new source is empty. To get data into it, either grant a data provider access to it and call the ingest API ([Import data](/guides/studio/sources/import-data)), or upload a CSV ([Import data from a CSV file](/guides/studio/sources/manual-import)).

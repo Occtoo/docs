@@ -1,13 +1,99 @@
 ---
-title: "Manual import data"
+title: "Import data from a CSV file"
+description: "Upload a CSV straight into a source, review what was parsed, and save."
 ---
 
-Navigate to your data source, and in the upper right corner you have an “Import data” button. Press it and you can upload a .csv-file with data directly into the Studio.
+The CSV importer loads data into a source without an integration. No data provider is needed.
 
-![An image from the static](/images/guides/studio/sources/import-data1-b9aaa7e89ef53b8961ae83bc64e00cfa.png)
+<Steps>
+  <Step title="Press Import data">
 
-The following criteria has to be met on the .csv-file if you want to on board its contents to source(s):
+    Open the source and press **Import data**, in the page header or in the **Entries** widget.
 
-- The .csv file must contain a header row.
-- Values in the first column must be unique and will serve as entry IDs.
-- Entries with existing IDs in the source will be overwritten.
+    <Info>
+    **Import data** needs the data source import permission. It is also disabled while the source is being purged: "Source is being purged. Import is unavailable until it completes."
+    </Info>
+
+  </Step>
+  <Step title="Choose the file">
+
+    ![The import dialog](/images/guides/studio/sources/import-dialog.png)
+
+    Drag the file onto the drop zone or press **browse**. One file at a time, up to 10 MB.
+
+    The **File requirements** listed in the dialog:
+
+    - Acceptable file formats: CSV
+    - Supported delimiters: comma, colon, semicolon and tab.
+    - Values in the first column must be unique (they will serve as entry IDs).
+    - Localized properties are supported using the format property(locale), e.g. title(en) or description(sv).
+
+    <Warning>
+    The dialog also warns: "Entries with existing IDs in the source will be overwritten." An import is an upsert on the first column, so a repeated ID replaces the values of the existing entry.
+    </Warning>
+
+  </Step>
+  <Step title="Read the summary">
+
+    ![The parsed summary](/images/guides/studio/sources/import-summary.png)
+
+    Occtoo parses the file in the browser and reports what it found — "We've identified 3 entries to be imported".
+
+    Problems are listed here instead, and block the import until fixed. **Delete** clears the file so you can upload a corrected one.
+
+  </Step>
+  <Step title="Preview the data">
+
+    **Preview the data** opens **Review your data**, with the note "We'll be importing all this data to the source file". The first column is tagged **ID**.
+
+    ![The import preview](/images/guides/studio/sources/import-preview.png)
+
+    Cells and headers with problems carry a warning icon; hover it for the reason. The preview shows the first 100 rows.
+
+    Press **Close** to go back.
+
+  </Step>
+  <Step title="Press Save">
+
+    **Save** starts the import. Occtoo confirms with "Successfully imported &lt;n&gt; entries into &lt;source&gt;" and closes the dialog.
+
+    The import then runs in the background. The **Entries** widget shows **Import is in progress** — "Your import is being processed. Entries will start appearing as they're added." — and refreshes itself until entries appear.
+
+  </Step>
+</Steps>
+
+## File rules
+
+The first row is the header row, and the first column is the entry ID.
+
+**Column headers** must start with a letter and may contain letters, digits, underscores, dashes, slashes, colons, pipes and parentheses — the last for localized properties. Headers have to be unique; duplicates give "Columns headers in the file need to be unique." Maximum 256 characters.
+
+**Entry IDs** must start with a letter or digit and may contain letters, digits, underscores, dashes, slashes, colons and pipes. Maximum 256 characters. A row with an empty first column is rejected: "Row &lt;n&gt; has no ID."
+
+Fully empty rows and columns are skipped rather than treated as errors.
+
+## Localized columns
+
+Write a localized value as `property(locale)`:
+
+```csv
+id,colorCode,title(en),title(sv)
+715332-0324,0324,Wrap front dress,Omlottklänning
+```
+
+That lands as one `title` property with an English and a Swedish value, alongside the plain `colorCode`. Locale codes may use hyphens or underscores — `en-US` and `zh_CN` both work. A header that does not match the `property(locale)` pattern is treated as non-localized.
+
+<Info>
+Localized and non-localized columns can be mixed freely in the same file.
+</Info>
+
+## Limits
+
+- One CSV per import, maximum 10 MB.
+- Files over 65,000 entries are rejected.
+- An empty file gives "The file you uploaded appears to be empty. Please double-check the contents of your file and re-upload it."
+- A non-CSV file gives "File format not supported. Please upload CSV file."
+
+<Info>
+For recurring loads, use a data provider and the ingest API instead — see [Import data](/guides/studio/sources/import-data). For import formats other than CSV, contact support@occtoo.com.
+</Info>

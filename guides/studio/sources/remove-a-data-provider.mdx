@@ -1,25 +1,40 @@
 ---
 title: "Remove a data provider"
+description: "Unregister a data provider and revoke its access to every source."
 ---
 
 <Steps>
-  <Step title="Open Data providers">
-
-    Select the tab Data providers.
-
-  </Step>
   <Step title="Open the provider menu">
 
-    Select the menu at the right on the specific data provider that you would like to remove.
-
-    ![An image from the static](/images/guides/studio/sources/remove-data-provider1-cb92474e333941b77464746ed9041fbd.png)
+    On the **Data providers** tab, press the menu on the provider and choose **Delete**.
 
   </Step>
-  <Step title="Confirm the removal">
+  <Step title="Confirm by typing the provider name">
 
-    Confirm that you would like to remove the data provider
+    ![The Delete provider dialog](/images/guides/studio/sources/delete-provider-dialog.png)
 
-    ![An image from the static](/images/guides/studio/sources/remove-data-provider2-dbc7c6e1ede37dcf861cbb6e5f0587b3.png)
+    The dialog is titled **Delete provider &lt;name&gt;?** and reads "This provider will be unregistered, and all its details will be deleted from Occtoo. This action cannot be undone and may critically impact any sources connected to this provider and their subsequent data."
+
+    Type the provider name into **Type in the name of the provider to confirm deletion**. It has to match exactly; anything else gives "The name you entered does not match the provider you're trying to delete".
+
+  </Step>
+  <Step title="Press Yes, delete provider">
+
+    Occtoo confirms with "&lt;name&gt; was deleted".
 
   </Step>
 </Steps>
+
+<Warning>
+Deleting a provider revokes its credentials immediately. Any integration using its ID and secret stops being able to onboard data, and there is no way to restore the provider or its secret — a replacement gets a new ID and a new secret, which every integration then has to be updated with.
+</Warning>
+
+## Before you delete
+
+Check what the provider feeds. Open each source it lists and look at the **Providers** chip row — if this is the only provider on a source, nothing will be writing to that source after the deletion. Data already onboarded stays; it just stops being updated.
+
+<Info>
+To take away access to one source without unregistering the provider, remove that source from **Allowed Sources** instead — see [Edit a data provider](/guides/studio/sources/edit-a-data-provider).
+
+Deleting needs the data provider delete permission. Without it the menu item is disabled.
+</Info>
