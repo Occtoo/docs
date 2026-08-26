@@ -23,13 +23,13 @@ Relations live in the **Relations** widget at the bottom of the card page.
   </Step>
   <Step title="Name the relation">
 
-    - **Name** — required, up to 50 characters.
-    - **Identifier** — required, up to 50 characters, derived from the name. This is what destinations use.
-    - **Description** — optional, up to 200 characters.
+    - **Name** — required.
+    - **Identifier** — required, derived from the name. This is what destinations use.
+    - **Description** — optional.
     - **Display category** — **Default**, **Show sources**, **Show targets** or **Show target and source**. Controls how the relation is presented in the catalog.
 
     <Warning>
-    The identifier must not match any property ID on either card — "The identifier must not match any property ID from the target or source card." It also cannot be changed after the relation is created.
+    The identifier must not match any property ID on either card, and cannot be changed after the relation is created.
     </Warning>
 
   </Step>
@@ -39,18 +39,18 @@ Relations live in the **Relations** widget at the bottom of the card page.
 
     **Related From** is the card you are on. **Related to** is the card you are linking to; only **Active** cards are listed.
 
-    On each side choose the **Property** that holds the matching value, and optionally a **Label** (up to 50 characters) naming that direction of the relation.
+    On each side choose the **Property** that holds the matching value, and optionally a **Label** naming that direction of the relation.
 
     <Info>
     The labels are display names used inside Studio: on the **Relations** tab and the entry hierarchy panel of an entry, and on relation-based filters in the segment builder. Where a label is empty, Studio falls back to the relation's **Name**.
     </Info>
 
     <Info>
-    The dialog states the rule for the property lists: "Relations are matched by index lookup, so only indexed properties can be selected. To use another property, enable its indexing capability first. The Id property is always available."
+    Relations are matched by index lookup, so only indexed properties can be selected — to use another property, enable its indexing capability on the source first. The `id` property is always available.
     </Info>
 
     <Warning>
-    Two constraints are enforced when you save: the two sides cannot both be the `id` property ("Both source and target properties cannot be the ID property."), and a list property cannot be related to another list property ("A list property can not be related to a list property.").
+    Two constraints are enforced when you save: the two sides cannot both be the `id` property, and a list property cannot be related to another list property.
     </Warning>
 
   </Step>

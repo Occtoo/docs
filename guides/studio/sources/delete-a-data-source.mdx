@@ -10,7 +10,7 @@ description: "Remove a source that is empty and no longer referenced."
 
     ![The source menu with Delete source disabled](/images/guides/studio/sources/source-menu.png)
 
-    **Delete source** is disabled unless the source is empty and unreferenced. The tooltip reads "Sources can only be deleted if they are empty and not currently in use by any card or referenced by any provider."
+    **Delete source** is disabled unless the source is empty and unreferenced — no entries, no card built on it, and no data provider listing it.
 
     <Info>
     To clear the blockers: [purge the source](/guides/studio/sources/purge-a-source) to remove its entries, remove the source from any card built on it, and remove it from the **Allowed Sources** of every data provider that lists it.
@@ -21,12 +21,10 @@ description: "Remove a source that is empty and no longer referenced."
 
     ![The Delete source dialog](/images/guides/studio/sources/delete-source-dialog.png)
 
-    The dialog reads "This source and all its details will be deleted. This action cannot be undone."
-
   </Step>
   <Step title="Press Yes, delete source">
 
-    Occtoo confirms with "&lt;name&gt; was deleted" and returns you to the source list.
+    Studio returns you to the source list.
 
   </Step>
 </Steps>
@@ -36,5 +34,5 @@ Deletion cannot be undone. The source, its properties and its configuration are 
 </Warning>
 
 <Info>
-Deleting needs the data source delete permission. While a purge is running the item is disabled with "This source is currently being purged."
+Deleting needs the data source delete permission, and is unavailable while a purge is running.
 </Info>

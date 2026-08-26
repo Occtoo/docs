@@ -36,7 +36,7 @@ Both languages follow the same two steps: post the provider ID and secret to get
 The entity shape is visible in the snippet — a `key` for the entry ID, a `delete` flag, and a `properties` array where each property has an `id`, a `value` and an optional `language`.
 
 <Warning>
-The dialog carries its own note: "do not include secrets in frontend JavaScript code or add to source control. Remove secrets that are no longer needed." If you paste the secret to generate the snippet, strip it before committing the code.
+If you paste the secret to generate the snippet, strip it before committing the code. Never ship a provider secret in frontend JavaScript or into source control.
 </Warning>
 
 <Info>

@@ -7,31 +7,25 @@ Two widgets on the source page show how onboarding is going: **Updates over time
 
 ## Updates over time
 
-The widget is subtitled "Added, updated, deleted, and ignored (no-op) entries over time".
-
 ![The Updates over time widget](/images/guides/studio/sources/updates-over-time.png)
 
-When there is no data for the chosen time frame it shows **No updates available** — "No updates were found for your selected time frame. Try adjusting the time frame." That is the normal state for a source that has not been onboarded recently; widen the range or check the freshness badge in the header.
+The chart breaks the chosen time frame into added, updated, deleted and ignored entries. A source with no ingest activity in range shows **No updates available** instead — widen the range, or check the freshness badge in the page header.
 
 ### The four stat boxes
 
-With data in range, four boxes sit above the chart:
-
-| Box             | What it counts                                                                                        |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| **Volume**      | Added + updated + deleted entries, broken down underneath as "+n added · +n updated · −n deleted"     |
-| **Effective**   | The share of processed entries that actually changed something, with a bar and "n effective · n noop" |
-| **Updates**     | The number of ingest requests in the range                                                            |
-| **Update rate** | Average requests per bucket, with the busiest bucket as **Peak n**                                    |
+| Box | What it counts |
+| --- | --- |
+| **Volume** | Added + updated + deleted entries, with the breakdown underneath |
+| **Effective** | The share of processed entries that actually changed something |
+| **Updates** | The number of ingest requests in the range |
+| **Update rate** | Average requests per bucket, with the busiest bucket as **Peak** |
 
 ### Effectiveness
 
 An ingest call that sends a value identical to the stored one is a **noop** — counted, but no change. **Effective** is everything that did change, over everything processed.
 
 <Info>
-  A low effectiveness percentage means the integration is resending unchanged
-  data. That is harmless for correctness but wasteful, and it is the main thing
-  this box is for.
+A low effectiveness percentage means the integration is resending unchanged data. That is harmless for correctness but wasteful, and it is the main thing this box is for.
 </Info>
 
 ### Rate units
@@ -42,32 +36,26 @@ The rate adapts to the window. Over a short window it is reported per minute, ov
 
 ![The date range picker](/images/guides/studio/sources/date-range-picker.png)
 
-**By time** offers Last 10 minutes, Last hour, Last 6 hours, Last 12 hours, Last 24 hours and Last 72 hours. **By date** offers Last 7 days, Last 14 days, Last 28 days, This week and This month. The default is **Last 24 hours**.
-
-You can also pick a custom range on the calendar and press **Apply**; **Cancel** discards it.
+**By time** offers ranges from the last 10 minutes up to the last 72 hours. **By date** offers the last 7, 14 or 28 days, this week and this month. The default is **Last 24 hours**. You can also pick a custom range on the calendar.
 
 <Info>
-  **Last 10 minutes** is a live view: it re-reads the data every minute and
-  keeps the window rolling, so you can watch an ingest run as it happens.
+**Last 10 minutes** is a live view: it re-reads the data every minute and keeps the window rolling, so you can watch an ingest run as it happens.
 </Info>
 
 ## Languages
 
-The **Languages** widget shows localized value coverage per language, and carries the language count in its heading when there is one — **Languages (23)**.
+The **Languages** widget shows localized value coverage per language, and carries the language count in its heading.
 
 ![The Languages widget](/images/guides/studio/sources/languages-widget.png)
 
-Each row shows a language code, a coverage bar and a percentage. The footer states the formula: "Coverage = filled localized values ÷ (entries × localized properties)"
-
-Rows are sorted by coverage, highest first.
+Each row is a language code with its coverage bar and percentage, sorted highest first. Coverage is filled localized values divided by entries × localized properties.
 
 ### Three empty states
 
-- **No localized properties** — "This source has no localized text or list properties, so language coverage doesn't apply." Coverage only means something once the source has **Localized text** or **Localized list** properties.
-- **No entries yet** — "This source has localized properties but no entries yet, so there is nothing to measure coverage against."
-- **No languages detected** — "No localized values have been ingested for this source yet, so there are no languages to show."
+- **No localized properties** — coverage only means something once the source has **Localized text** or **Localized list** properties.
+- **No entries yet** — localized properties exist, but there is nothing to measure them against.
+- **No languages detected** — no localized values have been ingested yet.
 
 <Info>
-  Languages are discovered from the data, not configured. A language appears as
-  soon as a localized value arrives for it.
+Languages are discovered from the data, not configured. A language appears as soon as a localized value arrives for it.
 </Info>

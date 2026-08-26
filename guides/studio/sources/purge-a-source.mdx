@@ -11,7 +11,7 @@ Purging empties a source. The source, its properties and its links to providers 
     Open the source and press the menu in the top right corner, then **Purge source**.
 
     <Info>
-    **Purge source** is disabled on a source with no entries — "This source has no entries to purge." — and while a purge is already running: "This source is already being purged."
+    **Purge source** is disabled on a source with no entries, and while a purge is already running.
     </Info>
 
   </Step>
@@ -19,14 +19,12 @@ Purging empties a source. The source, its properties and its links to providers 
 
     ![The Purge source dialog](/images/guides/studio/sources/purge-source-dialog.png)
 
-    The dialog reads: "All entries belonging to this source will be deleted in the background. The source will be unavailable for ingestion or edits until the purge completes. This action cannot be undone."
-
-    Type the source name into **Type in the name of the source to confirm**. The name has to match exactly.
+    Type the source name to confirm. It has to match exactly.
 
   </Step>
   <Step title="Press Yes, purge source">
 
-    Occtoo confirms with "Purging &lt;name&gt; entries" and starts the purge in the background.
+    The purge starts in the background.
 
   </Step>
 </Steps>
@@ -37,12 +35,7 @@ A purge cannot be undone. Every entry in the source is deleted, and any card or 
 
 ## While the purge runs
 
-The source is locked until the purge completes:
-
-- **Import data** is disabled — "Source is being purged. Import is unavailable until it completes."
-- Entries cannot be saved — "Source is being purged. Entries cannot be edited until it completes."
-- Entries cannot be deleted — "Source is being purged. Entries cannot be deleted until it completes."
-- **Purge source** and **Delete source** are both disabled.
+The source is locked until the purge completes. Importing is unavailable, entries cannot be edited or deleted, and both **Purge source** and **Delete source** are disabled.
 
 ## Purge or delete?
 

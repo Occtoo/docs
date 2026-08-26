@@ -23,21 +23,19 @@ A data provider is the identity an integration uses to write into sources. Befor
 
     ![The Create Data Provider dialog](/images/guides/studio/sources/create-provider-dialog.png)
 
-    - **Name** — required, 2 to 50 characters.
+    - **Name** — required.
     - **Allowed Sources** — the sources this provider may write to. Pick as many as needed.
 
   </Step>
   <Step title="Press Create">
 
-    The dialog stays open and shows the generated secret, above the note "Copy and store the secret below before you close this dialog." and "You won't be able to see it again."
-
-    Copy the secret with the copy button.
+    The dialog stays open and shows the generated secret. Copy it with the copy button.
 
   </Step>
-  <Step title="Press I have copied the secret. Close the dialog.">
+  <Step title="Confirm you have copied the secret">
 
     <Warning>
-    The secret is shown once and never again. Try to close before copying it and Occtoo warns "You have not copied the secret yet. It cannot be retrieved later." — closing a second time dismisses the dialog anyway, and the secret is lost. If that happens you have to [reset the secret](/guides/studio/sources/reset-a-client-secret).
+    The secret is shown once and never again. Closing the dialog without copying it loses it for good, and the only way forward is to [reset the secret](/guides/studio/sources/reset-a-client-secret). Studio warns you once if you try, but a second attempt closes anyway.
     </Warning>
 
   </Step>

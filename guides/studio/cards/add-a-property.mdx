@@ -19,14 +19,14 @@ Properties are added from the **Properties** widget on the card page. You can ad
 
     ![Basic settings in the Add new property dialog](/images/guides/studio/cards/add-property-basic-settings.png)
 
-    - **Display name** — required, up to 50 characters. The name shown in Studio.
-    - **Identifier** — required, up to 50 characters. This is the name destinations using this card will see. It is derived from the display name as you type, until you edit it yourself.
+    - **Display name** — required. The name shown in Studio.
+    - **Identifier** — required. This is the name destinations using this card will see. It is derived from the display name as you type, until you edit it yourself.
     - **Property selection** — **Choose an existing property** maps a property that already exists in the data source. **Create a new property** writes a new property to the source instead.
     - **Data source** — required. Only sources the card is built on, plus sources that share IDs with them, are listed.
     - **Data source property ID** — required. Searchable list of the properties in the selected source.
     - **Data type** — required.
     - **Delimiter** — required for **List** and **Localized list**: the character that separates values in the source, such as `|`.
-    - **Description** — optional, up to 200 characters.
+    - **Description** — optional.
     - **Allow enrichment** — whether the value can be edited on an entry in the catalog.
     - **Assign tag** — connects the property to a managed tag list.
 
@@ -37,7 +37,7 @@ Properties are added from the **Properties** widget on the card page. You can ad
     ![Data source property ID list](/images/guides/studio/cards/add-property-source-property.png)
 
     <Warning>
-    The identifier has to be unique on the card. If it is already taken, "Identifier must be unique" appears under the field.
+The identifier has to be unique on the card.
     </Warning>
 
   </Step>
@@ -61,11 +61,11 @@ Properties are added from the **Properties** widget on the card page. You can ad
 
 ## Data type and delimiter come from the source
 
-When you map an existing source property, the source decides the type. If the source pins a type and offers no conversions, **Data type** and **Delimiter** are locked and the tooltip reads "Inherited from the data source property. Edit it on the data source page to change." — with an **Open data source page** link.
+When you map an existing source property, the source decides the type. If the source pins a type and offers no conversions, **Data type** and **Delimiter** are locked, and the tooltip offers an **Open data source page** link to change it at the source.
 
 ![Locked data type with its tooltip](/images/guides/studio/cards/add-property-data-type-locked.png)
 
-If the source property defines allowed conversions, **Data type** offers the source type plus those conversion targets, and the tooltip reads "Type and delimiter options are defined by the data source property. Edit the allowed conversions on the data source page to change." Choosing a conversion target fills in that target's delimiter for you.
+If the source property defines allowed conversions, **Data type** offers the source type plus those conversion targets. Choosing a conversion target fills in that target's delimiter for you.
 
 <Info>
 To use a type the source does not offer, change the property, or its allowed conversions, on the data source itself.
@@ -78,12 +78,12 @@ Pick **Create a new property** when the value does not exist in the source yet. 
 ![Create a new property selected](/images/guides/studio/cards/add-property-new-source-property.png)
 
 <Warning>
-Saving creates the property in the data source as well as on the card. The data source property ID has to be unique in that source — "Custom data source property ID must be unique" appears if it is taken. Studio lowercases the ID it sends to the source.
+Saving creates the property in the data source as well as on the card. The data source property ID has to be unique in that source. Studio lowercases the ID it sends.
 </Warning>
 
 ## Advanced settings
 
-**Advanced settings** is collapsed by default and only appears for the **Text** and **List** data types. It holds **List values**, a comma-separated list, with the note "For supporting legacy data structure".
+**Advanced settings** is collapsed by default and only appears for the **Text** and **List** data types. It holds **List values**, a comma-separated list kept for legacy data structures.
 
 ![Advanced settings](/images/guides/studio/cards/add-property-advanced-settings.png)
 
@@ -96,5 +96,5 @@ Saving creates the property in the data source as well as on the card. The data 
 **Assign tag** connects the property to a managed tag list. When a tag is set and the data type is **Text** or **List**, an extra **Use the key of the tag** choice appears: **Yes** stores the tag's key, **No** stores its value.
 
 <Warning>
-For **Text** and **List** properties, a Localized Text tag list can only be used key-based. Choosing **No** raises "For Text and List data types, only Key based tags can be selected for Localized Text tag type."
+For **Text** and **List** properties, a Localized Text tag list can only be used key-based, so **No** is rejected.
 </Warning>

@@ -13,9 +13,9 @@ description: "Add a data source, and link it to the sources it shares entry IDs 
 
     ![The New source dialog](/images/guides/studio/sources/new-source-dialog.png)
 
-    - **Name** — required, 2 to 50 characters. It has to be unique; a name already taken gives "A data source with this name already exists. Please choose another." It cannot start or end with a space.
-    - **Description** — optional, up to 200 characters.
-    - **Shares ID with** — optional. The sources whose entry IDs match this one's. The info icon reads "Link this source to a source that shares the same ID in order to combine sources in a card." You can leave it empty and set it later.
+    - **Name** — required, and unique across sources.
+    - **Description** — optional.
+    - **Shares ID with** — optional. The sources whose entry IDs match this one's. You can leave it empty and set it later.
 
     <Info>
     There is no identifier field. Occtoo derives the source identifier from the name: it strips any leading non-letters and camel-cases the rest, so "Variant from PIM" becomes `variantFromPim`. That identifier is what the ingest API and destinations use.

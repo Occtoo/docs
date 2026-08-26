@@ -24,7 +24,7 @@ Each row ends with an edit and a delete button.
 
 ## Status
 
-A property is **Active** in normal use. It shows **Updating** while a change is being applied and **Deleting** while it is being removed. Both edit and delete are disabled in those states — "Property is being updated. Wait until it becomes active."
+A property is **Active** in normal use. It shows **Updating** while a change is being applied and **Deleting** while it is being removed. Both edit and delete are disabled in those states.
 
 ## Sections
 
@@ -32,7 +32,7 @@ Properties are grouped into collapsible display sections. Anything not assigned 
 
 ## Search
 
-**Search by name** filters the table. It is a fuzzy match on the display name, so small typos still hit, and it only starts filtering once you have typed more than two characters. No match shows **No results**.
+**Search by name** filters the table. It is a fuzzy match on the display name, so small typos still hit, and it only starts filtering past two characters. No match shows **No results**.
 
 <Info>
 The search matches the **Display name** column, not the **ID**.
@@ -40,14 +40,14 @@ The search matches the **Display name** column, not the **ID**.
 
 ## Where properties come from
 
-Properties appear on their own the first time data arrives carrying them, whether through a provider or a CSV import. The empty state says as much: "Properties are detected automatically when entries are imported, or you can define them manually." Defining one up front lets you set its type, capabilities and interface settings before any data lands — see [Add or edit a property](/guides/studio/sources/add-and-edit-a-property).
+Properties appear on their own the first time data arrives carrying them, whether through a provider or a CSV import. Defining one up front lets you set its type, capabilities and interface settings before any data lands — see [Add or edit a property](/guides/studio/sources/add-and-edit-a-property).
 
 ## Actions
 
 - **Add property** — define a new property.
 - **Edit order and sections** — drag properties into order and between sections. Disabled when the source has no properties.
 - The pencil on a row — edit that property.
-- The remove icon on a row — delete that property. Disabled while a card uses it: "This property can't be deleted while in use by a card."
+- The remove icon on a row — delete that property. Disabled while a card uses it.
 
 <Info>
 All four need the data source edit permission. Without it they are disabled.
