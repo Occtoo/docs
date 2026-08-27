@@ -142,8 +142,7 @@
                       "guides/studio/catalog/used-by",
                       "guides/studio/catalog/add-an-entry",
                       "guides/studio/catalog/import-entries",
-                      "guides/studio/catalog/export-entries",
-                      "guides/studio/catalog/manage-tags"
+                      "guides/studio/catalog/export-entries"
                     ]
                   },
                   {
@@ -171,6 +170,13 @@
                       "guides/studio/destinations/reset-a-client-secret",
                       "guides/studio/destinations/remove-an-application",
                       "guides/studio/destinations/generate-documentation"
+                    ]
+                  },
+                  {
+                    "group": "Settings",
+                    "pages": [
+                      "guides/studio/settings/users-and-roles",
+                      "guides/studio/settings/managed-tags"
                     ]
                   }
                 ]
@@ -622,7 +628,11 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/catalogue/how-to-managed-tags",
-      "destination": "/guides/studio/catalog/manage-tags"
+      "destination": "/guides/studio/settings/managed-tags"
+    },
+    {
+      "source": "/guides/studio/catalog/manage-tags",
+      "destination": "/guides/studio/settings/managed-tags"
     },
     {
       "source": "/docs/occtoo-studio/guides/media/how-to-configure-media",
