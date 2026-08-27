@@ -139,7 +139,7 @@ https://{@DESTINATION-ENDPOINT-ADDRESS}?brand=BrandA&brand=BrandB
 
 #### POST filtering
 
-Within the POST body, a 'filter' can be supplied to reduce the amount of returned results. The filter may be empty. However, nested content (object arrays) within each result cannot be filtered.
+Within the POST body, a 'filter' can be supplied to reduce the number of returned results. The filter may be empty. However, nested content (object arrays) within each result cannot be filtered.
 
 The filter contains a list of queries, any one of which must be fulfilled. Each query may include criteria for inclusion (*must*), exclusion (*must\_not*), or both. Criteria are expressed as properties of the criteria, where the ID matches the ID of the property in the result.
 
@@ -197,7 +197,7 @@ Filter values are always passed as arrays of values. Various data types are avai
 - Double: Uses '.' as a decimal separator.
 - Bool: Possible values are true/false.
 
-Matching values of properties are performed using exact matches against ANY of the provided filter values.
+Matching of property values is performed using exact matches against ANY of the provided filter values.
 
 ##### Example
 
@@ -412,7 +412,7 @@ The POST request uses the filter syntax and can be combined freely with other fi
 
 **Type: string (array)**
 
-Return only the specified properties for each entry instead of the full result object. This reduces the response size and is useful when a client only needs a few properties from an endpoint that exposes many. The property names are the ones exposed by the endpoint, meaning the [alias](/technical/destinations#endpoint-configuration) if one is configured.
+Return only the specified properties for each entry instead of the full result object. This reduces the response size and is useful when a client only needs a few properties from an endpoint that exposes many. The property names are the ones exposed by the endpoint, meaning the [alias](/guides/studio/destinations/create-an-alias) if one is configured.
 
 If 'select' is omitted, all properties configured on the endpoint are returned.
 
@@ -520,7 +520,7 @@ Example of meta data payload included on each result entry
 
 **Type: int32**
 
-Retrieve the top x amount of entries from the endpoint. This can be used together with [skip](#skip) for implementing pagination. The maximum amount of entries to retrieve with 'top' and 'skip' is 10 000.
+Retrieve the top x number of entries from the endpoint. This can be used together with [skip](#skip) for implementing pagination. The maximum number of entries to retrieve with 'top' and 'skip' is 10 000.
 
 <Tabs>
   <Tab title="GET">
@@ -542,7 +542,7 @@ https://{@DESTINATION-ENDPOINT-ADDRESS}?top=100
 
 **Type: int32**
 
-Skip x amount of entries in the request. This can be used together with [top](#top) for implementing pagination. The maximum amount of entries to retrieve with 'top' and 'skip' is 10 000.
+Skip x number of entries in the request. This can be used together with [top](#top) for implementing pagination. The maximum number of entries to retrieve with 'top' and 'skip' is 10 000.
 
 <Tabs>
   <Tab title="GET">
@@ -561,7 +561,7 @@ GET https://{@DESTINATION-ENDPOINT-ADDRESS}?skip=10
 </Tabs>
 
 <Tip>
-The maximum amount of entries to retrieve with top and skip is 10 000. If more results are needed, use [after](#after).
+The maximum number of entries to retrieve with top and skip is 10 000. If more results are needed, use [after](#after).
 </Tip>
 
 #### after
@@ -591,7 +591,7 @@ https://{@DESTINATION-ENDPOINT-ADDRESS}?after=id123&sortAsc=id
 
 **Type: string (array)**
 
-To sort property in ascending order, use the 'sortAsc' parameter. For the GET request, the 'sortAsc' parameter can be repeated to sort on multiple properties at once. For the POST request, an array of one or more sort properties is required.
+To sort a property in ascending order, use the 'sortAsc' parameter. For the GET request, the 'sortAsc' parameter can be repeated to sort on multiple properties at once. For the POST request, an array of one or more sort properties is required.
 
 <Tabs>
   <Tab title="GET">
@@ -613,7 +613,7 @@ https://{@DESTINATION-ENDPOINT-ADDRESS}?sortAsc=propertyA
 
 **Type: string (array)**
 
-To sort property in descending order, use the 'sortDesc' parameter. For the GET request, the 'sortDesc' parameter can be repeated to sort on multiple properties at once. For the POST request, an array of one or more sort properties is required.
+To sort a property in descending order, use the 'sortDesc' parameter. For the GET request, the 'sortDesc' parameter can be repeated to sort on multiple properties at once. For the POST request, an array of one or more sort properties is required.
 
 <Tabs>
   <Tab title="GET">
@@ -785,7 +785,7 @@ The structure of the response object remains consistent whether it's a POST or a
 
 If the API parameter [`select`](#select) is used, each result object contains only the requested properties.
 
-If the endpoint contains facets, they are included as an array. The structure of the facet response is described under [facets](#facets). If facets are not configured, the "facet" property is omitted from the response.
+If the endpoint contains facets, they are included as an array. The structure of the facet response is described under [facets](#facets). If facets are not configured, the "facets" property is omitted from the response.
 
 The "total" property indicates the total number of results and is only included in the response if the API parameter [`includeTotals`](#includetotals) is present and set to true. If the parameter is not present, the "total" property is omitted from the response.
 

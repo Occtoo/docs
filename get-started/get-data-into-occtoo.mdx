@@ -1,5 +1,6 @@
 ---
 title: "Get data into Occtoo"
+keywords: ["Occtoo Source data ingestion", "upload entities to Occtoo using C#", "Occtoo API access token generation", "C# HTTP request example for Occtoo", "schema-less data upload key-value", "Occtoo data provider authentication", "JSON format for Occtoo ingest API"]
 ---
 
 This guide displays how to get data into Occtoo in three easy steps.
@@ -30,8 +31,6 @@ In Occtoo, a data source functions as a container for incoming data, similar to 
 A data source entry is the core data unit within a source. These entries are imported using a unique key and contain a dynamic list of property-value pairs.
 Example of a data source entry in JSON format:
 
-json
-
 ```json
 {
   "key": "some-id",
@@ -46,11 +45,10 @@ json
 }
 ```
 
-Localized Properties
+#### Localized Properties
+
 Properties in a data entry can be localized by tagging them with language codes, supporting multiple language variants for each property. This supports globalized content management and multilingual customer experiences.
 Example with localized properties:
-
-json
 
 ```json
 {
@@ -69,7 +67,7 @@ json
 }
 ```
 
-Data Upload with Data Providers
+#### Data Upload with Data Providers
 
 To ingest data into Occtoo, you need a configured data provider. This is a secure integration mechanism that uses authentication credentials (e.g., client ID and secret) to obtain a valid token for data uploads.
 
@@ -109,7 +107,7 @@ var tokenDocument = JsonSerializer.Deserialize<JsonDocument>(tokenResponseConten
 var token = tokenDocument.RootElement.GetProperty("access_token").GetString();
 ```
 
-#### 1a. Client ID and secret
+#### 1. Client ID and secret
 
 To call the Ingest API, create a provider in [Occtoo Studio](https://studio.occtoo.com/sources/dataProviders), select its allowed sources, and save its OAuth client ID and client secret securely.
 
@@ -161,16 +159,6 @@ var ingestResponse = await httpClient.SendAsync(ingestRequest);
 
 For additional examples and best practices on how to onboard data into the platform, please visit our official GitHub repository: [https://github.com/Occtoo](https://github.com/Occtoo)
 
-#### Keywords for Search Optimization:
-
-- Occtoo Source data ingestion
-- Upload entities to Occtoo using C#
-- Occtoo API access token generation
-- C# HTTP request example for Occtoo
-- Schema-less data upload key-value
-- Occtoo data provider authentication
-- JSON format for Occtoo ingest API
-
 #### Recommended Guidelines for Entity Payloads
 
 To ensure optimal performance, reliable ingestion, and efficient data processing in Occtoo, we recommend following these best practices when submitting payloads with entities:
@@ -192,7 +180,7 @@ To ensure optimal performance, reliable ingestion, and efficient data processing
 
 ### Rules
 
-Entry Key Requirements
+#### Entry Key Requirements
 
 - Must be 1 to 256 characters in length.
 - Allowed characters:
@@ -202,45 +190,53 @@ Entry Key Requirements
   - underscore (\_)
   - hyphen (-)
 
-Property ID Requirements
+#### Property ID Requirements
 
 - Must be 1 to 256 characters in length.
 - Same character rules as Entry Key apply.
 
-Property Language Code Requirements
+#### Property Language Code Requirements
 
 - Must be 2 to 10 characters in length.
 - Same character rules as above apply.
-  Summary of Allowed Characters:
+
+#### Summary of Allowed Characters
+
 - Letters: a–z, A–Z
 - Digits: 0–9
 - Symbols: \_, -
-  These validation constraints ensure compatibility with the Occtoo Source schema-less ingestion engine and prevent malformed data entries from being rejected during processing.
+
+These validation constraints ensure compatibility with the Occtoo Source schema-less ingestion engine and prevent data entries from being rejected during processing.
 
 ## Media upload
 
 Media ingestion can be performed using the Occtoo Ingest API. To upload media files, the source media must be accessible via a public URL. Alternatively, the Occtoo Onboarding SDK supports direct streaming uploads.
-Import Authentication Flow
+
+### Import Authentication Flow
 
 All media imports require authentication. The process must begin by requesting an access token. Once a valid token is obtained, the import API endpoint can be called to initiate the upload.
-Media File Identification
+
+### Media File Identification
 
 Each successfully uploaded media file receives a unique Occtoo Media File ID. This ID is used for all subsequent API interactions related to that file.
 
 Users also have the option to assign a custom unique identifier to the uploaded file. If a unique identifier is provided, it becomes immutable—any future uploads using the same unique identifier will be rejected. To update a media file with a reused unique identifier, the original file must first be deleted.
 
-Asynchronous Uploads & Tracking
+### Asynchronous Uploads & Tracking
+
 All media uploads are processed asynchronously. The Ingest API supports batch uploads, allowing multiple media files to be uploaded in a single request.
 
 Upload progress can be tracked via the Upload Status API.
-Retrieving Media File Information
+
+### Retrieving Media File Information
 
 Information about uploaded media can be retrieved using either of the following methods:
 
 - By custom unique identifier → Media File Information by Unique Identifier API
 - By Occtoo-generated media file ID → Media File Information by File ID API
 
-Upload via Links
+### Upload via Links
+
 To initiate a link-based media upload:
 
 PUT - [https://api.occtoo.com/media/uploads/links](https://api.occtoo.com/media/uploads/links)
@@ -269,7 +265,8 @@ The request body must include a JSON array of media links with the following for
 
 If the upload request is accepted, the API responds with HTTP Status 202 Accepted, indicating that the processing has started.
 
-Bulk Upload Capability
+### Bulk Upload Capability
+
 The Occtoo API allows uploading up to 50 data entries or media objects per request. This batch processing capability ensures efficient performance, reduced latency, and scalable data ingestion for high-volume operations.
 
 For more details on the import see the [import endpoint documentation](/api-reference/ingest/overview#import).

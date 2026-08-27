@@ -113,7 +113,7 @@ See [Data Provider access token](/api-reference/authentication/application-token
 
 #### Import
 
-Imports are initiated by sending a POST request to the URL ending with the identifier of the [data source](/guides/studio/sources/add-a-data-source) to which the data is intended for import.
+Imports are initiated by sending a POST request to the URL ending with the identifier of the [data source](/guides/studio/sources/add-a-data-source) the data is intended for.
 
 ```text
 https://api.occtoo.com/datasources/{@DATA-SOURCE-IDENTIFIER}/import
@@ -210,7 +210,7 @@ The import format is structured as follows:
                 {
                     "id": "My-first-prop",
                     "value":"これがmy-first-propの値です",
-                    "language": "jp"
+                    "language": "ja"
                 },
                 {
                     "id": "My-second-prop",
@@ -405,7 +405,7 @@ The upload via links payload format is structured as follows:
   - **uniqueidentifier** (Optional): Unique identifier of the media to be uploaded
 
 <Tip>
-  If the media file that is to be uploaded contains [illegal characters](#rules-1) one can use the filename attribute to rename the file as this is the name that will be used for the file when uploaded to the Occtoo media service.
+  If the media file that is to be uploaded contains illegal characters one can use the filename attribute to rename the file as this is the name that will be used for the file when uploaded to the Occtoo media service.
 </Tip>
 
 <Tabs>
@@ -433,7 +433,7 @@ The upload via links payload format is structured as follows:
   </Tab>
   <Tab title="Without unique identifier">
     <Tip>
-      It is possible to either set **uniqueidentifier** to _null_ or omit it entirely from the payload. Although it is our **strong recommendation** that a unique identifier is used to avoid reuploading the same binary multiple times.
+      It is possible to either set **uniqueidentifier** to _null_ or omit it entirely from the payload. However, it is our **strong recommendation** that a unique identifier is used to avoid reuploading the same binary multiple times.
     </Tip>
 
     ```javascript
@@ -441,7 +441,7 @@ The upload via links payload format is structured as follows:
       "links": [
         {
           "filename": "my-media-file-name.png",
-          "link": "https://www.the.url/to/the/media/file/my-media-file-name.png",
+          "link": "https://www.the.url/to/the/media/file/my-media-file-name.png"
         },
         {
           "filename": "another-media-file.tif",
