@@ -1,7 +1,25 @@
 ---
-title: "Used by tab"
+title: "Used by"
+description: "Check which segments and destinations depend on a single entry before you change it."
 ---
 
-The Used by tab indicates, to the user, how the product is currently being used. For example, if it is published to a certain destination or which segments it is included in.
+The **Used by** tab of an entry lists everything that consumes it: the destination versions that publish it and the segments that contain it.
 
-![An image from the static](/images/guides/studio/catalog/catalogue-used-by-1-46eee22584090d242ff7a7540bd9dcf4.png)
+![The Used by tab](/images/guides/studio/catalog/entry-used-by-tab.png)
+
+| Column | Holds |
+| --- | --- |
+| **Type** | **Destination** or **Segment** |
+| **Name** | A link that opens the destination version or the segment in a new tab |
+| **Status** | The destination's publishing state, or whether the segment is in use |
+| **Last updated** | When that destination or segment last changed |
+
+Use **Search by name** and the **Type** filter to narrow a long list.
+
+An entry that nothing consumes shows an empty state instead of the table.
+
+<Info>
+The left panel of the entry carries a shorter version of the same information — **Used by Destinations** — visible from every tab, so you can see the publishing impact while editing values.
+</Info>
+
+This is the entry-level view. For the same question at card level, see [Track card usage](/guides/studio/cards/track-usage); for a segment, [Track segment usage](/guides/studio/segments/track-usage).

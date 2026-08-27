@@ -1,0 +1,36 @@
+---
+title: "Export entries"
+description: "Download entries as CSV or Excel, with the properties and languages you choose."
+---
+
+Export writes the current result to a file. What "current" means depends on where you start it:
+
+- From the toolbar menu — every entry in the list, with the applied filters and language.
+- From the selection panel — only the entries you ticked. See [Select entries](/guides/studio/catalog/select-entries).
+
+![The export entries dialog](/images/guides/studio/catalog/export-entries-dialog.png)
+
+## The fields
+
+| Field | Does |
+| --- | --- |
+| **Export name** | The file name. Defaults to `entries_` plus the card name. |
+| **Select file format** | CSV or Excel |
+| **Select properties** | Which columns to include. Leave it on **All** for every property, plus `Id`. |
+| **Select language(s)** | Which languages to include for localized properties |
+| **Override list value delimiter** | Replaces the delimiter used between the values of a list property. Left blank, each list keeps its own. |
+| **Include 'Last Modified' information** | Adds the last-updated timestamp as a column |
+
+<Info>
+**Select language(s)** only appears when the card's sources carry languages. Leaving it empty exports every language the card has.
+</Info>
+
+Properties set to not show on the interface are not offered as columns.
+
+## Getting the file
+
+Small exports finish immediately and the confirmation carries a **Download** action. Larger ones are queued: Studio tells you the export has started, and the file appears in the notification center when it is ready. Either way the file stays available there, so a download you dismiss is not lost.
+
+<Info>
+Exporting needs the **Edit card definition** permission.
+</Info>

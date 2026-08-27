@@ -132,10 +132,17 @@
                   {
                     "group": "Catalog",
                     "pages": [
-                      "guides/studio/catalog/enable-enrichment",
-                      "guides/studio/catalog/changelog",
+                      "guides/studio/catalog/find-entries",
+                      "guides/studio/catalog/filter-entries",
+                      "guides/studio/catalog/select-entries",
+                      "guides/studio/catalog/entry-page",
+                      "guides/studio/catalog/enrich-an-entry",
+                      "guides/studio/catalog/entry-relations",
+                      "guides/studio/catalog/change-log",
                       "guides/studio/catalog/used-by",
-                      "guides/studio/catalog/edit-order-and-sections",
+                      "guides/studio/catalog/add-an-entry",
+                      "guides/studio/catalog/import-entries",
+                      "guides/studio/catalog/export-entries",
                       "guides/studio/catalog/manage-tags"
                     ]
                   },
@@ -587,11 +594,11 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/catalogue/how-to-enable-enrichment",
-      "destination": "/guides/studio/catalog/enable-enrichment"
+      "destination": "/guides/studio/catalog/enrich-an-entry"
     },
     {
       "source": "/docs/occtoo-studio/guides/catalogue/how-to-changelog",
-      "destination": "/guides/studio/catalog/changelog"
+      "destination": "/guides/studio/catalog/change-log"
     },
     {
       "source": "/docs/occtoo-studio/guides/catalogue/how-to-used-by",
@@ -599,7 +606,19 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/catalogue/how-to-edit-order-and-section",
-      "destination": "/guides/studio/catalog/edit-order-and-sections"
+      "destination": "/guides/studio/cards/display-sections-and-options"
+    },
+    {
+      "source": "/guides/studio/catalog/enable-enrichment",
+      "destination": "/guides/studio/catalog/enrich-an-entry"
+    },
+    {
+      "source": "/guides/studio/catalog/changelog",
+      "destination": "/guides/studio/catalog/change-log"
+    },
+    {
+      "source": "/guides/studio/catalog/edit-order-and-sections",
+      "destination": "/guides/studio/cards/display-sections-and-options"
     },
     {
       "source": "/docs/occtoo-studio/guides/catalogue/how-to-managed-tags",

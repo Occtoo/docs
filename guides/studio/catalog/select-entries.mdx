@@ -1,0 +1,34 @@
+---
+title: "Select entries"
+description: "Tick entries in the list to build a fixed segment, add them to an existing one, or export just those entries."
+---
+
+Every tile carries a checkbox. Tick one and a panel appears above the list with the actions that work on a selection.
+
+![The selection panel above the entry list](/images/guides/studio/catalog/catalog-selection-panel.png)
+
+The panel counts what you picked and offers three actions. The cross on the left clears the whole selection.
+
+<Info>
+Filtering and searching do not touch the selection, so you can pick entries from one filtered result and then change the filters to find more. Switching card clears it.
+</Info>
+
+## Create fixed segment
+
+Opens the segment creation form with the card filled in and your selected entries as the segment's content, at the **Segment details** step. A fixed segment holds exactly the ids you picked — it does not re-evaluate as data changes, unlike a query segment.
+
+## Add to fixed segment
+
+Adds the selected entries to a fixed segment that already exists.
+
+![The add to fixed segment dialog](/images/guides/studio/catalog/catalog-add-to-fixed-segment.png)
+
+The dropdown only lists **fixed** segments built on the same card, so you cannot mix entries from two different cards into one segment. Entries already in the target segment are not duplicated — the two lists are merged.
+
+## Export entries
+
+Exports only the selected entries, with the same dialog described in [Export entries](/guides/studio/catalog/export-entries). Opening **Export entries** from the toolbar menu instead exports the whole current result, filters included.
+
+<Info>
+**Export entries** needs the **Edit card definition** permission.
+</Info>

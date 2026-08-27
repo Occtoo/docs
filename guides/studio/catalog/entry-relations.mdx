@@ -1,0 +1,44 @@
+---
+title: "Entry relations"
+description: "See what an entry is linked to, and add or remove links by hand."
+---
+
+The **Relations** tab lists the relations defined on the card, one collapsible group each, with the number of linked entries in the heading.
+
+![The Relations tab with a relation expanded](/images/guides/studio/catalog/entry-relations-tab.png)
+
+**Relations** narrows the view to a single relation, and **Expand sections** / **Collapse sections** folds them all at once. A card with no relations shows an empty state instead.
+
+<Info>
+The relations themselves — which cards they connect, their display names, their ordering — are defined on the card. See [Card relations](/guides/studio/cards/card-relations).
+</Info>
+
+Selecting a linked entry opens it, so you can walk from a variant to its SKUs and back.
+
+## Add a relation
+
+<Steps>
+<Step title="Press New relation on the group you want to extend">
+A panel opens listing the entries of the card on the other end of that relation.
+
+![The add relation panel](/images/guides/studio/catalog/entry-add-relation-sheet.png)
+</Step>
+<Step title="Find the entries">
+Search by entry name. Entries that are already linked are marked as such and cannot be picked twice.
+</Step>
+<Step title="Select and add">
+**Select** marks an entry; the button counts what you picked. Adding queues the change.
+</Step>
+</Steps>
+
+<Warning>
+A newly added relation stays pending until the change is processed. Pending entries appear in the group but cannot be deleted or reordered yet.
+</Warning>
+
+## Remove a relation
+
+**Delete relation** on a linked entry asks for confirmation and then queues the removal. It unlinks the two entries — it does not delete the entry on the other end.
+
+## Reorder linked entries
+
+The drag handle on a linked entry only works when the relation has a sorting property configured on the card. Without one, the handle is disabled and the order comes from the data. This order is what a destination publishes, so it matters for things like image galleries.

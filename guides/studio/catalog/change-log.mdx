@@ -1,0 +1,34 @@
+---
+title: "Change log"
+description: "See which values were enriched on an entry, by whom and when."
+---
+
+The **Change log** tab of an entry is a timeline of the enrichment done on it: one item per property change, newest first.
+
+![The Change log tab](/images/guides/studio/catalog/entry-change-log-tab.png)
+
+Each item names the property, who changed it, when, and the value it was set to. The last item on the timeline records when the entry first became available in Occtoo.
+
+## Filters
+
+| Filter | Narrows to |
+| --- | --- |
+| Date range | **Last 7 days**, **Current month**, **Last month** or **Last year** |
+| **Properties** | One property |
+| **Updated by** | One person, or **Provider** for changes that did not come from a named user |
+
+The date range defaults to **Last year**.
+
+<Warning>
+The date range is a hard window, not a paging control. An entry whose last change is older than the selected range shows an empty timeline — widen the range before concluding that nothing was ever changed.
+</Warning>
+
+The **Properties** and **Updated by** lists only offer values that occur in the changes currently loaded, so they shrink as you narrow the date range.
+
+<Info>
+Change logs are retained for one year. Older modifications may have happened without being visible here.
+</Info>
+
+## What is not in here
+
+The change log records enrichment — values edited in Studio. Values that changed because a source delivered new data are not listed as changes; those are visible as the entry's last-updated timestamp and on the source itself.
