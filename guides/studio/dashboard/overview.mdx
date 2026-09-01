@@ -1,45 +1,62 @@
 ---
-title: "Work with the Dashboard"
+title: "The Dashboard"
+description: "The landing page of Occtoo Studio: how much you have built, what you use most, and where your data is being consumed."
 ---
 
-After logging in you will be met with the landing page for Occtoo Studio, which is the **Dashboard**.
+The **Dashboard** is the page you land on after signing in, and the first item in the left navigation. It summarises the tenant you are currently working in — how many blocks exist, which of them you have starred, which destinations are being called, and how much media you store.
 
-![An image from the static](/images/guides/studio/dashboard-explanation-8cbea2727dceeccf086054364c54f827.png)
+![The Occtoo Studio dashboard](/images/guides/studio/dashboard/dashboard-page.png)
 
-Under **Block summary** we have a numeric overview of the following:
+## Block summary
 
-- **Sources** - Total number of sources created.
-- **Cards** - Total number of cards created.
-- **Segments** - Total number of segments created.
-- **Destinations** - Total number of destinations created.
+Four counters, one per block type: **Sources**, **Cards**, **Segments** and **Destinations**. Each counter is a link — click it to open that section.
 
-**Favorites** - Shows Destinations, Segments, Cards and/or Sources marked as favorites - which makes for faster and easier access.
-To mark one of the entities as a favorite - press the star shaped icon in the lower right corner - as seen on the picture below.
+The numbers are totals for the environment, not filtered counts. A destination is counted once regardless of how many API versions it has.
 
-![An image from the static](/images/guides/studio/dashboard/favorite-icon-dashboard-035cd9077ab7b49a264f1414afd2851f.png)
+## Favorites
 
-**Top destinations** - An overview of the destinations with the most requests generated during a specified interval.
-![An image from the static](/images/guides/studio/dashboard/topdestinations-dashboard-0296a9dee172481361dd2cf5d97e421f.png)
+A horizontal strip of the blocks you have starred, mixing all four block types. See [Favorites](/guides/studio/dashboard/favorites).
 
-<Tip>
-You can filter on:
+## Top Destinations
 
-- **Requests** - Total requests towards the top destinations.
-- **Bandwidth** - Bandwidth used on the top destinations.
-</Tip>
+The destinations receiving the most traffic, at most ten of them.
 
-<Tip>
-You can also filter on the number of days:
+![The Top Destinations widget](/images/guides/studio/dashboard/dashboard-top-destinations.png)
 
-- **Today**
-- **Past 7 days**
-- **Past 30 days**
-- **All time**
-</Tip>
+Two selectors control the list:
 
-**Media** - A breakdown of the amount of storage used per asset type and the total number of assets stored.
-![An image from the static](/images/guides/studio/dashboard/media-dashboard-d88c3d0038fec483bbf3895b251df5f7.png)
+| Selector | Options |
+| --- | --- |
+| Metric | **By requests**, **By bandwidth** |
+| Period | **Today**, **Last 7 days**, **Last 30 days**, **All time** |
+
+Each row names the destination, badges the API version it counts, and shows the figure for the selected metric. Clicking a row opens that version.
 
 <Info>
-There are four different asset types in total.
+Only **successful** requests are counted — calls that returned HTTP 200. Failed and rejected calls never appear here, so a destination that is being called incorrectly can look idle. Use the destination's own **Analytics** tab to see the full picture.
 </Info>
+
+Versions that have been deleted are dropped from the list even if they generated traffic during the period.
+
+## Media
+
+Storage and asset counts for the environment.
+
+![The Media widget](/images/guides/studio/dashboard/dashboard-media.png)
+
+The two figures at the top are **Used storage** (the sum of all file sizes) and **Total assets** (the number of files). Below them, **Breakdown by asset type** splits that storage into four groups:
+
+| Group | What lands in it |
+| --- | --- |
+| Images | Any `image/*` file |
+| Video | Any `video/*` file |
+| Documents | PDF, Word, Excel, plain text, CSV, XML, JSON, HTML |
+| Other | Everything else |
+
+Groups are ordered largest first, and the bar lengths are relative to the largest group — not to your total quota.
+
+## Who can do what
+
+Everyone can see the Dashboard, and every role can star and unstar blocks. The widgets show whatever the environment holds; they are not filtered by role. What differs is what you can do once you click through to a source, card, segment or destination.
+
+See [Users and roles](/guides/studio/settings/users-and-roles) for the full picture.

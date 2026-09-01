@@ -1,0 +1,49 @@
+---
+title: "Find destinations"
+description: "Browse the destinations in the environment, filter them by publish status, and see what each tile tells you."
+---
+
+A **destination** is an API that serves your unified data to something outside Occtoo — a storefront, a marketplace feed, an agent. Each destination holds one or more **API versions**, and it is always a version you open, configure and publish.
+
+![The destinations listing](/images/guides/studio/destinations/destinations-list.png)
+
+## Filter and sort
+
+| Control | Options |
+| --- | --- |
+| **Sort by** | Last updated (newest or oldest first), Name ascending, Name descending |
+| **Status** | All in use, Not published, Publishing, Published, Publish failed |
+| **Search by destination name** | Matches the display name |
+
+**All in use** is the default and covers everything except versions that are deleted or being deleted.
+
+## What a tile shows
+
+Each tile carries the display name, the status of the selected version, a version selector, when it was last updated, the description, and two badges — the destination type and whether the API is **Protected** or **Public**.
+
+The version selector on the tile changes which version's status you are looking at without leaving the listing. It is disabled when the destination has only one version.
+
+<Info>
+Destination types differ in how data is served and how many client applications they allow. See [Destination types](/concepts/destination-types).
+</Info>
+
+## Statuses
+
+| Status | Meaning |
+| --- | --- |
+| **Not published** | Never published. The APIs cannot be called yet |
+| **Publishing** | Publish in progress |
+| **Operational** | Accepting updates, but not all data has reached the endpoints yet |
+| **Updating** | A partial publish is running; it returns to Published when infrastructure and mappings are updated |
+| **Published** | Live and callable |
+| **Pending changes** | Published, with saved changes that are not published yet |
+| **Publish failed** | The publish did not complete |
+| **Stopped** | Halted because a card schema broke. Fix the query and create a new version |
+
+## Who can do what
+
+Anyone can browse destinations, open a version and read its documentation, analytics and settings.
+
+Creating destinations and versions, editing endpoints, managing languages, registering applications and deleting all need the **Contributor** role or higher — a **Reader** sees the same screens with those controls disabled. Publishing is a separate permission again; if **Publish** is disabled for you while other controls are not, that is why.
+
+See [Users and roles](/guides/studio/settings/users-and-roles).

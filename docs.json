@@ -61,8 +61,18 @@
                     "group": "Dashboard",
                     "pages": [
                       "guides/studio/dashboard/overview",
+                      "guides/studio/dashboard/favorites",
+                      "guides/studio/dashboard/notifications",
                       "guides/studio/dashboard/profile",
                       "guides/studio/dashboard/switch-environments"
+                    ]
+                  },
+                  {
+                    "group": "Analytics",
+                    "pages": [
+                      "guides/studio/analytics/analytics-page",
+                      "guides/studio/analytics/cdn-usage",
+                      "guides/studio/analytics/source-and-provider-updates"
                     ]
                   },
                   {
@@ -153,21 +163,23 @@
                   {
                     "group": "Destinations",
                     "pages": [
+                      "guides/studio/destinations/find-destinations",
                       "guides/studio/destinations/create-a-destination",
+                      "guides/studio/destinations/destination-page",
                       "guides/studio/destinations/create-an-endpoint",
-                      "guides/studio/destinations/select-properties",
-                      "guides/studio/destinations/use-a-segment",
-                      "guides/studio/destinations/create-an-alias",
-                      "guides/studio/destinations/create-a-facet",
+                      "guides/studio/destinations/endpoint-content",
+                      "guides/studio/destinations/endpoint-segments",
+                      "guides/studio/destinations/endpoint-relations",
+                      "guides/studio/destinations/delete-an-endpoint",
                       "guides/studio/destinations/add-languages",
                       "guides/studio/destinations/publish-a-destination",
+                      "guides/studio/destinations/pending-changes",
                       "guides/studio/destinations/create-a-version",
-                      "guides/studio/destinations/update-a-version",
                       "guides/studio/destinations/delete-a-version",
-                      "guides/studio/destinations/track-usage",
+                      "guides/studio/destinations/used-by",
                       "guides/studio/destinations/register-an-application",
-                      "guides/studio/destinations/reset-a-client-secret",
                       "guides/studio/destinations/remove-an-application",
+                      "guides/studio/destinations/reset-a-client-secret",
                       "guides/studio/destinations/generate-documentation"
                     ]
                   },
@@ -647,19 +659,19 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-select-property-endpoint",
-      "destination": "/guides/studio/destinations/select-properties"
+      "destination": "/guides/studio/destinations/endpoint-content"
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-use-segtemnt-in-an-endpoint",
-      "destination": "/guides/studio/destinations/use-a-segment"
+      "destination": "/guides/studio/destinations/endpoint-segments"
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-create-alias-endpoint",
-      "destination": "/guides/studio/destinations/create-an-alias"
+      "destination": "/guides/studio/destinations/endpoint-content"
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-create-facets-endpoint",
-      "destination": "/guides/studio/destinations/create-a-facet"
+      "destination": "/guides/studio/destinations/endpoint-content"
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-create-langugae-in-destination",
@@ -675,7 +687,7 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-update-existing-version-of-destination",
-      "destination": "/guides/studio/destinations/update-a-version"
+      "destination": "/guides/studio/destinations/publish-a-destination"
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-delete-version-destination",
@@ -683,7 +695,7 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-track-usage-of-destination",
-      "destination": "/guides/studio/destinations/track-usage"
+      "destination": "/guides/studio/destinations/used-by"
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-register-an-application",
@@ -856,6 +868,30 @@
     {
       "source": "/guides/studio/sources/search-in-an-entry",
       "destination": "/guides/studio/sources/browse-entries"
+    },
+    {
+      "source": "/guides/studio/destinations/select-properties",
+      "destination": "/guides/studio/destinations/endpoint-content"
+    },
+    {
+      "source": "/guides/studio/destinations/create-an-alias",
+      "destination": "/guides/studio/destinations/endpoint-content"
+    },
+    {
+      "source": "/guides/studio/destinations/create-a-facet",
+      "destination": "/guides/studio/destinations/endpoint-content"
+    },
+    {
+      "source": "/guides/studio/destinations/use-a-segment",
+      "destination": "/guides/studio/destinations/endpoint-segments"
+    },
+    {
+      "source": "/guides/studio/destinations/track-usage",
+      "destination": "/guides/studio/destinations/used-by"
+    },
+    {
+      "source": "/guides/studio/destinations/update-a-version",
+      "destination": "/guides/studio/destinations/publish-a-destination"
     }
   ]
 }

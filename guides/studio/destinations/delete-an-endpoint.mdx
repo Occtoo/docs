@@ -1,0 +1,27 @@
+---
+title: "Delete an endpoint"
+description: "Remove an endpoint from a version that has not been published."
+---
+
+<Steps>
+  <Step title="Open the endpoint">
+
+    Open the destination, select **Endpoints**, and click the endpoint you want to remove.
+
+  </Step>
+  <Step title="Delete it">
+
+    Click **Delete endpoint**, above the endpoint summary, and confirm.
+
+  </Step>
+</Steps>
+
+<Warning>
+Deletion cannot be undone. The endpoint's property selection, aliases, facets, segment filters and relations all go with it — recreating it means configuring all of that again.
+</Warning>
+
+## When it is blocked
+
+**Delete endpoint** is disabled on a **published** version, and while a publish or update is running. A published path stays callable for the life of its version.
+
+To retire an endpoint that is already live, create a new version without it and publish that — see [Create a version](/guides/studio/destinations/create-a-version). Consumers move over when they switch to the new version URL.

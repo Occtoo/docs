@@ -1,0 +1,65 @@
+---
+title: "The destination page"
+description: "The header, the version selector and the eight tabs of a destination."
+---
+
+Opening a destination opens one **API version** of it. Everything on the page — endpoints, languages, applications, documentation — belongs to that version, not to the destination as a whole.
+
+![A destination page](/images/guides/studio/destinations/destination-page.png)
+
+## The header
+
+The display name and description sit on the left. On the right:
+
+- **Version selector** — switches between versions of this destination, and offers **Add new version**. See [Create a version](/guides/studio/destinations/create-a-version).
+- **Publish** — publishes the current version. It disappears once the version is published with nothing outstanding. See [Publish a destination](/guides/studio/destinations/publish-a-destination).
+- **⋮** — **Edit** the version's name and description, or **Delete version**.
+
+Under that sit five information cards: **Status**, **Destination type**, **Security** (Protected or Public), and two **Based on** counts — how many cards and how many segments this version draws from.
+
+## The tabs
+
+| Tab               | What it holds                                                |
+| ----------------- | ------------------------------------------------------------ |
+| **Overview**      | The base URL and a chart of successful requests per endpoint |
+| **Endpoints**     | The endpoints of this version, and their content             |
+| **Languages**     | The source-to-destination language mapping                   |
+| **Applications**  | The client applications allowed to call the API              |
+| **Analytics**     | Traffic and indexing figures for this version                |
+| **Settings**      | Read-only version details, including the version ID          |
+| **Documentation** | The generated API reference, and a request tool              |
+| **Used by**       | The cards and segments this version depends on               |
+
+<Info>
+  **Applications** only appears on a **Protected** version — a Public API has
+  nothing to authenticate.
+</Info>
+
+A number badge on **Endpoints** counts endpoints with unpublished changes. See [Pending changes](/guides/studio/destinations/pending-changes).
+
+## Overview
+
+**Base URL** is the address every endpoint of this version hangs off, with a copy control. Append the endpoint's identifier to reach an endpoint.
+
+Below it, **Endpoints successful requests** charts traffic per endpoint over a period you choose. A version that has never been published has nothing to chart.
+
+<Info>
+  **Restart version** and **Get Token** may appear next to the base URL
+  depending on what is enabled for your environment. **Get Token** fetches an
+  access token for a registered application so you can try the API without
+  leaving Studio.
+</Info>
+
+## Settings
+
+A read-only summary: **Name**, **Created**, **Last updated**, **Version ID** (with a copy control), **Version**, **Authentication**, **Description** and **Regions**, with the default region marked.
+
+![The Settings tab](/images/guides/studio/destinations/destination-settings.png)
+
+The **Version ID** is what the consumption API expects when identifying this destination — copy it from here.
+
+<Info>
+  Nothing on this tab is editable. Name and description are changed from
+  **Edit** in the header menu; languages and regions from their own tab and at
+  creation.
+</Info>

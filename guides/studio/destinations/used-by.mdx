@@ -1,0 +1,29 @@
+---
+title: "See what a destination is built on"
+description: "The cards and segments a version depends on, and why that matters before you change them."
+---
+
+The **Used by** tab lists what this version draws from: **Cards used by destination** and **Segments used by destination**, each with its own count.
+
+![The Used by tab](/images/guides/studio/destinations/destination-used-by.png)
+
+| Table | Columns |
+| --- | --- |
+| Cards | Card name, number of card properties, status |
+| Segments | Segment name, number of entries |
+
+Names link to the card or segment, and the expand icon opens a table full-screen.
+
+The same counts appear as **Based on** cards in the destination header.
+
+## Why it matters
+
+<Warning>
+Changing a card or segment listed here changes this API. Removing a property from the card removes it from the response; narrowing a segment removes entries from the endpoint — without anyone republishing the destination.
+</Warning>
+
+A card that is not **Active** also blocks publishing this version, so check the status column when **Publish** is disabled.
+
+<Info>
+The reverse view exists too: a card shows which destinations consume it, and a segment the same. See [Track usage of a card](/guides/studio/cards/track-usage) and [Track usage of a segment](/guides/studio/segments/track-usage).
+</Info>

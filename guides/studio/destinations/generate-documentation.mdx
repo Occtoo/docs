@@ -1,61 +1,53 @@
 ---
-title: "Generate documentation for a destination"
+title: "API documentation"
+description: "Read the generated reference for a version, try a request, compare versions and download the spec."
 ---
 
-You can generate documentation for a destination in JSON format - to do this, follow the steps below:
+The **Documentation** tab holds an OpenAPI reference generated from the version's own configuration — it always matches what the API actually serves.
 
-<Steps>
-  <Step title="Open the destination">
+![The Documentation tab](/images/guides/studio/destinations/destination-documentation.png)
 
-    Click on your destination - from there you can see multiple tabs - Overview, Endpoints, Regions, Languages, Analytics, Settings and Documentation
+The left column lists **Overview** and then each endpoint path with the methods it supports. **Overview** shows the API title, its version badge and the base URL.
 
-  </Step>
-  <Step title="Open the Documentation tab">
+## Read a request
 
-    Click on the tab named **Documentation**
+Selecting a method shows its full URL, its **Query Parameters** table, and the response schema.
 
-  </Step>
-  <Step title="Click Download">
+![A request in the documentation](/images/guides/studio/destinations/destination-documentation-request.png)
 
-    Click on **Download**
-
-  </Step>
-  <Step title="Choose a download format">
-
-    From there on, choose either:
-
-    - **Download JSON**
-    - **Download JSON & Examples**(depending on what kind of documentation you are looking for)
-    - This will generate a data-model output in .json format
-
-    ![An image from the static](/images/guides/studio/destinations/destination-documentation-1-714096286a809944398969ea8d5910a3.png)
-
-  </Step>
-</Steps>
-
-You can also compare the differences in the data-model across several versions of the destination, to do this press on the **Compare**-button.
-
-![An image from the static](/images/guides/studio/destinations/compare-documentation-159549b7e4747c6528cb4e4cb4fcdd96.png)
+The parameter table gives each parameter's name, type, description and whether it is required. This is where to check what the endpoint supports — `language`, `search`, `sortAsc` / `sortDesc`, `top` / `skip`, paging with `after`, and the rest.
 
 <Info>
-You will now be able to see what has changed in a side-by-side view from the previous version number published.
+Parameter semantics, including paging, are documented in the [consumption API reference](/api-reference/consumption/overview).
 </Info>
 
-![An image from the static](/images/guides/studio/destinations/compare-documentation-1-ba6f4691de9deca51e1c1a69e853a47e.png)
+## Try a request
 
-The documentation-tab can be helpful and can also be used to see what queryable parameters we have on the destination.
+**Send API Request** opens the **Destination Query Tool** — a dialog that calls the live endpoint and shows the response, without leaving Studio.
 
-![An image from the static](/images/guides/studio/destinations/compare-documentation-2-42aad8995aa24e6c47258dec812a5c09.png)
+The left half is the request:
 
-<Tip>
-In the left side of the pane - we have the **Overview** - under this we can see what endpoints we have available and which ones we can query on.
-If you press on one of the endpoints - you can also see what specific parameters we can query on in our API-request.
-</Tip>
+- **Request Headers** — `Content-Type: application/json` is fixed. On a Protected version with a registered application, `Authorization` is prefilled with that application's access token. **Add header** adds your own rows.
+- **Parameters** — every query parameter the endpoint declares, plus `id`, which every endpoint accepts for fetching entries by ID. Parameters left empty are not sent.
+- **Request Body** — only for **POST** and **PUT**, prefilled with an example payload.
 
-![An image from the static](/images/guides/studio/destinations/compare-documentation-3-f034e2b2018cfec1c1bf2c8b053d3962.png)
+The right half holds the response, and the footer says whether the request as composed is valid. Send it with the play button beside the URL, or with **Run now**.
 
-In the image above you can see all of our query parameters - we can add these in our request (for example, &language in the request) when making specific calls towards the API.
+<Warning>
+A Protected version with no registered application cannot be called from here: the tool shows a warning and the run buttons stay disabled. [Register an application](/guides/studio/destinations/register-an-application) first.
+</Warning>
 
-<Info>
-if you have a localized string for example - and you want to make a request towards a specific language - you can add "&language=no" in your request to receive all the localized fields in the Norwegian language.
-</Info>
+## Download the spec
+
+**Download** offers:
+
+- **Download JSON** — the OpenAPI document.
+- **Download JSON & Examples** — the same document with example payloads, when the version has examples to give.
+
+The button is disabled while a publish or update is running, since the spec would be mid-change.
+
+## Compare versions
+
+**Compare** opens a side-by-side diff of this version's data model against another version of the same destination.
+
+Use it before retiring a version to see exactly what changed for consumers — which fields appeared, disappeared or changed type.

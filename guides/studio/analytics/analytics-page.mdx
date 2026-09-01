@@ -1,0 +1,28 @@
+---
+title: "The Analytics page"
+description: "Three boards covering traffic out of Occtoo and updates coming in."
+---
+
+**Analytics** collects the environment-wide boards, under the heading **Analytics boards**. It answers two different questions: how much is being read out of Occtoo, and how much is being written into it.
+
+![The Analytics page](/images/guides/studio/analytics/analytics-page.png)
+
+| Board | Answers |
+| --- | --- |
+| **Content delivery network (CDN)** | How much traffic your destinations served, day by day |
+| **Sources updates** | How many updates each source received |
+| **Providers sent-updates** | How many updates each provider sent |
+
+The two update boards read the same underlying data from opposite ends — one groups by the source that was written to, the other by the provider that did the writing. See [CDN usage](/guides/studio/analytics/cdn-usage) and [Source and provider updates](/guides/studio/analytics/source-and-provider-updates).
+
+<Info>
+These boards are environment-wide. For the traffic of a single destination, open that destination and use its own **Analytics** tab — see [The destination page](/guides/studio/destinations/destination-page).
+</Info>
+
+## Who can do what
+
+Every role can open Analytics and read all three boards, including exporting the CDN figures to CSV. Nothing on this page changes data.
+
+The source and provider selectors list what you can already see elsewhere in Studio, so a **Data Provider** — who has no access to the Sources section — will find those two boards of limited use.
+
+See [Users and roles](/guides/studio/settings/users-and-roles).
