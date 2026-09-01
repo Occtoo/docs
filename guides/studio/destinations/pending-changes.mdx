@@ -1,0 +1,36 @@
+---
+title: "Pending changes"
+description: "Changes saved onto a published version, waiting to go live."
+---
+
+A published version can take a limited set of additions without a new version:
+
+- new properties
+- new segments
+- new relations
+- facets enabled on a property
+
+Saving one of these does not make it live. The version moves to the **Pending changes** status, and **Publish** reappears in the header.
+
+## Spotting them
+
+| Where | What you see |
+| --- | --- |
+| The status card | **Pending changes** instead of **Published** |
+| The **Endpoints** tab | A count badge of endpoints holding unpublished changes |
+| The tree | Pending checkboxes and icons rendered in orange rather than blue |
+| **Filter by** | The **Pending content** filter, listing only those properties |
+
+## Publish or discard
+
+To make them live, click **Publish** and confirm. Studio lists an **Updates impact** warning for each change that carries risk on a live API.
+
+An endpoint with pending changes also offers a control to restore it to its published content, discarding everything unpublished on that endpoint.
+
+<Warning>
+Restoring discards every pending change on that endpoint at once, not just the last one, and cannot be undone.
+</Warning>
+
+<Info>
+Changes that would break the existing contract — removing a property, renaming an alias, adding an endpoint or a language — cannot be made pending at all. Those controls are disabled on a published version; use [a new version](/guides/studio/destinations/create-a-version).
+</Info>

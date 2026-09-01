@@ -1,50 +1,54 @@
 ---
 title: "Register an application"
+description: "Create the client credentials a consumer needs to call a protected destination."
 ---
 
-Before you can query on a protected destination - you need to register an application (i.e. user).
-You will receive a **ClientId** and a **SecretKey** when creating an application - this will be used to generate a token which is then used to access the destination.
+A **Protected** destination only answers callers holding a valid token. Registering an application produces the **Client ID** and **client secret** used to fetch that token.
+
+![The Applications tab](/images/guides/studio/destinations/destination-applications.png)
 
 <Steps>
-  <Step title="Open the destination">
+  <Step title="Open the Applications tab">
 
-    Open your destination in the detail view.
+    Open the destination and select **Applications**, then click **Add Application**.
+
+    <Info>
+    The tab only exists on a **Protected** version. A Public destination needs no application.
+    </Info>
 
   </Step>
-  <Step title="Open the Application tab">
+  <Step title="Name the application">
 
-    Click on the tab **Application**.
+    ![The Add an application dialog](/images/guides/studio/destinations/destination-add-application.png)
+
+    Give it a **Display name** that identifies the consumer — the storefront, the marketplace connector, the agent — then click **Register application**.
 
   </Step>
-  <Step title="Add the application">
+  <Step title="Copy the secret">
 
-    Click on **+ Add application**.
+    The secret appears once, with a copy control. Copy and store it, then confirm with **I have copied the secret. Close the dialog.**
 
-    ![An image from the static](/images/guides/studio/destinations/destination-application-1-9f62e696d58ddb47c69d54e91ef1072a.png)
-
-    ![An image from the static](/images/guides/studio/destinations/destination-application-2-e902db7bf8f2681d6e69bdbc0afc50b1.png)
+    <Warning>
+    The secret is shown only at creation and cannot be retrieved afterwards. Trying to close the dialog without copying it raises a warning; closing a second time dismisses it anyway — the only way forward is to [reset the secret](/guides/studio/destinations/reset-a-client-secret).
+    </Warning>
 
   </Step>
 </Steps>
 
-<Info>
-You are only able to see the client secret when creating the application
-</Info>
+Each registered application is listed with its name and **Client ID**, both copyable, and a **⋮** menu.
 
-![An image from the static](/images/guides/studio/destinations/destination-application-3-e2a548148a44c5b85ba13eaf00b975b9.png)
+## What a consumer needs
 
-![An image from the static](/images/guides/studio/destinations/destination-application-4-4ba97a7966b23bc3a8809076fc9f19b5.png)
+| Value | Where to find it |
+| --- | --- |
+| **Version ID** | The **Settings** tab of the destination |
+| **Client ID** | On the application in the **Applications** tab |
+| **Client secret** | Only at creation — store it then |
 
-<Info>
-To use the destination externally, the following is needed:
+See [Application authentication](/api-reference/authentication/application-token) for exchanging these for a token.
 
-- Destination ID - You find this in the tab "Settings"
-- Client ID - You find that under your created application
-- Client secret - You find that when the Application is created
-</Info>
+## How many you can register
 
-![An image from the static](/images/guides/studio/destinations/destination-application-5-8c232a6bf8fba78d8f030892e5c54089.png)
+Only **Multi-consumer** destinations accept several applications. **Dynamic**, **Static** and **Enterprise** destinations allow one, and **Add Application** is disabled with a tooltip once it exists. See [Destination types](/concepts/destination-types).
 
-<Info>
-If you are using a Dynamic or a Static Destination you are only allowed to create one application.
-</Info>
+**Add Application** is also disabled while a publish or update is running.

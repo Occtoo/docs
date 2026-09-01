@@ -1,30 +1,36 @@
 ---
-title: "Delete a version of the destination"
+title: "Delete a version"
+description: "Retire an old API version once consumers have moved off it."
 ---
 
-When creating new versions of a destination - you will also need to delete the older, previous versions.
-
 <Steps>
-  <Step title="Open the destination">
+  <Step title="Select the version">
 
-    Open your destination in the detail view.
-
-  </Step>
-  <Step title="Open the Settings tab">
-
-    Click on the tab **Settings**.
+    Open the destination and switch to the version you want to remove.
 
   </Step>
-  <Step title="Delete the version">
+  <Step title="Open the header menu">
 
-    Click on **Delete this version**.
+    Click **⋮** next to **Publish**.
 
-    ![An image from the static](/images/guides/studio/destinations/destination-delete-102c20161ce1b91cf718802af8e85672.png)
+    ![The destination header menu](/images/guides/studio/destinations/destination-header-menu.png)
+
+  </Step>
+  <Step title="Delete it">
+
+    Select **Delete version** and confirm.
 
   </Step>
 </Steps>
 
+<Warning>
+Deleting a version takes its URL out of service immediately. Any consumer still calling `.../v{number}` starts failing — confirm they have moved before you delete.
+</Warning>
+
+Deleting the only remaining version deletes the destination, and Studio returns you to the destinations listing.
+
 <Info>
-We recommend that you do not have more than two versions of the same destination.
-More destinations will lead to higher data throughput - meaning that changes done will need more time to propagate to destinations and endpoints.
+Deletion is not instant: the version passes through **Deleting** while it is torn down. Deleted versions stop counting toward the environment's destination totals and disappear from Dashboard traffic figures.
 </Info>
+
+Keeping old versions is not free — see the note on version count in [Create a version](/guides/studio/destinations/create-a-version).

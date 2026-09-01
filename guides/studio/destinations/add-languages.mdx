@@ -1,40 +1,31 @@
 ---
-title: "Add additional languages to a destination"
+title: "Manage languages"
+description: "Map the language keys in your onboarded data to the language codes the API exposes."
 ---
 
-It is possible to add more languages in a destination (if not yet published).
+Localized properties are stored per language key. The **Languages** tab decides which of those keys this version serves, and what each is called on the API.
 
-<Steps>
-  <Step title="Open the destination">
+![The Languages tab](/images/guides/studio/destinations/destination-languages.png)
 
-    Open your destination in the detail view.
+Each row is one mapping:
 
-  </Step>
-  <Step title="Open the Languages tab">
+- **Source language** — a language key that exists in your onboarded data. The selector lists the keys Occtoo has seen.
+- **Destination language** — the code callers use, for example in `&language=no`.
 
-    Click on the tab **Languages**.
+The two need not match. Data onboarded under `sv-SE` can be served as `sv`.
 
-  </Step>
-  <Step title="Click Add Languages">
+## Add or remove a language
 
-    Click on **Add Languages**.
+Use **Add language** for a new row, and the bin icon to drop one. Then pick the **Default language** — the language served when a request does not ask for one — and click **Save changes**.
 
-  </Step>
-  <Step title="Configure the languages">
+Keys and values must be 2–10 characters, may contain only letters, digits, `_` and `-`, and must each be unique within the version. The **Default language** selector only offers rows that are completely and validly filled in, and follows along if you delete the row it was pointing at.
 
-    - **Default language** - the default API language (will probably be **en** in most cases).
-    - **Languages** - languages supported in the API. If you for example have onboarded data from a system that contains 'localized fields' you will need to add those localized languages before you can query on them.
+<Warning>
+Languages can only be changed while the version is **Not published**. Once published, the whole tab is read-only — a language added later would change the shape of every localized field. Create a new version to add one. See [Create a version](/guides/studio/destinations/create-a-version).
+</Warning>
 
-  </Step>
-  <Step title="Save changes">
+<Info>
+Add every language you intend to query before publishing. A localized property can only be requested for a language the destination carries; asking for one it does not know returns the default language instead of an error.
+</Info>
 
-    Click on **Save changes**.
-
-    ![An image from the static](/images/guides/studio/destinations/destination-add-languages-8e66f0ca0538938d6eec79e113b1f9b1.png)
-
-  </Step>
-</Steps>
-
-<Note>
-If your destination is Published you need to create a new version of the destination to be able to add additional languages.
-</Note>
+Facet headers are entered per language, so adding a language means every faceted property needs a header for it — see [Endpoint content](/guides/studio/destinations/endpoint-content).

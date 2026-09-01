@@ -1,15 +1,33 @@
 ---
-title: "Switch between environments"
+title: "Switch environment"
+description: "Move between the Occtoo environments you have access to, and find the safe name and tenant ID an integration needs."
 ---
 
-If you are assigned to several environments you are able to switch between the environments.
+The environment you are working in is named in the top bar, to the left of the notification bell. Clicking it opens a panel that both identifies the current environment and lets you move to another one.
 
-The selected environment is visible in the right hand corner
+![The environment switcher](/images/guides/studio/dashboard/dashboard-tenant-switcher.png)
 
-![An image from the static](/images/guides/studio/dashboard/SwitchEnviroment-41a385cad418a862e61d242f045783e9.png)
+## Identify the current environment
 
-If you have several environments
+Under **Current environment** the panel shows the display name, and two values integrations need, each with a copy control:
+
+| Value | Used for |
+| --- | --- |
+| **Safename** | The environment segment of every destination URL — `https://global.occtoo.com/{safename}/{destination}/v{n}` |
+| **Tenant ID** | Identifying the environment when calling the ingest and consumption APIs |
+
+## Move to another environment
+
+Environments you belong to are listed below the divider, sorted alphabetically. Select one to switch.
+
+<Warning>
+Switching environment reloads Studio and returns you to the Dashboard. Anything unsaved on the page you were on is lost — save first.
+</Warning>
+
+The list carries a **Find environment** search box once you belong to more than five environments. Below that number the panel just lists them.
 
 <Info>
-Click on the arrow and select the new environment
+If you belong to a single environment the panel shows only the details block — there is nothing to switch to. Access is granted per environment; ask an **Administrator** of the environment you need. See [Users and roles](/guides/studio/settings/users-and-roles).
 </Info>
+
+Your role can differ per environment. Being a Contributor in one does not make you a Contributor in the next, so controls that were enabled a moment ago may be disabled after switching.

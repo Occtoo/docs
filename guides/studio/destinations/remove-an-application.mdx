@@ -1,31 +1,32 @@
 ---
 title: "Remove an application"
+description: "Revoke a consumer's access to a protected destination."
 ---
 
-If you have an application that is not in use anymore you can remove the application.
-Upon removal - the access rights to the destination will be revoked.
-
 <Steps>
-  <Step title="Open the destination">
+  <Step title="Open the Applications tab">
 
-    Open your destination in the detail view.
-
-  </Step>
-  <Step title="Open the Application tab">
-
-    Click on the tab **Application**.
+    Open the destination and select **Applications**.
 
   </Step>
   <Step title="Open the application menu">
 
-    Click on the three dots (menu) icon under the **+ Add application**-button.
+    Click **⋮** on the application you want to remove.
 
   </Step>
-  <Step title="Remove the application">
+  <Step title="Confirm by typing the name">
 
-    Select **Remove the application**.
-
-    ![An image from the static](/images/guides/studio/destinations/destination-remove-application-b6bd8a1f252b90b4851c7a298aa9d736.png)
+    Select the delete option and type the application's display name exactly as shown to confirm.
 
   </Step>
 </Steps>
+
+<Warning>
+Removal revokes the credentials immediately. Any consumer still using that Client ID and secret starts failing authentication — move it to new credentials first.
+</Warning>
+
+Removing an application does not affect the destination's data, endpoints or other applications. On a **Multi-consumer** destination the remaining applications keep working.
+
+<Info>
+On Dynamic, Static and Enterprise destinations, which allow a single application, removing it frees the slot so a replacement can be registered. To change only the secret, [reset it](/guides/studio/destinations/reset-a-client-secret) instead of removing the application.
+</Info>

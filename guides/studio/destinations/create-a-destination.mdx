@@ -1,49 +1,64 @@
 ---
 title: "Create a destination"
+description: "Add a destination and its first API version in one dialog."
 ---
 
+Creating a destination also creates **Version 1** of its API. The dialog therefore mixes properties of the destination itself (name, description, type) with properties of that first version (authentication, languages, regions).
+
 <Steps>
-  <Step title="Add a destination">
+  <Step title="Open the dialog">
 
-    To create a destination, click on the Button **+Add Destination** in the upper right corner.
-
-    ![An image from the static](/images/guides/studio/destinations/destination-add-destination-1-f436b22830fdebd9275242f400ad4c78.png)
+    On the destinations listing, click **New destination**.
 
   </Step>
-  <Step title="Select the destination type">
+  <Step title="Choose a destination type">
 
-    Select the destination type you want to create:
+    ![The destination type options](/images/guides/studio/destinations/destination-type-options.png)
 
-    - **Dynamic**
-    - **Multi Consumer**
-    - **Static**
-    - **Enterprise**
+    The type is fixed at creation and cannot be changed afterwards — it decides how data is served and how many client applications the destination will accept. See [Destination types](/concepts/destination-types).
 
-    ![An image from the static](/images/guides/studio/destinations/destination-add-destination-0-20b05f12aeda04f91a5ddf4956a1f39f.png)
+  </Step>
+  <Step title="Name it">
+
+    ![The new destination dialog](/images/guides/studio/destinations/destination-create-dialog.png)
+
+    - **Display name** — what you and your colleagues see in Studio.
+    - **Safe name** — the URL segment. Studio derives it from the display name as you type, converting it to camelCase and dropping anything that is not alphanumeric, but you can overwrite it.
+    - **Description** — optional.
+
+    <Warning>
+    The safe name becomes part of every URL this destination serves — `https://global.occtoo.com/{environment}/{safe name}/v{version}`. It cannot be changed once the destination exists, so a rename later means a new destination and new URLs for every consumer.
+    </Warning>
+
+  </Step>
+  <Step title="Choose the authentication">
+
+    **Protected** requires a token from a registered application; **Public** serves anyone with the URL.
 
     <Info>
-    Read more about the different [destination types](/concepts/destination-types)
+    This choice only appears for the **Multi-consumer** type. Every other type is Protected.
     </Info>
 
   </Step>
-  <Step title="Add the destination information">
+  <Step title="Add the languages">
 
-    Add following information
+    Each row maps a **Source language** — a language key that already exists in your onboarded data — to the **Destination language** code you want to expose on the API. Use **Add language** for another row, and pick which of them is the **Default language**.
 
-    - **Display name** - Use a name that best matches the intent of your destination.
-    - **Safe name** - Will be added automatically but you will have the possibility to change this afterwards.
-    - **Description** - Describe the purpose of the destination
-    - **Source language code** - Language code that has been on boarded to the destination.
-    - **Destination language code** - The code that you would like to share in the endpoint
-    - **Default language** - Preferred language(s) on the endpoint - you can add several. Cannot be updated or edited after the destination has been published.
-    - **Regions** - In which regions should your destination be included?
-    - **Default region** - Which region should be used as the default region?
+    ![Languages and regions in the new destination dialog](/images/guides/studio/destinations/destination-create-regions.png)
 
-    ![An image from the static](/images/guides/studio/destinations/destination-add-destination-2-7dc874a3ce95483db1ac1f0d76e80006.png)
+    Keys and values are 2–10 characters, may contain only letters, digits, `_` and `-`, and must each be unique within the destination. Add every language you intend to query on — localized fields cannot be requested for a language the destination does not carry. See [Languages](/guides/studio/destinations/add-languages).
 
-    <Info>
-    You are only able to select Regions if the client has requested several regions in their contract.
-    </Info>
+  </Step>
+  <Step title="Choose the regions">
+
+    **Regions** are where the API is hosted, and **Default region** is the one used when a caller does not specify. Only the regions your contract covers are listed; if there is a single option it is chosen for you.
+
+  </Step>
+  <Step title="Save">
+
+    Click **Save**. Studio opens the new destination on **Version 1**, in the **Not published** state.
 
   </Step>
 </Steps>
+
+The destination has no endpoints yet, and cannot be published until it has at least one — continue with [Create an endpoint](/guides/studio/destinations/create-an-endpoint).

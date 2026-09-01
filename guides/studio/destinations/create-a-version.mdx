@@ -1,43 +1,39 @@
 ---
-title: "Create a new version of a destination"
+title: "Create a version"
+description: "Fork a published version so you can make breaking changes without disturbing consumers."
 ---
 
-If a destination is Published and you would like to do additional changes to it - you will need to create a new version of your destination.
+A published version's contract is fixed. To add an endpoint, add a language, remove a property or rename an alias, create a new version — consumers stay on the old URL until they move.
 
 <Steps>
-  <Step title="Open the destination">
+  <Step title="Open the version selector">
 
-    Open your destination in the detail view.
+    In the destination header, open the version selector.
 
-  </Step>
-  <Step title="Click Manage">
-
-    Click on the **Manage**-button next to the Version information.
+    ![The version selector](/images/guides/studio/destinations/destination-version-select.png)
 
   </Step>
-  <Step title="Add a new version">
+  <Step title="Add the version">
 
-    Click on **Add new version**.
+    Click **Add new version** at the bottom of the list, then **Add version** in the dialog.
 
-  </Step>
-  <Step title="Name the new version">
-
-    Name your new version.
-
-    ![An image from the static](/images/guides/studio/destinations/destination-version-1-f5e7ad8102adb807a9b8875d5b0ce9e9.png)
-
-    ![An image from the static](/images/guides/studio/destinations/destination-version-2-d7ecd68ceb0891ced6df465651f8449b.png)
+    The version is numbered for you — the next number up — and the name is not editable.
 
   </Step>
 </Steps>
 
-### Destination versions
+The new version copies the endpoints and configuration of the one it was forked from, and starts as **Not published**. It gets its own URL: `.../{safe name}/v{number}`.
+
+## When you cannot add one
+
+**Add new version** is disabled while the destination already has an unpublished version. Publish or delete that one first — a destination carries at most one version in flight.
 
 <Info>
-We recommend that you do not have more than 2 versions of the same destination.
-Data on-boarded / changes done in systems will propagate to each destination - meaning that if you have more than 1 version of the destination - all the changes have to propagate to several destinations - instead of one.
+The version selector lists every version of the destination, newest first, and carries a search box. Switching versions from here reloads the page against that version.
 </Info>
 
-- It's possible, from the overview page, to navigate between the different versions of the destination. The destination in use is displayed together with previous versions. To see the configuration of a specific version choose the desired version before entering.
+## How many to keep
 
-![An image from the static](/images/guides/studio/destinations/destination-version-3-1cab5b283271787af962b2312f54c908.png)
+<Warning>
+Every version is fed independently. Onboarded data propagates to each one, so two live versions mean twice the work and slower propagation to both. Keep at most two, and [delete](/guides/studio/destinations/delete-a-version) the old one once consumers have moved.
+</Warning>

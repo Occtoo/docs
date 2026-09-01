@@ -1,0 +1,48 @@
+---
+title: "Track imports and exports"
+description: "The notification centre reports background import and export tasks and hands you the finished files."
+---
+
+Imports and exports do not block the page you started them from — they run in the background and report into the **Notifications** panel. This is also where you collect an export once it is ready.
+
+## Where to find it
+
+The bell sits in the top bar of every page, between the environment switcher and your avatar.
+
+![The notifications bell in the top bar](/images/guides/studio/dashboard/dashboard-notifications-location.png)
+
+A red dot on the bell means at least one export is still running. Click it to open the panel.
+
+![The notifications panel](/images/guides/studio/dashboard/dashboard-notifications.png)
+
+## What a task looks like
+
+Each entry names the file and the stage it has reached. Which controls appear depends on that stage:
+
+| Stage | What you see | Controls |
+| --- | --- | --- |
+| Queued | _Waiting to start_, and a note that another task of the same kind is still running | **Cancel** |
+| Importing / Exporting | A progress bar and a percentage | **Cancel** |
+| Completed | When it finished | **Download** (exports only) |
+| Cancelled | Who cancelled it and when | **Retry** |
+| Failed | That the file could not be generated | **Retry** |
+
+<Warning>
+Only one import and one export run at a time. A second task queues behind the first rather than running alongside it, so a large export delays the next one.
+</Warning>
+
+## Collect an export
+
+Click **Download** on a completed export. The panel shows the download's own progress while the file transfers, which is separate from the progress of generating it.
+
+<Info>
+Exports are started from the Catalog, either from a selection of entries or from the toolbar's actions menu. See [Export entries](/guides/studio/catalog/export-entries).
+</Info>
+
+## Clear the list
+
+Each entry has its own **×** to remove it, and **Clear** in the panel header removes every entry at once.
+
+<Warning>
+Removing a notification also removes its download link. Download the file before you clear it — the export itself is not re-runnable from here, you would have to export again.
+</Warning>

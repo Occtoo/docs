@@ -1,49 +1,56 @@
 ---
 title: "Create an endpoint"
+description: "Add an endpoint to a version and choose the card or segment it serves."
 ---
 
+An endpoint is one callable path on a destination. A version can hold several, each exposing different data.
+
 <Steps>
-  <Step title="Add an endpoint">
+  <Step title="Open the Endpoints tab">
 
-    To create an endpoint go to the second tab named **Endpoints** and select **+Add Endpoint**.
+    Open the destination and select **Endpoints**, then click **Add Endpoint**.
 
-    <Note>
-    You can have several endpoints within the same destination - you can also decide what kind of data you want to expose in each and every endpoint.
-    </Note>
+    ![The Endpoints tab](/images/guides/studio/destinations/destination-endpoints-list.png)
 
-  </Step>
-  <Step title="Enter the endpoint description">
-
-    Enter following description
-
-    - **Name** - Name of the endpoint.
-    - **Identifier** - Will be prefilled but has the possibility to change.
-    - **Description** - Description of your endpoint.
-
-    ![An image from the static](/images/guides/studio/destinations/destination-endpoint-1-e2ae3f83735cbb954a58948db95c77c5.png)
+    Each endpoint is listed with the card it is based on, the segments filtering it, its identifier, and how many properties it exposes.
 
   </Step>
-  <Step title="Choose a segment or a card">
+  <Step title="Describe the endpoint">
 
-    The next step is to decide whether the endpoint will be based on a segment or a card.
-    The difference is:
+    ![The Add Endpoint dialog](/images/guides/studio/destinations/destination-endpoint-details.png)
 
-    - A segment is a selection within your card that has been created. For example, I might only want products with the 'Status' = 'Active' on my endpoint - I can use the segmentation to set up filtering for this property - meaning that the product will only get exposed if its value is set to 'Active'.
-    - If you select a card you will get a complete result of all the properties included on that specific card.
+    - **Name** — the display name.
+    - **Identifier** — the URL segment, derived from the name as you type. At least 3 characters, alphanumeric and underscore only.
+    - **Description** — optional.
 
-    ![An image from the static](/images/guides/studio/destinations/destination-endpoint-2-cc99c78e1135185cad4e4f70660472ce.png)
+    Click **Next**.
 
-    <Tip>
-    Use the **Filter** and **Search** to narrow down your result of segments and cards.
-    </Tip>
+  </Step>
+  <Step title="Select the content base">
 
-    <Tip>
-    To select a card or a segment click on the **Checkbox** in the lower right corner of the segment or card.
-    </Tip>
+    ![Selecting the content base](/images/guides/studio/destinations/destination-endpoint-content-base.png)
+
+    Two tabs decide what the endpoint serves:
+
+    - **Segments** — the endpoint returns only the entries in that segment. Picking a segment also fixes the card it belongs to.
+    - **Cards** — the endpoint returns every entry of that card.
+
+    Filter by category or search by name, then tick the tile. Only one content base can be selected.
+
+    <Warning>
+    Switching between the **Segments** and **Cards** tab clears the selection you had made on the other tab.
+    </Warning>
+
+  </Step>
+  <Step title="Save">
+
+    Click **Save**. Studio creates the endpoint with every property of the card selected, and opens it so you can narrow that down.
 
   </Step>
 </Steps>
 
-**Create an endpoint using a segment**
+<Warning>
+Endpoints can only be added to a version that is not yet published. On a published version **Add Endpoint** is disabled — create a new version instead. See [Create a version](/guides/studio/destinations/create-a-version).
+</Warning>
 
-**Create an endpoint using a card**
+Next, choose which properties and relations the endpoint exposes — see [Endpoint content](/guides/studio/destinations/endpoint-content).
