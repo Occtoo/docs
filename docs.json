@@ -91,7 +91,7 @@
                       "guides/studio/sources/order-and-sections",
                       "guides/studio/sources/delete-a-property",
                       "guides/studio/sources/browse-entries",
-                      "guides/studio/sources/edit-an-entry",
+                      "guides/studio/sources/view-an-entry",
                       "guides/studio/sources/delete-an-entry",
                       "guides/studio/sources/import-data",
                       "guides/studio/sources/manual-import",
@@ -868,6 +868,10 @@
     {
       "source": "/guides/studio/sources/search-in-an-entry",
       "destination": "/guides/studio/sources/browse-entries"
+    },
+    {
+      "source": "/guides/studio/sources/edit-an-entry",
+      "destination": "/guides/studio/sources/view-an-entry"
     },
     {
       "source": "/guides/studio/destinations/select-properties",
