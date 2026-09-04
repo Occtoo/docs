@@ -17,7 +17,6 @@ The **Properties** widget on the source page lists every property the source hol
 | **Delimiter** | The character separating values, for **List** and **Localized list** only. Otherwise `—`. |
 | **Used by** | The cards that use this property, each a link to the card. Above four, the rest collapse into **+n more**. |
 | **Capabilities** | One icon per enabled capability, with the capability name on hover. See [Property capabilities](/guides/studio/sources/property-capabilities). |
-| **Interface** | An eye icon when the property is shown on the interface, a pencil icon when it is editable. `—` when neither. |
 | **Status** | **Active**, **Updating** or **Deleting**. |
 
 Each row ends with an edit and a delete button.
@@ -30,6 +29,8 @@ A property is **Active** in normal use. It shows **Updating** while a change is 
 
 Properties are grouped into collapsible display sections. Anything not assigned to a section sits in **General**. Sections are ordered by the lowest display order among their properties. See [Display sections and order](/guides/studio/sources/order-and-sections).
 
+The same display order decides which properties get a column in the **Entries** widget — the first six do.
+
 ## Search
 
 **Search by name** filters the table. It is a fuzzy match on the display name, so small typos still hit, and it only starts filtering past two characters. No match shows **No results**.
@@ -40,7 +41,7 @@ The search matches the **Display name** column, not the **ID**.
 
 ## Where properties come from
 
-Properties appear on their own the first time data arrives carrying them, whether through a provider or a CSV import. Defining one up front lets you set its type, capabilities and interface settings before any data lands — see [Add or edit a property](/guides/studio/sources/add-and-edit-a-property).
+Properties appear on their own the first time data arrives carrying them, whether through a provider or a CSV import. Defining one up front lets you set its type, capabilities and display section before any data lands — see [Add or edit a property](/guides/studio/sources/add-and-edit-a-property).
 
 ## Actions
 

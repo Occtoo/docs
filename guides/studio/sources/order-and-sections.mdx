@@ -3,7 +3,7 @@ title: "Display sections and order"
 description: "Group source properties into sections and set the order they appear in."
 ---
 
-Sections and order control how properties are laid out in the **Properties** widget and in the entry panel. They are presentation only — they change nothing about the data or what destinations receive.
+Sections and order control how properties are laid out in the **Properties** widget and in the entry panel, and which of them get a column in the **Entries** widget. They are presentation only — they change nothing about the data or what destinations receive.
 
 <Steps>
   <Step title="Press Edit order and sections">
@@ -34,8 +34,13 @@ Sections and order control how properties are laid out in the **Properties** wid
 </Steps>
 
 <Warning>
-**Cancel** discards every change made in the dialog. There is no per-property undo.
+  **Cancel** discards every change made in the dialog. There is no per-property
+  undo.
 </Warning>
+
+## Which properties get an entries-table column
+
+The **Entries** widget columns the first six properties in this order and ignores the rest, so this dialog is where you decide what the entries table shows. Drag a property up into the first six to give it a column, and drag one out to take its column away. Section boundaries do not reset the count — it runs across the whole list, top to bottom.
 
 ## The General section
 
@@ -46,5 +51,6 @@ Sections and order control how properties are laid out in the **Properties** wid
 The reorder dialog always loads the source's full property list, even when the **Properties** widget behind it has a search filter applied. A save can never rewrite the order from a filtered subset.
 
 <Info>
-You can also set a single property's section from the property form — see [Add or edit a property](/guides/studio/sources/add-and-edit-a-property).
+  You can also set a single property's section from the property form — see [Add
+  or edit a property](/guides/studio/sources/add-and-edit-a-property).
 </Info>

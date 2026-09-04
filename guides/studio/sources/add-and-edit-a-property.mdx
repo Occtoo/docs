@@ -1,6 +1,6 @@
 ---
 title: "Add or edit a property"
-description: "Define a source property, or change the type, capabilities and interface settings of an existing one."
+description: "Define a source property, or change the type, capabilities and display section of an existing one."
 ---
 
 **Add property** and the pencil on a row both open the same form. Add mode is titled **Add property** with an **Add** button; edit mode is **Edit property** with **Save**.
@@ -34,13 +34,15 @@ description: "Define a source property, or change the type, capabilities and int
     Choose whether the property can be searched, filtered and converted. See [Property capabilities](/guides/studio/sources/property-capabilities).
 
   </Step>
-  <Step title="Set the interface settings">
+  <Step title="Pick a display section">
 
     ![Interface settings](/images/guides/studio/sources/property-interface-settings.png)
 
-    - **Display section** — **Choose an existing section** picks one of the source's sections; **Create a new section** lets you type a new name.
-    - **Show on interface** — **Yes** gives the property a column in the entries table and a row in the entry panel. Only the first six shown properties get a table column.
-    - **Editable** — **Yes** lets the value be changed by hand on an entry. **No** makes it read-only in Studio, so it can only change through onboarding.
+    **Display section** is the only interface setting on the form. **Choose an existing section** picks one of the source's sections; **Create a new section** lets you type a new name.
+
+    <Info>
+    The form does not decide whether the property gets a column in the entries table. That table shows the first six properties by display order — to add one, move it into the first six with **Edit order and sections**. See [Display sections and order](/guides/studio/sources/order-and-sections).
+    </Info>
 
   </Step>
   <Step title="Press Add">
@@ -58,7 +60,7 @@ Changing the display section is a second save behind the scenes, because section
 
 ![The Edit property dialog](/images/guides/studio/sources/edit-property-dialog.png)
 
-**ID** and **Display name** are read-only in edit mode. Everything else can be changed: preferred card property ID, data type, delimiter, description, capabilities and interface settings.
+**ID** and **Display name** are read-only in edit mode. Everything else can be changed: preferred card property ID, data type, delimiter, description, capabilities and display section.
 
 <Warning>
 Changing the data type of a property that already holds data changes how existing values are read. Check what the source is sending before switching type, especially between **Text** and the list types, where the delimiter decides how a value splits.
