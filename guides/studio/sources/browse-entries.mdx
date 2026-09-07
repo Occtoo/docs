@@ -1,6 +1,6 @@
 ---
 title: "Browse and search entries"
-description: "Read the entries table, search by entry ID, and sort on indexed properties."
+description: "Read the entries table, search by entry ID, and sort on entry ID, last modified or indexed properties."
 ---
 
 The **Entries** widget on the source page holds the onboarded entries.
@@ -29,7 +29,7 @@ No match gives **No matching entries**.
 
 ## Sort
 
-Click a column header to sort. Only properties with the **Indexing** capability are sortable — the rest render as plain headers, because the search index can only order on what it indexes. **Entry ID** is always sortable. **Last modified** and **Created** are not.
+Click a column header to sort. **Entry ID** and **Last modified** always sort. Property columns sort only when the property has the **Indexing** capability — the rest render as plain headers with a tooltip saying why, because the search index can only order on what it indexes. **Created** never sorts: the index does not keep a creation timestamp.
 
 Sorting is applied by the backend across the whole source, not just the rows already loaded.
 
