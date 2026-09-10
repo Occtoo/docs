@@ -4,6 +4,24 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
+<Update label="September 2026" description="Event subscriptions" tags={["Events", "Studio", "Sources", "API"]}>
+## Event subscriptions
+
+Get platform events pushed to you instead of pulling. Subscriptions deliver signed CloudEvents at-least-once to an HTTPS webhook, an Azure Service Bus queue or topic, or an Azure Storage Queue, filtered by event type and conditions. Manage subscriptions, rotate signing secrets, and monitor deliveries in Studio under Settings.
+
+## Redesigned data source page
+
+The data source page is now the operational view of your source data: analytics widgets for entries, properties, and import activity, a language coverage report, and an entries browser with search, facets, and filters. Entries can be sorted by last modified and open in a detail sheet with **Data** and **Changelog** tabs.
+
+## Tenant-level applications
+
+A new **Settings → Applications** tab lets you create and manage applications for your whole tenant, with per-source and per-destination access and one-click access tokens. Data providers and destination applications are now tenant-level applications too, sharing one canonical scope model (`write:sources`, `events:pull`, …); existing applications were migrated automatically and legacy scope names continue to work.
+
+## Protected source property types
+
+A source property's data type can no longer be changed while a card property built on it is used by a segment, endpoint, or relation. Studio locks the selector and shows which card properties hold the lock, so type changes never silently break downstream configuration.
+</Update>
+
 <Update label="August 2026" description="Public APIs" tags={["API", "Events", "Ingest"]}>
 ## Public Events API
 
@@ -15,7 +33,7 @@ The ingest surface is now exposed through the public API gateway: data-provider 
 
 ## Typed source ingest
 
-The new [`POST /sources/{sourceId}` endpoint](/api-reference/ingest/typed-source-entries) accepts native JSON strings, numbers, booleans, `null` values, and arrays of strings. It validates values against configured source property types and infers types for new properties before queueing the complete batch. Tenant-level Applications use the `write:sources` scope and source grants to control access. A successful response includes a correlation ID, the accepted entry count, and any new properties inferred from the request.
+The new [`POST /v1/sources/{sourceId}` endpoint](/api-reference/ingest/typed-source-entries) accepts native JSON strings, numbers, booleans, `null` values, and arrays of strings. It validates values against configured source property types and infers types for new properties before queueing the complete batch. Tenant-level Applications use the `write:sources` scope and source grants to control access. A successful response includes a correlation ID, the accepted entry count, and any new properties inferred from the request.
 
 ## Smarter card setup
 
