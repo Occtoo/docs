@@ -4,10 +4,32 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
-<Update label="August 2026" description="Public APIs" tags={["API", "Events", "Ingest"]}>
+<Update label="September 2026" description="Unified applications" tags={["Studio", "API", "Media", "Sources"]}>
+## One application model
+
+Data providers and destination applications are now tenant-level applications, managed together under Settings. Permissions and application scopes share one canonical capability model (`write:sources`, `events:pull`, `read:users`, …); existing applications were migrated automatically and legacy scope names continue to work.
+
+## Download original media files
+
+Select entries in a media data source and download the original files as a zip archive. The download runs as a tracked task and delivers a time-limited link in the Notification Center when ready.
+
+## Protected source property types
+
+A source property's data type can no longer be changed while a card property built on it is used by a segment, endpoint, or relation. Studio locks the selector and shows which card properties hold the lock, so type changes never silently break downstream configuration.
+
+## Source entry details
+
+Entries in the data source view open in a detail sheet with **Data** and **Changelog** tabs, and can be sorted by last modified.
+</Update>
+
+<Update label="August 2026" description="Public APIs" tags={["API", "Events", "Ingest", "Studio", "Media"]}>
 ## Public Events API
 
 A new tenant-scoped Events API is available on the public API: around 30 platform event types — imports, sources, cards, segments, destinations, media, users — published as standard [CloudEvents](https://cloudevents.io/). Consume them via cursor-based pull or a real-time [Server-Sent Events stream](/api-reference/events/streaming), with event discovery, filtering, and immutable JSON schemas per event type. See the [Events API reference](/api-reference/events/overview).
+
+## Event subscriptions
+
+Get platform events pushed to you instead of pulling. Subscriptions deliver signed CloudEvents at-least-once to an HTTPS webhook, an Azure Service Bus queue or topic, or an Azure Storage Queue, filtered by event type and conditions. Manage subscriptions, rotate signing secrets, and monitor deliveries in Studio under Settings.
 
 ## Public Ingest API
 
@@ -15,7 +37,15 @@ The ingest surface is now exposed through the public API gateway: data-provider 
 
 ## Typed source ingest
 
-The new [`POST /sources/{sourceId}` endpoint](/api-reference/ingest/typed-source-entries) accepts native JSON strings, numbers, booleans, `null` values, and arrays of strings. It validates values against configured source property types and infers types for new properties before queueing the complete batch. Tenant-level Applications use the `write:sources` scope and source grants to control access. A successful response includes a correlation ID, the accepted entry count, and any new properties inferred from the request.
+The new [`POST /v1/sources/{sourceId}` endpoint](/api-reference/ingest/typed-source-entries) accepts native JSON strings, numbers, booleans, `null` values, and arrays of strings. It validates values against configured source property types and infers types for new properties before queueing the complete batch. Tenant-level Applications use the `write:sources` scope and source grants to control access. A successful response includes a correlation ID, the accepted entry count, and any new properties inferred from the request.
+
+## Tenant-level applications and API keys
+
+A new **Settings → Applications** tab lets you create and manage applications for your whole tenant, with per-source and per-destination access and one-click access tokens. The **API keys** tab issues keys for destination endpoints and the MCP server.
+
+## Media management in Studio
+
+Media data sources have a dedicated experience: browse assets with thumbnails, organize them in folders, search and filter, and enrich entries in place.
 
 ## Smarter card setup
 

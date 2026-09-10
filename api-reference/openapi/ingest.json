@@ -386,7 +386,7 @@
         "x-permission-match": "any"
       }
     },
-    "/sources/{sourceId}": {
+    "/v1/sources/{sourceId}": {
       "post": {
         "tags": [
           "Sources"
