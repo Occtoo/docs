@@ -1,0 +1,31 @@
+---
+title: "Verify an endpoint"
+description: "Answer the challenge Occtoo sends to a new webhook endpoint so the subscription starts delivering."
+---
+
+A new **Webhook** subscription opens in **Pending verification**. Occtoo has sent a challenge request to the endpoint and delivers nothing until the endpoint answers it. Storage Queue and Service Bus subscriptions skip this — they have no endpoint to prove.
+
+The subscription page carries a **Verify your endpoint** banner while it waits.
+
+<Steps>
+  <Step title="Answer the challenge">
+
+    Occtoo sends the challenge to the endpoint you registered, following the [CloudEvents HTTP webhook handshake](https://github.com/cloudevents/spec/blob/main/cloudevents/http-webhook.md). Respond with the challenge value signed with your signing secret.
+
+    <Info>
+    The secret is the one shown when the subscription was created. If you no longer have it, rotate it first — see [Signing secrets](/guides/studio/events/signing-secrets).
+    </Info>
+
+  </Step>
+  <Step title="Check verification">
+
+    Click **Check verification** in the banner. Studio asks the API whether the handshake succeeded; when it has, the banner disappears and the status becomes **Active**.
+
+    A failure leaves the subscription in **Pending verification**, so fix the endpoint and check again — there is no limit on attempts.
+
+  </Step>
+</Steps>
+
+<Warning>
+Delivery starts at the event head as of verification. Events published while the subscription waited are not delivered afterwards.
+</Warning>

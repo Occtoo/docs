@@ -1,0 +1,30 @@
+---
+title: "Edit a subscription"
+description: "Change the name, delivery target or event filter of an existing subscription."
+---
+
+On the subscription page, open the kebab menu and choose **Edit**.
+
+![The edit subscription dialog](/images/guides/studio/events/edit-subscription.png)
+
+The dialog is the creation form with the current values in it, minus the type step — the delivery type is fixed for the life of the subscription. To deliver the same events somewhere else in a different way, create a second subscription.
+
+| Type | What you can change |
+| --- | --- |
+| **Webhook** | Name, HTTPS endpoint, event filter |
+| **Azure Storage Queue** | Name, connection string and queue name, event filter |
+| **Azure Service Bus** | Name, connection string and entity name, event filter |
+
+Editing the filter works exactly as it does at creation — see [Build the event filter](/guides/studio/events/event-filter).
+
+## Azure credentials
+
+The stored connection string is never returned, so its field opens blank. Leave it and the queue or entity name untouched and the stored configuration stays as it is.
+
+Start replacing it and both fields become required together: a new connection string needs the queue or entity name that goes with it, and for Service Bus an `EntityPath=` in the connection string still has to match the entity name.
+
+Click **Save changes**. **Cancel** discards everything, including changes to the filter.
+
+<Warning>
+A new filter applies to events published after you save. Events that arrived while the old filter was in place are not re-evaluated or replayed.
+</Warning>

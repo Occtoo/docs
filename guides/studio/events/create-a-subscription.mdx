@@ -1,0 +1,61 @@
+---
+title: "Create a subscription"
+description: "Pick a delivery type, point it at your endpoint or queue, and choose the events it receives."
+---
+
+One dialog creates the subscription: the delivery type first, then the target it writes to, then the event filter.
+
+<Steps>
+  <Step title="Choose a delivery type">
+
+    On the listing, click **New subscription**.
+
+    ![The subscription type options](/images/guides/studio/events/new-subscription-type.png)
+
+    The type decides which target fields the rest of the dialog asks for, and it is fixed once the subscription exists — editing a subscription later cannot turn a queue into a webhook.
+
+    <Warning>
+    **Back** returns to this list and rebuilds the form from scratch. Everything typed into it, including the event filter, is discarded.
+    </Warning>
+
+  </Step>
+  <Step title="Name it and point it at the target">
+
+    The **Name** is yours — it identifies the subscription in Studio and nothing else.
+
+    **Webhook**
+
+    ![Name and endpoint for a webhook subscription](/images/guides/studio/events/webhook-configuration.png)
+
+    The **HTTPS endpoint** must start with `https://`. Every request carries a `webhook-signature` header you verify with the signing secret — see [Signing secrets](/guides/studio/events/signing-secrets).
+
+    **Azure Storage Queue and Azure Service Bus**
+
+    ![Connection string and entity name for an Azure Service Bus subscription](/images/guides/studio/events/azure-configuration.png)
+
+    | Field | What to enter |
+    | --- | --- |
+    | **Connection string** | The connection string for the storage account or Service Bus namespace |
+    | **Queue name** (Storage Queue) | The queue that receives the events |
+    | **Entity name** (Service Bus) | The queue or topic that receives the events |
+
+    The connection string is stored by Occtoo and never shown again — afterwards only the derived queue or entity URL comes back. If the connection string carries an `EntityPath=`, it has to name the same entity you typed, and the dialog blocks the mismatch before it reaches the API.
+
+  </Step>
+  <Step title="Choose the events">
+
+    Pick at least one event type, and optionally narrow it with conditions. See [Build the event filter](/guides/studio/events/event-filter).
+
+  </Step>
+  <Step title="Create it">
+
+    Click **Create subscription**.
+
+    A **Webhook** shows its signing secret once, then opens in **Pending verification** — no events are delivered until the endpoint is verified. A queue subscription has no secret and no verification step: Studio opens it straight away.
+
+  </Step>
+</Steps>
+
+<Warning>
+A subscription only receives events published after it starts delivering. Nothing from before that point is replayed, so a consumer that needs history has to read it from the [Events API](/api-reference/events/overview) instead.
+</Warning>

@@ -1,0 +1,51 @@
+---
+title: "Monitor deliveries"
+description: "Read the delivery chart and the attempt log on a subscription, and understand what each delivery status means."
+---
+
+Two widgets on the subscription page cover delivery: the chart summarises attempts over a time range, the table lists them one by one.
+
+## Deliveries over time
+
+![The deliveries over time widget](/images/guides/studio/events/deliveries-over-time.png)
+
+The range picker opens on **Last 24 hours**. It offers presets **By time** — from **Last 10 minutes** to **Last 72 hours** — and **By date** — **Last 7 days** through **This month** — or pick a start and end day in the calendar and click **Apply**. **Last 10 minutes** is a live view: the window rolls forward and the chart refreshes every minute.
+
+Bars are stacked per bucket — **Delivered** and **Failed**, plus **Other** if the API reports an outcome Studio does not recognise. The bucket width follows the range: one minute up to an hour, one hour up to three days, one day beyond that.
+
+| Stat | What it counts |
+| --- | --- |
+| **Deliveries** | Every attempt in the range |
+| **Success rate** | Delivered as a share of delivered plus failed. Outcomes counted as *other* are left out, so a cancelled delivery never drags the rate down |
+| **Failed** | Failed attempts in the range |
+| **Delivery rate** | Average attempts per bucket, with the busiest bucket as **Peak** |
+
+The unit on **Delivery rate** follows the bucket width — `/min`, `/hour` or `/day`.
+
+<Info>
+A range with no data shows **No deliveries available** rather than an empty chart. Widen the range before reading that as a problem.
+</Info>
+
+## Recent deliveries
+
+![The recent deliveries table](/images/guides/studio/events/recent-deliveries.png)
+
+One row per delivery, newest first: the event type with its event id underneath, the **Sequence** that orders it in the stream, the current status, how many attempts it has taken, the response, and when it was delivered.
+
+| Status | Meaning |
+| --- | --- |
+| **Queued** | Accepted, not attempted yet |
+| **Retrying** | An attempt failed and another is scheduled |
+| **Delivered** | The target accepted it |
+| **Dead-lettered** | Retries were exhausted. Occtoo stops trying |
+| **Cancelled** | The delivery was cancelled and will not be attempted again |
+
+Failed attempts are retried with exponential backoff, and dead-lettered once those run out. **Attempts** counts every attempt including the first, so it keeps climbing while a row stays in **Retrying**.
+
+**Response** is the HTTP status the endpoint returned, with its error text where there is one. Queue deliveries have no HTTP response and show `—`.
+
+The widget holds the 25 most recent deliveries. The expand control opens the full list, which loads more as you scroll, and **Refresh** re-reads the log in either view.
+
+<Warning>
+Delivery is at least once: a delivery that timed out may still have been processed, and the retry then arrives as a duplicate. Deduplicate on the `webhook-id` header so a repeat is not processed twice.
+</Warning>

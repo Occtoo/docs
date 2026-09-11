@@ -184,6 +184,20 @@
                     ]
                   },
                   {
+                    "group": "Events",
+                    "pages": [
+                      "guides/studio/events/find-subscriptions",
+                      "guides/studio/events/create-a-subscription",
+                      "guides/studio/events/event-filter",
+                      "guides/studio/events/signing-secrets",
+                      "guides/studio/events/verify-an-endpoint",
+                      "guides/studio/events/subscription-page",
+                      "guides/studio/events/monitor-deliveries",
+                      "guides/studio/events/edit-a-subscription",
+                      "guides/studio/events/pause-resume-and-delete"
+                    ]
+                  },
+                  {
                     "group": "Settings",
                     "pages": [
                       "guides/studio/settings/users-and-roles",

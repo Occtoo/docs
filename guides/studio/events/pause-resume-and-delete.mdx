@@ -1,0 +1,30 @@
+---
+title: "Pause, resume and delete"
+description: "Stop a subscription temporarily or for good, and understand what each does to the events in between."
+---
+
+## Pause and resume
+
+**Pause** sits at the top right of the subscription page and stops delivery immediately. The button becomes **Resume**, and the status becomes **Paused**.
+
+<Warning>
+**Resume** starts delivering from the current event head. Events published while the subscription was paused are never delivered — a pause drops them rather than queueing them.
+</Warning>
+
+If you need those events afterwards, read them from the [Events API](/api-reference/events/overview), which retains the stream independently of any subscription.
+
+Neither button appears on a **Disabled** or **Deleted** subscription.
+
+## Delete
+
+Open the kebab menu and choose **Delete**.
+
+![The delete confirmation](/images/guides/studio/events/delete-subscription.png)
+
+Confirm with **Delete** and Studio returns to the listing. Deliveries stop immediately, and for a webhook the signing secret is revoked with it, so anything still holding that secret can no longer validate anything.
+
+<Warning>
+Deleting cannot be undone. Recreating the subscription means a new signing secret, a fresh endpoint verification, and delivery starting from the event head at that moment.
+</Warning>
+
+Pause instead when you only need the target to stop receiving for a while and want to keep the configuration.

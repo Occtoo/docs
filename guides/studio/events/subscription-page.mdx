@@ -1,0 +1,32 @@
+---
+title: "The subscription page"
+description: "Read a subscription's target, filter and state, and find the controls that change it."
+---
+
+Opening a subscription shows what it delivers, where, and how that delivery has been going.
+
+![The subscription page](/images/guides/studio/events/subscription-page.png)
+
+## The header
+
+The name sits with two badges — the current **status** and the subscription **type** — above the delivery target. The label in front of the target changes with the type: **Endpoint URL** for a webhook, **Queue URL** for a Storage Queue, **Service Bus entity URI** for a Service Bus.
+
+Below that: how many event types and conditions the filter holds, and when the subscription was created and last modified. The event-type number counts the types named in the filter, or all 30 when the filter names none.
+
+**Events** and **Conditions** then list the filter itself, one chip per event type and one per `property eq "value"` clause. A subscription with no conditions shows no **Conditions** row.
+
+## The controls
+
+**Pause** — or **Resume** on a paused subscription — sits at the top right, next to the kebab menu. Neither appears on a **Disabled** or **Deleted** subscription.
+
+![The subscription actions menu](/images/guides/studio/events/subscription-actions.png)
+
+| Menu item | What it does |
+| --- | --- |
+| **Edit** | [Change the name, target or filter](/guides/studio/events/edit-a-subscription) |
+| **Rotate signing secret** | [Issue a new webhook secret](/guides/studio/events/signing-secrets). Webhook subscriptions only |
+| **Delete** | [Stop delivery for good](/guides/studio/events/pause-resume-and-delete) |
+
+## The widgets
+
+**Deliveries over time** charts delivery attempts against a time range, and **Recent deliveries** lists the individual attempts. Both are covered in [Monitor deliveries](/guides/studio/events/monitor-deliveries).
