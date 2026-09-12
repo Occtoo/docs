@@ -42,8 +42,8 @@ The event-type count is the number of types named in the filter. A filter that n
 | Status | Meaning |
 | --- | --- |
 | **Active** | Delivering matching events |
-| **Pending verification** | A webhook whose endpoint has not answered the challenge yet. Nothing is delivered until it does — see [Verify an endpoint](/guides/studio/events/verify-an-endpoint) |
-| **Paused** | Someone paused delivery. **Resume** starts again from the current event head |
+| **Pending verification** | A webhook whose endpoint has not completed verification. Nothing is delivered until verification succeeds — see [Verify an endpoint](/guides/studio/events/verify-an-endpoint) |
+| **Paused** | Delivery was paused by a user or automatically after repeated authorization failures. **Resume** starts again from the current event head |
 | **Disabled** | Delivery is switched off. Studio offers no **Pause** or **Resume** control in this state |
 | **Deleted** | Deleted. Kept only so it can still be found by filtering on this status |
 

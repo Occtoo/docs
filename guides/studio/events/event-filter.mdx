@@ -50,4 +50,4 @@ Narrowing the event types can strand a condition on a property the remaining typ
 (type eq "source_entry.added" or type eq "source_entry.updated" or type eq "source_entry.deleted") and sourceId eq "product"
 ```
 
-Types are joined with `or` and bracketed as a group once a condition is present; conditions are appended with `and`. A condition left without a value is dropped from the expression rather than sent empty.
+Types are joined with `or` and bracketed as a group once a condition is present; conditions are appended with `and`. A condition left without a value is omitted from the expression preview, but it blocks creation and saving. Fill in the value or remove the condition before submitting.
