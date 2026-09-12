@@ -19,6 +19,10 @@ The Occtoo Events API lets you react to changes across your tenant — sources, 
   </Card>
 </Columns>
 
+<Note>
+Occtoo can also push these events to you. Create a webhook, Azure Storage Queue or Azure Service Bus subscription in Studio — see [Find event subscriptions](/guides/studio/events/find-subscriptions).
+</Note>
+
 ## Inspect stream metadata
 
 Call `GET /v1/events/metadata` to inspect the retained stream without retrieving event payloads. It accepts the same optional `filter` as the pull and stream endpoints.

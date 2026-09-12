@@ -1,0 +1,47 @@
+---
+title: "Verify an endpoint"
+description: "Handle Occtoo's verification request so your webhook subscription starts delivering."
+---
+
+A new **Webhook** subscription opens in **Pending verification**. Occtoo delivers no events until you verify the endpoint. Storage Queue and Service Bus subscriptions skip verification and become active at creation.
+
+The subscription page carries a **Verify your endpoint** banner while verification is pending.
+
+<Steps>
+  <Step title="Prepare the endpoint">
+
+    Configure your endpoint to accept an `OPTIONS` request, following the [CloudEvents HTTP webhook handshake](https://github.com/cloudevents/spec/blob/main/cloudevents/http-webhook.md). Occtoo sends the request when you click **Check verification**, not when you create the subscription.
+
+    The request includes:
+
+    ```http
+    WebHook-Request-Origin: https://api.occtoo.com
+    Accept: application/cloudevents+json
+    ```
+
+    Return a successful `2xx` response with a `WebHook-Allowed-Origin` header containing the exact requested origin or `*`:
+
+    ```http
+    HTTP/1.1 200 OK
+    WebHook-Allowed-Origin: https://api.occtoo.com
+    ```
+
+    The example shows the production origin. Other environments may send a different origin.
+
+    <Info>
+    Verification does not use a signed challenge or your signing secret. You use the secret to validate event delivery requests after activation — see [Signing secrets](/guides/studio/events/signing-secrets).
+    </Info>
+
+  </Step>
+  <Step title="Verify the endpoint">
+
+    Click **Check verification** in the banner. Occtoo sends the `OPTIONS` request and checks the response. When verification succeeds, the banner disappears and the status becomes **Active**.
+
+    A failure leaves the subscription in **Pending verification**. Fix the endpoint and click **Check verification** to try again.
+
+  </Step>
+</Steps>
+
+<Warning>
+Delivery starts at the event head as of verification. Events published while the subscription waited are not delivered afterwards. Changing a verified webhook's endpoint requires verification again.
+</Warning>

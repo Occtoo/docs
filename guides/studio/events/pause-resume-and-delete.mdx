@@ -1,0 +1,32 @@
+---
+title: "Pause, resume and delete"
+description: "Stop a subscription temporarily or for good, and understand what each does to the events in between."
+---
+
+## Pause and resume
+
+**Pause** sits at the top right of the subscription page. It stops new deliveries and cancels pending deliveries. The button becomes **Resume**, and the status becomes **Paused**. A request already in progress may still complete.
+
+<Warning>
+**Resume** starts delivering from the current event head. Events published while the subscription was paused are never delivered — a pause drops them rather than queueing them.
+</Warning>
+
+If you need those events afterwards, read them from the [Events API](/api-reference/events/overview), which retains the stream independently of any subscription.
+
+Neither button appears on a **Disabled** or **Deleted** subscription.
+
+## Delete
+
+Open the kebab menu and choose **Delete**.
+
+![The delete confirmation](/images/guides/studio/events/delete-subscription.png)
+
+Confirm with **Delete** and Studio returns to the listing. Occtoo stops new deliveries and cancels pending deliveries. A request already in progress may still complete.
+
+Deleting a webhook does not invalidate a signing secret stored by your receiver. That secret can still validate signatures made with it. Remove it from your receiver when you no longer want to accept requests signed with it.
+
+<Warning>
+Deleting cannot be undone. A replacement webhook gets a new signing secret and requires endpoint verification; its delivery starts from the event head at verification. A replacement Azure subscription starts from the event head at creation. Neither replays the old subscription's backlog.
+</Warning>
+
+Pause instead when you only need the target to stop receiving for a while and want to keep the configuration.

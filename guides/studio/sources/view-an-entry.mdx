@@ -20,7 +20,7 @@ Clicking a row in the **Entries** widget opens the entry panel on the right.
 
 ## Current data
 
-Every property on the entry, grouped into the source's display sections, with a **Filter properties** box above. Sections come from the property's display section — see [Display sections and order](/guides/studio/sources/order-and-sections).
+Every property on the entry, grouped into the source's display sections, with a row of filters above. Sections come from the property's display section — see [Display sections and order](/guides/studio/sources/order-and-sections).
 
 A property with no value shows `—`. A localized property shows one row per language the source has seen, each tagged with its language code. Hovering a value reveals a copy button.
 
@@ -32,6 +32,24 @@ A property with no value shows `—`. A localized property shows one row per lan
 ### Filter properties
 
 **Filter properties** matches on both the property ID and the display name, and hides sections left with nothing in them. No match shows **No properties match your filter**.
+
+### Hide empty
+
+**Hide empty** drops every value the entry has nothing in. A property whose values are all empty disappears entirely, and a section left with no properties disappears with it — so a source with hundreds of properties collapses to what this entry actually carries. On a localized property only the empty language rows go; the languages that have a value stay.
+
+### Filter by language
+
+The language select next to **Hide empty** lists **All languages** plus every language the source has spotted. Picking one leaves a localized property showing that language only. Values that are not localized are not language-specific, so they stay whatever you pick.
+
+![The language filter on the entry panel](/images/guides/studio/sources/entry-language-filter.png)
+
+The select appears only on sources where a language has been spotted. A source with no localized values has nothing to filter by, so it shows **Hide empty** alone.
+
+<Info>
+  The three filters combine: search narrows to matching properties, **Hide
+  empty** removes what is blank in them, and the language picks which localized
+  rows remain.
+</Info>
 
 ## Changelog
 
