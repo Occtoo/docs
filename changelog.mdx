@@ -4,7 +4,7 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
-<Update label="September 2026" description="Event subscriptions" tags={["Events", "Studio", "Sources", "API"]}>
+<Update label="September 2026" description="Event subscriptions" tags={["Events", "Studio", "Sources", "Segments", "API"]}>
 ## Event subscriptions
 
 Get platform events pushed to you instead of pulling. Subscriptions deliver signed CloudEvents at-least-once to an HTTPS webhook, an Azure Service Bus queue or topic, or an Azure Storage Queue, filtered by event type and conditions. Manage subscriptions, rotate signing secrets, and monitor deliveries in Studio under Settings.
@@ -20,6 +20,18 @@ A new **Settings → Applications** tab lets you create and manage applications 
 ## Protected source property types
 
 A source property's data type can no longer be changed while a card property built on it is used by a segment, endpoint, or relation. Studio locks the selector and shows which card properties hold the lock, so type changes never silently break downstream configuration.
+
+## Segment tags
+
+Attach metadata tags to segments. Tags flow into each exposed entry's metadata in destination indexes and can be used to filter destination queries. Includes validation, tag suggestions, and a tags UI on segment details.
+
+## Scheduled segments
+
+Give segments a start and end time: they wait in a Scheduled state, activate automatically, and archive themselves when the window closes.
+
+## New documentation site
+
+The documentation moved to a new platform with an interactive API reference and playground, an Integrations section, cleaner navigation, and this changelog. All previous URLs redirect to their new locations.
 </Update>
 
 <Update label="August 2026" description="Public APIs" tags={["API", "Events", "Ingest"]}>
@@ -38,10 +50,6 @@ The new [`POST /v1/sources/{sourceId}` endpoint](/api-reference/ingest/typed-sou
 ## Smarter card setup
 
 When creating card properties from source properties, Studio now suggests sensible property IDs, and new card definitions default their property groups from the data source's property groups — so cards start organized the way your source data already is.
-
-## New documentation site
-
-The documentation moved to a new platform with an interactive API reference and playground, an Integrations section, cleaner navigation, and this changelog. All previous URLs redirect to their new locations.
 </Update>
 
 <Update label="July 2026" description="Source analytics" tags={["Studio", "Ingest", "Media", "Platform"]}>
@@ -62,11 +70,7 @@ Upload a replacement file for an existing asset while keeping its enrichment and
 The platform gained per-tenant usage limits for imports — request rate, request size, entry size, and property value size — with standard `429 + Retry-After` responses and clear per-entry errors, rolling out gradually per tenant.
 </Update>
 
-<Update label="June 2026" description="Segment tags" tags={["Segments", "Ingest", "Studio"]}>
-## Segment tags
-
-Attach metadata tags to segments. Tags flow into each exposed entry's metadata in destination indexes and can be used to filter destination queries. Includes validation, tag suggestions, and a tags UI on segment details.
-
+<Update label="June 2026" description="Scheduled segment filters" tags={["Segments", "Ingest", "Studio"]}>
 ## Scheduled segment filters, completed
 
 Queued endpoint segment changes now support include and exclude filters at any level of the endpoint structure — root or nested relations — and queued changes can be deleted before they apply.
@@ -121,10 +125,6 @@ Re-run a failed import task via the API instead of re-uploading the payload. Fai
 
 Source properties are now first-class objects: each can carry a data type, delimiter for list types, and display name — managed via new GraphQL queries and mutations.
 
-## Catalog landing page
-
-A new overview experience for the Catalog with configurable widgets, pinned items, and favorites.
-
 ## Granular destination status
 
 Destination API versions now report finer-grained states — Updating, Operational, Restarting — and publishing status correctly reflects partial publishes.
@@ -134,11 +134,7 @@ Destination API versions now report finer-grained states — Updating, Operation
 The ingestion backbone was rebuilt with streaming entry storage: faster imports, correct merging of localized values, and predictable behavior for deleted-then-restored entries. Entry update events now include previous and current values.
 </Update>
 
-<Update label="February 2026" description="Scheduled segments" tags={["Segments", "Destinations", "Studio", "Cards"]}>
-## Scheduled segments
-
-Give segments a start and end time: they wait in a Scheduled state, activate automatically, and archive themselves when the window closes.
-
+<Update label="February 2026" description="Destination publishing" tags={["Segments", "Destinations", "Studio", "Cards"]}>
 ## Destination publishing overhaul
 
 A clearer publishing-status flow, editable pending changes on endpoints, proper revert of property changes, protection against conflicting edits from multiple users, and republishing of destinations stuck in a failed state.
