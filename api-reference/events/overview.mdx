@@ -177,7 +177,7 @@ In the tables, `?` marks a property that is not required — it may be absent or
 
 ## Data property reference
 
-Properties marked **filterable** can be used in the filter grammar of `GET /v1/events`, `GET /v1/events/metadata`, and `GET /v1/events/stream`. The exact set accepted for a given type is returned as `filterableProperties` by `GET /v1/event-types`.
+Properties marked **filterable** can be used in the filter grammar of `GET /v1/events`, `GET /v1/events/metadata`, and `GET /v1/events/stream`. The exact set accepted for a given type is returned as `filterableProperties` by `GET /v1/event-types`. You can also filter by the envelope fields `type` and [`subject`](#filter-by-subject).
 
 | Property | Type | Filterable | Description |
 |---|---|---|---|
