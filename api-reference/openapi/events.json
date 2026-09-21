@@ -2,7 +2,7 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Occtoo Events API",
-    "description": "Occtoo Events API exposes customer-safe CloudEvents derived from changes across an Occtoo tenant. Use pull for scheduled or batch processing and SSE for low-latency delivery. Both transports read the same ordered, 90-day retained event projection.\n\n## Quick start\n\n1. Select **Authorize** and sign in with the existing Occtoo identity, or provide a bearer token or organization API key.\n2. Inspect the [event catalog](https://api.occtoo.com/v1/event-types) to select event types and entity-level filters.\n3. Pull the first page, process it, and persist its `after` cursor.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'limit=100' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo check whether that consumer has reached the latest event matching the same filter, read stream metadata and compare `latest.sequence` with the last processed CloudEvent sequence. Sequence gaps identify position, not an exact number of pending matching events.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events/metadata' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\n## Authentication and tenancy\n\nEvent reads require a tenant-scoped credential. All delivery endpoints accept the established `read-events` permission. Tenant applications can instead use `events:pull` for pull and metadata or `events:sse` for SSE. Interactive user calls use Authorization Code with PKCE and can reuse the existing Occtoo sign-in session. Machine consumers can send a tenant-scoped Kinde application token as `Authorization: Bearer <token>` or an Occtoo organization API key as `x-api-key: <organization-api-key>`. The gateway validates the credential, projects application scopes directly as permissions, and supplies its tenant and actor identity to the Events API; the tenant cannot be selected with a query parameter.\n\nNative browser `EventSource` cannot attach either authorization header. Browser applications should consume SSE with streaming `fetch` or relay it through an authenticated backend; server-side SSE clients can set either header directly.\n\n## Delivery and checkpoints\n\nEvents are ordered by the fixed-width `sequence` extension rather than their timestamp. A new SSE connection without a cursor starts live at the current tenant-stream tail; it does not replay retained history. Pull normally transports a position as an opaque `after` cursor, but accepts the raw sequence as a recovery checkpoint when the cursor was not retained. SSE transports the raw sequence as `Last-Event-ID`. Resuming is exclusive: the event at the supplied position is not delivered again. Public event ids are deterministic UUIDv5 values, so replaying the same internal event recreates the same id. Consumers should nevertheless make business processing idempotent and checkpoint only after successful processing.\n\n### Recover from a recorded sequence\n\nIf the returned pull cursor was lost but the last successfully processed CloudEvent `sequence` was retained, pass that sequence directly as `after`. Continue using the same filter as the original subscription.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'after=003.00000000000000184467' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo resume SSE from the same processed position, send `Last-Event-ID: 003.00000000000000184467`. The first event returned has a greater sequence.\n\n## Filtering\n\n`filter` implements a bounded RFC 7644-derived subset: `eq`, `and`, `or`, parentheses and JSON double-quoted strings. `and` binds more tightly than `or`. Use parentheses when combining event families. Only `type` and the entity-level properties advertised by the catalog are accepted; entry/card-level filters are intentionally unavailable.\n\n## Schema compatibility\n\nThe CloudEvent `type` is stable and unversioned. Read the exact payload version from `dataschema`. A new minor version is additive: ignore unknown fields and fetch the new immutable schema asynchronously. Do not deserialize a new major version as an earlier major; retain or quarantine the raw event until the consumer is upgraded.\n\nMachine-readable contracts: [OpenAPI](https://api.occtoo.com/openapi/events.json) · [AsyncAPI](https://api.occtoo.com/asyncapi/events.json) · [event catalog](https://api.occtoo.com/v1/event-types)",
+    "description": "Occtoo Events API exposes customer-safe CloudEvents derived from changes across an Occtoo tenant. Use pull for scheduled or batch processing and SSE for low-latency delivery. Both transports read the same ordered, 90-day retained event projection.\n\n## Quick start\n\n1. Select **Authorize** and sign in with the existing Occtoo identity, or provide a bearer token or organization API key.\n2. Inspect the [event catalog](https://api.occtoo.com/v1/event-types) to select event types and entity-level filters.\n3. Pull the first page, process it, and persist its `after` cursor.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'limit=100' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo check whether that consumer has reached the latest event matching the same filter, read stream metadata and compare `latest.sequence` with the last processed CloudEvent sequence. Sequence gaps identify position, not an exact number of pending matching events.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events/metadata' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\n## Authentication and tenancy\n\nEvent reads require a tenant-scoped credential. All delivery endpoints accept the established `read-events` permission. Tenant applications can instead use `events:pull` for pull and metadata or `events:sse` for SSE. Interactive user calls use Authorization Code with PKCE and can reuse the existing Occtoo sign-in session. Machine consumers can send a tenant-scoped Kinde application token as `Authorization: Bearer <token>` or an Occtoo organization API key as `x-api-key: <organization-api-key>`. The gateway validates the credential, projects application scopes directly as permissions, and supplies its tenant and actor identity to the Events API; the tenant cannot be selected with a query parameter.\n\nNative browser `EventSource` cannot attach either authorization header. Browser applications should consume SSE with streaming `fetch` or relay it through an authenticated backend; server-side SSE clients can set either header directly.\n\n## Delivery and checkpoints\n\nEvents are ordered by the fixed-width `sequence` extension rather than their timestamp. A new SSE connection without a cursor starts live at the current tenant-stream tail; it does not replay retained history. Pull normally transports a position as an opaque `after` cursor, but accepts the raw sequence as a recovery checkpoint when the cursor was not retained. SSE transports the raw sequence as `Last-Event-ID`. Resuming is exclusive: the event at the supplied position is not delivered again. Public event ids are deterministic UUIDv5 values, so replaying the same internal event recreates the same id. Consumers should nevertheless make business processing idempotent and checkpoint only after successful processing.\n\n### Recover from a recorded sequence\n\nIf the returned pull cursor was lost but the last successfully processed CloudEvent `sequence` was retained, pass that sequence directly as `after`. Continue using the same filter as the original subscription.\n\n```bash\ncurl --get 'https://api.occtoo.com/v1/events' \\\n  --header 'Authorization: Bearer <access-token>' \\\n  --data-urlencode 'after=003.00000000000000184467' \\\n  --data-urlencode 'filter=type eq \"source.updated\" and sourceId eq \"products\"'\n```\n\nTo resume SSE from the same processed position, send `Last-Event-ID: 003.00000000000000184467`. The first event returned has a greater sequence.\n\n## Filtering\n\n`filter` implements a bounded RFC 7644-derived subset: `eq`, `and`, `or`, parentheses and JSON double-quoted strings. `and` binds more tightly than `or`. Use parentheses when combining event families. `type`, the envelope `subject`, and the data properties advertised by the catalog are accepted. Match a single entry with `type eq \"source_entry.updated\" and sourceId eq \"products\" and subject eq \"sku-123\"`. Subjects are opaque, case-sensitive strings; their meaning depends on the event type. Subject filters match only events normalized after subject projection was enabled; older retained events are not backfilled.\n\n## Schema compatibility\n\nThe CloudEvent `type` is stable and unversioned. Read the exact payload version from `dataschema`. A new minor version is additive: ignore unknown fields and fetch the new immutable schema asynchronously. Do not deserialize a new major version as an earlier major; retain or quarantine the raw event until the consumer is upgraded.\n\nMachine-readable contracts: [OpenAPI](https://api.occtoo.com/openapi/events.json) · [AsyncAPI](https://api.occtoo.com/asyncapi/events.json) · [event catalog](https://api.occtoo.com/v1/event-types)",
     "version": "1.0.0",
     "summary": "Pull, inspect and stream tenant-scoped Occtoo events."
   },
@@ -19,7 +19,7 @@
           "Event discovery"
         ],
         "summary": "List public event types and schema versions",
-        "description": "Returns the public event catalog. Each entry identifies a stable event `type`, its current payload schema version, the immutable JSON Schema URL, and the entity-level properties accepted by the filter grammar.\n\nCache the catalog briefly and resolve payload contracts through `schemaUrl`. Event type names do not contain a schema version.",
+        "description": "Returns the public event catalog. Each entry identifies a stable event `type`, its current payload schema version, the immutable JSON Schema URL, and the envelope subject and data properties accepted by the filter grammar.\n\nCache the catalog briefly and resolve payload contracts through `schemaUrl`. Event type names do not contain a schema version.",
         "operationId": "GetPublicEventTypes",
         "responses": {
           "200": {
@@ -42,7 +42,8 @@
                         "description": "A source configuration changed.",
                         "schemaUrl": "https://api.occtoo.com/v1/events/schemas/source.updated/1.0",
                         "filterableProperties": [
-                          "sourceId"
+                          "sourceId",
+                          "subject"
                         ],
                         "schema": {
                           "type": "object",
@@ -165,7 +166,7 @@
           {
             "name": "filter",
             "in": "query",
-            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types.",
+            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types. Subject filters match only events normalized after subject projection was enabled; older events are not backfilled.",
             "schema": {
               "maxLength": 4096,
               "type": "string"
@@ -186,6 +187,7 @@
               "segmentDefinitionId",
               "segmentId",
               "sourceId",
+              "subject",
               "userId"
             ]
           }
@@ -297,7 +299,7 @@
           {
             "name": "filter",
             "in": "query",
-            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types.",
+            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types. Subject filters match only events normalized after subject projection was enabled; older events are not backfilled.",
             "schema": {
               "maxLength": 4096,
               "type": "string"
@@ -318,6 +320,7 @@
               "segmentDefinitionId",
               "segmentId",
               "sourceId",
+              "subject",
               "userId"
             ]
           }
@@ -427,7 +430,7 @@
           {
             "name": "filter",
             "in": "query",
-            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types.",
+            "description": "RFC 7644-derived event filter. Supports eq, and, or, parentheses and double-quoted strings. Example: (type eq \"source.updated\" and sourceId eq \"products\") or (type eq \"segment.updated\" and segmentId eq \"summer-sale\"). Filterable properties are listed by GET /v1/event-types. Subject filters match only events normalized after subject projection was enabled; older events are not backfilled.",
             "schema": {
               "maxLength": 4096,
               "type": "string"
@@ -448,6 +451,7 @@
               "segmentDefinitionId",
               "segmentId",
               "sourceId",
+              "subject",
               "userId"
             ]
           },
@@ -899,7 +903,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Entity-level data properties accepted by the filter grammar for this type."
+            "description": "Filterable data properties and the envelope subject for this type. Subject filtering applies only to events normalized after subject projection was enabled."
           },
           "schema": {
             "description": "The current JSON Schema, included inline for discovery clients.",

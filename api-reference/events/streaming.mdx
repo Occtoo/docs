@@ -19,6 +19,21 @@ Each SSE message is a [CloudEvents](https://cloudevents.io/) 1.0 envelope (`appl
 
 Every event type the stream can deliver — with its description and `data` properties — is listed in the [Events overview](/api-reference/events/overview#event-types). The stream delivers all of them by default; narrow it with the `filter` query parameter, for example `type eq "source.updated"`.
 
+## Filter the stream
+
+Add `subject` to receive events about one entry. Combine it with the type and parent resource:
+
+```bash
+curl --get --no-buffer 'https://api.occtoo.com/v1/events/stream' \
+  --header 'Authorization: Bearer <access-token>' \
+  --header 'Accept: text/event-stream' \
+  --data-urlencode 'filter=type eq "source_entry.added" and sourceId eq "products" and subject eq "entry-123"'
+```
+
+Matching is exact and case-sensitive. Only events processed after subject filtering was enabled can match a subject condition; older retained events are not backfilled. See [Filter by subject](/api-reference/events/overview#filter-by-subject) for the subject values used by each event family.
+
+Keep the same filter when resuming from a checkpoint. Changing it does not replay matching events before that checkpoint.
+
 ## Envelope example
 
 ```json source_entry.added
@@ -26,8 +41,8 @@ Every event type the stream can deliver — with its description and `data` prop
   "specversion": "1.0",
   "id": "8f4d2a1e-…",
   "type": "source_entry.added",
-  "source": "occtoo",
-  "subject": "products/entry-123",
+  "source": "/sources/products",
+  "subject": "entry-123",
   "time": "2026-08-04T12:00:00Z",
   "datacontenttype": "application/json",
   "dataschema": "https://api.occtoo.com/v1/events/schemas/source_entry.added/1.0",
