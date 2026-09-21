@@ -29,7 +29,7 @@
   "events": {
    "address": "/v1/events/stream",
    "title": "Tenant event stream",
-   "description": "An ordered SSE stream. The SSE id field contains the raw resumable event sequence; the initial after query accepts either that sequence or a pull cursor.",
+   "description": "An ordered SSE stream. The SSE id field contains the raw resumable event sequence; the initial after query accepts either that sequence or a pull cursor. Subject filters match only events normalized after subject projection was enabled; older events are not backfilled.",
    "messages": {
     "card.segment_membership_changed": {
      "$ref": "#/components/messages/card.segment_membership_changed"
@@ -145,6 +145,7 @@
     "segmentDefinitionId",
     "segmentId",
     "sourceId",
+    "subject",
     "userId"
    ]
   }
