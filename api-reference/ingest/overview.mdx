@@ -2,11 +2,11 @@
 title: "Ingest"
 ---
 
-Ingesting data into Occtoo is facilitated by the Ingest API. This powerful API serves as the backbone of the data ingestion process, allowing both data and media to be seamlessly pushed into Occtoo. All [providers](/integrations/providers/overview) utilize this API via the [onboarding SDK](/api-reference/overview#onboarding-sdk), acting as bridges between external systems and Occtoo's ecosystem.
+Ingesting data into Occtoo is facilitated by the Ingest API. This powerful API serves as the backbone of the data ingestion process, allowing both data and media to be seamlessly pushed into Occtoo. All [providers](/integrations/providers/overview) use this API as bridges between external systems and Occtoo. From .NET, call it with the [Occtoo .NET SDK](https://github.com/Occtoo/dotnet-sdk).
 
 ## Data ingest
 
-The Ingest API supports typed JSON and the legacy string-based entity format. Both formats validate the complete request before accepting it for asynchronous processing.
+The Ingest API supports typed JSON and the deprecated legacy string-based entity format. Both formats validate the complete request before accepting it for asynchronous processing.
 
 ### Typed source entries
 
@@ -18,7 +18,11 @@ Typed ingest requires a tenant-level Application token with the `write:sources` 
   View authentication requirements, type mapping and inference rules, request and response schemas, and the interactive API playground.
 </Card>
 
-### Legacy import
+### Legacy import (deprecated)
+
+<Warning>
+  The legacy import is deprecated and will be removed on 1 March 2027. Use [typed source entries](/api-reference/ingest/typed-source-entries) for new integrations, and move existing integrations before that date.
+</Warning>
 
 The legacy import format serializes property values as strings. Exchange registered Data Provider credentials through the Occtoo authorization service, then use that bearer token to call the import endpoint.
 
@@ -112,6 +116,10 @@ Request a token through the standard OAuth 2.0 client credentials flow at `https
 See [Data Provider access token](/api-reference/authentication/application-token#data-provider-access-token) for the request fields, interactive playground, and response schema.
 
 #### Import
+
+<Warning>
+  The legacy import is deprecated and will be removed on 1 March 2027. Use [typed source entries](/api-reference/ingest/typed-source-entries) for new integrations, and move existing integrations before that date.
+</Warning>
 
 Imports are initiated by sending a POST request to the URL ending with the identifier of the [data source](/guides/studio/sources/add-a-data-source) the data is intended for.
 
@@ -295,7 +303,7 @@ The status of the import is given by the HTTP response code of the request.
 
 ## Media ingest
 
-Media ingestion can be performed using the ingest API, but the media file to be uploaded must be available at a public URL. The Occtoo [onboarding SDK](/api-reference/overview#onboarding-sdk) supports uploading via streaming content directly. Before calling a media endpoint, request a Data Provider access token from `https://auth.occtoo.com/oauth2/token`.
+Media ingestion can be performed using the ingest API, but the media file to be uploaded must be available at a public URL. The [Occtoo .NET SDK](https://github.com/Occtoo/dotnet-sdk) uploads files directly from streams or disk. Before calling a media endpoint, request a Data Provider access token from `https://auth.occtoo.com/oauth2/token`.
 
 All uploaded media files are provided with an Occtoo media file identifier. The media file ID is used for all API interactions related to the file. When uploading a file, users have the option to provide their own unique identifiers as an attribute to the file. The unique ID attribute is respected, meaning that once it is used, any additional upload attempts with that same unique ID will fail. If a media file needs to be replaced, users must first delete the original and then upload the updated file.
 

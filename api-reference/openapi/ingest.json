@@ -19,8 +19,9 @@
           "Ingest"
         ],
         "summary": "Verify an ingest payload",
-        "description": "Runs the same caller-access, payload, key, property and configured-size validation as ingest without enqueuing entries.\n\nVerification applies payload-size ceilings but does not consume the tenant request-rate budget. A successful verification does not reserve capacity or guarantee that a later ingest will be accepted.",
+        "description": "<Warning>This endpoint is deprecated and will be removed on 1 March 2027. Use [typed source ingest](/api-reference/ingest/typed-source-entries) (`POST /v1/sources/{sourceId}`) instead. It validates values against source property types and uses tenant-level Application tokens.</Warning>\n\nRuns the same caller-access, payload, key, property and configured-size validation as ingest without enqueuing entries.\n\nVerification applies payload-size ceilings but does not consume the tenant request-rate budget. A successful verification does not reserve capacity or guarantee that a later ingest will be accepted.",
         "operationId": "verifyIngestPayload",
+        "deprecated": true,
         "parameters": [
           {
             "name": "dataSource",
@@ -204,8 +205,9 @@
           "Ingest"
         ],
         "summary": "Start an asynchronous ingest",
-        "description": "Validates and accepts source entries for asynchronous processing. A `202` response means the request was queued; it does not mean every entry has finished processing.\n\nPersist `result.id` as the ingest correlation id for diagnostics. There is currently no public status endpoint for this id. Do not retry a successful `202` response merely because downstream data is not visible yet.",
+        "description": "<Warning>This endpoint is deprecated and will be removed on 1 March 2027. Use [typed source ingest](/api-reference/ingest/typed-source-entries) (`POST /v1/sources/{sourceId}`) instead. It validates values against source property types and uses tenant-level Application tokens.</Warning>\n\nValidates and accepts source entries for asynchronous processing. A `202` response means the request was queued; it does not mean every entry has finished processing.\n\nPersist `result.id` as the ingest correlation id for diagnostics. There is currently no public status endpoint for this id. Do not retry a successful `202` response merely because downstream data is not visible yet.",
         "operationId": "startIngest",
+        "deprecated": true,
         "parameters": [
           {
             "name": "dataSource",

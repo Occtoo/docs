@@ -125,6 +125,10 @@ See [Data Provider access token](/api-reference/authentication/application-token
 
 #### 2. Prepare and Ingest Data (Key-Value Structure)
 
+<Warning>
+  This example uses the legacy import, which is deprecated and will be removed on 1 March 2027. For new integrations, use [typed source entries](/api-reference/ingest/typed-source-entries) with a tenant-level Application token instead.
+</Warning>
+
 Once the token is retrieved, format your data to match the Occtoo ingestion structure, which uses unique keys and property-value pairs. Optional language codes can be added for localized values.
 If your integration requires custom business logic, such as conditional mapping of properties, implement that logic before creating the request.
 
@@ -210,7 +214,7 @@ These validation constraints ensure compatibility with the Occtoo Source schema-
 
 ## Media upload
 
-Media ingestion can be performed using the Occtoo Ingest API. To upload media files, the source media must be accessible via a public URL. Alternatively, the Occtoo Onboarding SDK supports direct streaming uploads.
+Media ingestion can be performed using the Occtoo Ingest API. To upload media files, the source media must be accessible via a public URL. Alternatively, the [Occtoo .NET SDK](https://github.com/Occtoo/dotnet-sdk) uploads files directly.
 
 ### Import Authentication Flow
 
