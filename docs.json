@@ -270,6 +270,13 @@
         "pages": [
           "changelog"
         ]
+      },
+      {
+        "tab": "Announcements",
+        "icon": "bullhorn",
+        "pages": [
+          "announcements"
+        ]
       }
     ]
   },
