@@ -274,7 +274,57 @@
               "GET /v1/events/metadata",
               "GET /v1/events/stream",
               "GET /v1/events/schemas/{type}/{version}",
-              "api-reference/events/streaming"
+              "api-reference/events/streaming",
+              "api-reference/events/durable-consumers",
+              "POST /v1/event-destinations/{id}/pull",
+              "POST /v1/event-destinations/{id}/acknowledge"
+            ]
+          },
+          {
+            "group": "Configuration API",
+            "openapi": "/api-reference/openapi/configuration.json",
+            "pages": [
+              "api-reference/configuration/overview",
+              {
+                "group": "Sources",
+                "pages": [
+                  "GET /v1/sources",
+                  "POST /v1/sources",
+                  "GET /v1/sources/{sourceId}",
+                  "PATCH /v1/sources/{sourceId}",
+                  "DELETE /v1/sources/{sourceId}",
+                  "GET /v1/sources/{sourceId}/properties",
+                  "GET /v1/sources/{sourceId}/properties/{propertyId}",
+                  "PUT /v1/sources/{sourceId}/properties/{propertyId}",
+                  "DELETE /v1/sources/{sourceId}/properties/{propertyId}"
+                ]
+              },
+              {
+                "group": "Applications",
+                "pages": [
+                  "GET /v1/applications",
+                  "POST /v1/applications",
+                  "GET /v1/applications/access-catalog",
+                  "GET /v1/applications/{applicationId}",
+                  "PUT /v1/applications/{applicationId}",
+                  "DELETE /v1/applications/{applicationId}"
+                ]
+              },
+              {
+                "group": "Managed tags",
+                "pages": [
+                  "GET /v1/managed-tags",
+                  "POST /v1/managed-tags",
+                  "GET /v1/managed-tags/{managedTagId}",
+                  "PUT /v1/managed-tags/{managedTagId}",
+                  "DELETE /v1/managed-tags/{managedTagId}",
+                  "GET /v1/managed-tags/{managedTagId}/values",
+                  "POST /v1/managed-tags/{managedTagId}/values",
+                  "GET /v1/managed-tags/{managedTagId}/values/{key}",
+                  "PUT /v1/managed-tags/{managedTagId}/values/{key}",
+                  "DELETE /v1/managed-tags/{managedTagId}/values/{key}"
+                ]
+              }
             ]
           },
           {

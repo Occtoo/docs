@@ -1,0 +1,109 @@
+---
+title: "Configuration"
+description: "Manage sources, source properties, applications, and managed tags over REST."
+---
+
+The Configuration API lets you manage tenant configuration from your own code. It works on the same configuration as Studio, so changes made through the API show up in Studio and the other way around.
+
+```text
+https://api.occtoo.com
+```
+
+<Columns cols={3}>
+  <Card title="Sources">
+    List, create, update, and delete [sources](/concepts/source) under `/v1/sources`, and manage each source's properties.
+  </Card>
+  <Card title="Applications">
+    Create [applications](/concepts/applications) and control their scopes and resource access under `/v1/applications`.
+  </Card>
+  <Card title="Managed tags">
+    Maintain [managed tags](/guides/studio/settings/managed-tags) and their values under `/v1/managed-tags`.
+  </Card>
+</Columns>
+
+## Authentication
+
+Every request needs a tenant-scoped credential. The tenant comes from the credential; you cannot select it in the request. Send one of:
+
+- `Authorization: Bearer <token>` with an [Application access token](/api-reference/authentication/application-token) requested for your tenant ID as the audience.
+- `x-api-key: <organization-api-key>` with an Occtoo organization API key.
+
+Each operation requires one scope:
+
+| Resource | Read | Write |
+| --- | --- | --- |
+| Sources and source properties | `read:sources` | `write:sources` |
+| Applications | `read:applications` | `write:applications` |
+| Managed tags and managed tag values | `read:cards` | `write:cards` |
+
+An Application restricted to specific sources only sees those sources. `GET /v1/sources` filters out every source the Application cannot access.
+
+## Pagination
+
+List endpoints use forward-only keyset pagination:
+
+- `limit` sets the page size. The default is 50 and the maximum is 200.
+- `after` continues from the previous page. Pass the `after` value from the last response; `null` means you have reached the end.
+- `includeTotalCount=true` adds `totalCount` to the response. Otherwise it is `null`.
+
+Keep the same filters when you follow an `after` cursor.
+
+```bash
+curl --get 'https://api.occtoo.com/v1/sources' \
+  --header 'Authorization: Bearer <access-token>' \
+  --data-urlencode 'type=Generic' \
+  --data-urlencode 'limit=100'
+```
+
+```json
+{
+  "items": [
+    {
+      "id": "products",
+      "name": "Products",
+      "description": null,
+      "status": "Active",
+      "type": "Generic",
+      "createdAt": "2026-09-01T08:00:00Z",
+      "updatedAt": "2026-09-20T12:30:00Z"
+    }
+  ],
+  "after": "cHJvZHVjdHM",
+  "totalCount": null
+}
+```
+
+## Updates and concurrency
+
+- `PATCH /v1/sources/{sourceId}` changes only the fields you send. Omitted or `null` fields keep their current value; send an empty `description` to clear it.
+- `PUT /v1/sources/{sourceId}/properties/{propertyId}` creates the property or updates it. `null` optional fields keep their current value.
+- `PUT` on applications, managed tags, and managed tag values replaces the resource. Omitted collections become empty.
+- Application updates require the `etag` from your latest read. If the Application changed since then, the update returns `409`. Read it again and retry.
+
+## Application access
+
+Call `GET /v1/applications/access-catalog` to discover what an Application can be granted. The catalog is a tree of access nodes. Use the `key` of `Scope` nodes in `scopeKeys`, `Resource` nodes in `resourceSelectors`, and `Api` nodes in `apiSelectors` when you create or update an Application.
+
+`POST /v1/applications` returns the client secret once. Store it securely; later reads never return it. Deleting an Application revokes its credentials.
+
+## Asynchronous changes
+
+Some changes finish in the background after the API responds:
+
+- Deleting a source soft-deletes it and starts cleanup. The API does not offer hard deletion.
+- Deleting a source property starts the property cleanup.
+- Changing a property's type can trigger reindexing. Read the property again to follow its `state` from `Updating` back to `Active`.
+
+## Errors
+
+Errors use [Problem Details](https://www.rfc-editor.org/rfc/rfc9457) (`application/problem+json`). Validation failures list the invalid fields under `errors`.
+
+| Status | Meaning |
+| --- | --- |
+| `400` | The request failed validation. |
+| `401` | The credential is missing or invalid. |
+| `403` | The credential lacks the required scope or resource access. |
+| `404` | The resource does not exist. |
+| `409` | The request conflicts with the current state, such as a stale `etag`, an existing managed tag value key, or a managed tag still used by a card. |
+
+Deleting a managed tag or managed tag value that is already gone returns `204`.

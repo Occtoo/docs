@@ -36,6 +36,9 @@ For destinations, you can authorize a specific protected API version, every vers
 | Use every Events API transport | Tenant ID | `read:events` |
 | Pull events and inspect metadata | Tenant ID | `read:events:pull` |
 | Stream events with SSE | Tenant ID | `read:events:sse` |
+| Manage sources and source properties | Tenant ID | `read:sources`, `write:sources` |
+| Manage applications | Tenant ID | `read:applications`, `write:applications` |
+| Manage managed tags | Tenant ID | `read:cards`, `write:cards` |
 
 <Note>
   Legacy data-provider and per-destination-version credentials remain supported for compatibility while existing integrations migrate.

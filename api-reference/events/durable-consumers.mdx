@@ -1,0 +1,82 @@
+---
+title: "Durable consumers"
+description: "Pull leased batches of events from a server-tracked position and acknowledge them, with any number of stateless workers."
+---
+
+A durable consumer is an event destination that Occtoo tracks the position of for you. Instead of storing a cursor yourself, your workers pull leased batches of CloudEvents and acknowledge them. Any number of stateless workers can share one durable consumer, and its progress survives worker restarts.
+
+```text
+POST https://api.occtoo.com/v1/event-destinations/{id}/pull?limit=20&visibility=60&workerId=worker-1
+POST https://api.occtoo.com/v1/event-destinations/{id}/acknowledge
+```
+
+Both endpoints require the `read:events` scope. `{id}` is the ID of an event destination of type `DURABLE_CONSUMER`; other destination types return `400`.
+
+## Pull a batch
+
+A pull leases the next batch of events to the calling worker for `visibility` seconds.
+
+| Parameter | Default | Range | Description |
+| --- | --- | --- | --- |
+| `limit` | `20` | 1–100 | Maximum number of events in the batch. |
+| `visibility` | `60` | 1–600 | Seconds the lease stays with this worker before it expires and is redelivered. |
+| `workerId` | — | Up to 200 characters | Identifies one worker instance. Give every worker its own ID. Pulls without a `workerId` share one identity. |
+
+| Response | Meaning | What to do |
+| --- | --- | --- |
+| `200` | A leased batch with `leaseId`, `generation`, `attempt`, and `events`. | Process the events, then acknowledge. |
+| `204` | The durable consumer is caught up. | Poll again later. |
+| `409` | The durable consumer is paused. | Retry after a delay. |
+| `429` | At most 1,000 events can be leased but unacknowledged. The in-flight window is full. | Wait for acknowledgements to free it. |
+
+```json 200 response
+{
+  "leaseId": "3f1c6a52-2a8e-4d1b-9a63-0f5e1c7b2d40",
+  "generation": 0,
+  "attempt": 1,
+  "events": [
+    {
+      "specversion": "1.0",
+      "id": "8f4d2a1e-…",
+      "type": "source_entry.updated",
+      "subject": "sku-123",
+      "sequence": "001.00000000000000012345",
+      "data": { "…": "typed payload, see dataschema" }
+    }
+  ]
+}
+```
+
+A pull from a worker that still holds a lease returns that same lease. Pulling before acknowledging means the previous batch was abandoned.
+
+## Acknowledge a batch
+
+Send the `leaseId` and `generation` from the batch with a `status` of `ok` or `failed`:
+
+```bash
+curl 'https://api.occtoo.com/v1/event-destinations/{id}/acknowledge' \
+  --header 'Authorization: Bearer <access-token>' \
+  --header 'Content-Type: application/json' \
+  --data '{ "leaseId": "3f1c6a52-2a8e-4d1b-9a63-0f5e1c7b2d40", "generation": 0, "status": "ok" }'
+```
+
+The response returns the outcome in `status` and the committed cursor in `committed`:
+
+- `committed`: the batch is done.
+- `requeued`: you sent `failed`, and the batch is redelivered with a higher `attempt`.
+- `stale`: the lease expired and was handed to another worker before your acknowledgement. Nothing was committed.
+
+You can still acknowledge batches while the durable consumer is paused.
+
+## Delivery guarantees
+
+- **Start.** A durable consumer starts at the head of the event stream when you create it. Earlier events are never handed out.
+- **Redelivery.** Expired and failed leases are redelivered before new work, with a higher `generation`. An acknowledgement for an older generation is `stale`.
+- **Order.** Events are ordered within a batch. With several workers, batches interleave across them. Use a single worker when your processing depends on stream order.
+- **Commit.** The committed cursor only advances over a contiguous run of acknowledged batches, so one slow lease holds it back even when later batches are done.
+
+Delivery is at-least-once. Make your processing idempotent.
+
+<Tip>
+Give each independent consumer its own durable consumer. Every worker pulling from the same durable consumer competes for the same stream.
+</Tip>

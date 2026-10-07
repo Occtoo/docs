@@ -7,7 +7,7 @@ The Occtoo Events API lets you react to changes across your tenant — sources, 
 
 ## Consume and inspect events
 
-<Columns cols={3}>
+<Columns cols={2}>
   <Card title="Pull">
     Page through events with `GET /v1/events` using a cursor. Good for batch processing and catch-up jobs.
   </Card>
@@ -16,6 +16,9 @@ The Occtoo Events API lets you react to changes across your tenant — sources, 
   </Card>
   <Card title="Stream" href="/api-reference/events/streaming">
     Subscribe to a live, ordered Server-Sent Events stream at `GET /v1/events/stream`. Good for real-time reactions.
+  </Card>
+  <Card title="Durable consumer" href="/api-reference/events/durable-consumers">
+    Pull leased batches from a server-tracked position and acknowledge them. Good for competing workers that should not store their own cursor.
   </Card>
 </Columns>
 
