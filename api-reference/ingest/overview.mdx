@@ -295,6 +295,10 @@ The status of the import is given by the HTTP response code of the request.
 
 ## Media ingest
 
+<Tip>
+  To upload files straight from your own storage instead of a public URL, use the [Assets API](/api-reference/assets/overview).
+</Tip>
+
 Media ingestion can be performed using the ingest API, but the media file to be uploaded must be available at a public URL. The Occtoo [onboarding SDK](/api-reference/overview#onboarding-sdk) supports uploading via streaming content directly. Before calling a media endpoint, request a Data Provider access token from `https://auth.occtoo.com/oauth2/token`.
 
 All uploaded media files are provided with an Occtoo media file identifier. The media file ID is used for all API interactions related to the file. When uploading a file, users have the option to provide their own unique identifiers as an attribute to the file. The unique ID attribute is respected, meaning that once it is used, any additional upload attempts with that same unique ID will fail. If a media file needs to be replaced, users must first delete the original and then upload the updated file.

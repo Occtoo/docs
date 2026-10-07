@@ -265,6 +265,18 @@
             ]
           },
           {
+            "group": "Assets API",
+            "openapi": "/api-reference/openapi/assets.json",
+            "pages": [
+              "api-reference/assets/overview",
+              "POST /v1/assets/{dataSourceId}",
+              "POST /v1/assets/{dataSourceId}/complete",
+              "GET /v1/assets/{dataSourceId}",
+              "POST /v1/assets/{dataSourceId}/uploadLinks",
+              "DELETE /v1/assets/{dataSourceId}"
+            ]
+          },
+          {
             "group": "Events API",
             "openapi": "/api-reference/openapi/events.json",
             "pages": [

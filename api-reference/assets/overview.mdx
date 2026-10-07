@@ -1,0 +1,96 @@
+---
+title: "Assets"
+description: "Upload files into a data source through signed upload links, and read or delete what was uploaded."
+---
+
+The Assets API uploads files into an Occtoo data source. Every asset is keyed by the entry key of the data source entry it belongs to. The file bytes go straight to storage through a signed link and never pass through Occtoo, so no Occtoo request-size limit applies to the file.
+
+```text
+https://api.occtoo.com/v1/assets/{dataSourceId}
+```
+
+## Authentication
+
+Every request needs a tenant-scoped credential. The tenant comes from the credential, never from the route or request body. Send one of:
+
+- `Authorization: Bearer <token>` with an [Application access token](/api-reference/authentication/application-token) requested for your tenant ID as the audience, or a Data Provider token.
+- `x-api-key: <organization-api-key>` with an Occtoo organization API key.
+
+Every operation accepts any one of the `write:media`, `write:sources`, or `import-datasource` scopes.
+
+## Upload files
+
+<Steps>
+  <Step title="Initialize the assets">
+    Register up to 100 assets and get one signed upload link per entry key. Set `folderId` to a media folder ID, or `null`.
+
+    ```bash
+    curl 'https://api.occtoo.com/v1/assets/product-images' \
+      --header 'Authorization: Bearer <access-token>' \
+      --header 'Content-Type: application/json' \
+      --data '{
+        "folderId": null,
+        "assets": [
+          { "entryKey": "sku-1", "filename": "front.jpg" },
+          { "entryKey": "sku-2", "filename": "back.jpg" }
+        ]
+      }'
+    ```
+
+    ```json
+    {
+      "initialized": {
+        "sku-1": {
+          "uploadUrl": "https://occtoomedia.blob.core.windows.net/…/front.jpg?sv=…&sig=…",
+          "expiresAt": "2026-10-07T13:30:00+00:00"
+        },
+        "sku-2": {
+          "uploadUrl": "https://occtoomedia.blob.core.windows.net/…/back.jpg?sv=…&sig=…",
+          "expiresAt": "2026-10-07T13:30:00+00:00"
+        }
+      },
+      "failed": {}
+    }
+    ```
+  </Step>
+  <Step title="Upload each file">
+    `PUT` the file bytes to its `uploadUrl` before `expiresAt`. The link points to Azure Blob Storage, so send the `x-ms-blob-type: BlockBlob` header and no Occtoo credentials.
+
+    ```bash
+    curl --request PUT '<uploadUrl>' \
+      --header 'x-ms-blob-type: BlockBlob' \
+      --header 'Content-Type: image/jpeg' \
+      --data-binary '@front.jpg'
+    ```
+  </Step>
+  <Step title="Complete the uploads">
+    Confirm up to 50 uploads. Occtoo reads each file back, creates the media file, and updates the data source entry behind the entry key. Send the same `filename` each asset was initialized with.
+
+    ```bash
+    curl 'https://api.occtoo.com/v1/assets/product-images/complete' \
+      --header 'Authorization: Bearer <access-token>' \
+      --header 'Content-Type: application/json' \
+      --data '{ "assets": [ { "entryKey": "sku-1", "filename": "front.jpg" } ] }'
+    ```
+
+    The response lists each completed asset with its `publicUrl`, `mimeType`, `size`, and image `width` and `height`.
+  </Step>
+</Steps>
+
+## Manage assets
+
+| Operation | Endpoint | Description |
+| --- | --- | --- |
+| Read state | `GET /v1/assets/{dataSourceId}?key=sku-1&key=sku-2` | Returns `Initialized`, `Completed`, or `Failed` per entry key. Entry keys without an asset are left out. |
+| Re-sign links | `POST /v1/assets/{dataSourceId}/uploadLinks` | Signs a fresh upload link for assets that are initialized but not completed, for example when a link expired before the `PUT`. |
+| Delete | `DELETE /v1/assets/{dataSourceId}?key=sku-1` | Removes the entries, then the files behind them in the background. Returns `204`. |
+
+To replace a completed file, delete the asset and initialize it again.
+
+## Limits and errors
+
+- Initialize accepts at most 100 assets per call. `/complete`, `/uploadLinks`, `GET`, and `DELETE` accept at most 50.
+- Entry keys must be unique within a request, compared case-insensitively. They allow letters, digits, `_`, and `-`.
+- Batch operations return `200` with the entry keys that succeeded and a `failed` map of entry key to reason, so one bad asset does not fail the whole call.
+- Errors use [Problem Details](https://www.rfc-editor.org/rfc/rfc9457) (`application/problem+json`). A `400` lists the invalid fields under `errors`.
+- Retry `429` and transient `5xx` responses with bounded exponential backoff, and honor `Retry-After` when present.

@@ -1,0 +1,1187 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Assets API",
+    "description": "Upload files into an Occtoo data source. Tenant identity comes from the credential, never from the route or request body.\n\n## The upload flow\n\n1. `POST /v1/assets/<dataSourceId>` registers the assets and returns a signed upload link per entry key.\n2. `PUT` each file to its link. The bytes go straight to Azure Blob Storage and never pass through Occtoo.\n3. `POST /v1/assets/<dataSourceId>/complete` confirms the uploads and creates the files.\n\nEverything is keyed by entry key. `GET` reads asset state, `DELETE` removes assets and the files behind them, and `/uploadLinks` re-signs a link that expired before the `PUT` happened.\n\n## Authentication and access\n\nSelect **Authorize** to reuse the existing Occtoo browser session, provide a tenant-scoped bearer token, or send an organization API key through `x-api-key`. Every operation accepts any one of `write:media`, `write:sources` or the established `import-datasource` permission.\n\n## Batch ceilings\n\n- 100 assets per initialize call.\n- 50 assets per `/uploadLinks`, `/complete`, `GET` and `DELETE` call.\n- Entry keys must be unique within a request, compared case-insensitively, and allow letters, digits, `_` and `-`.\n\n## Responses\n\nSuccessful responses return resource data directly. `DELETE` answers `204` with no body. The batch operations answer `200` with the keys that succeeded and a `failed` map of entry key to reason, so one bad asset doesn't sink the call.\n\nErrors use ProblemDetails (RFC 9457) with the `application/problem+json` content type. A `400` carries per-property failures under `errors`. Retry `429` and transient `5xx` responses with bounded exponential backoff, honouring `Retry-After` where present.\n\nMachine-readable contract: [OpenAPI](https://api.occtoo.com/openapi/assets.json)",
+    "version": "1.0.0",
+    "summary": "Upload files into a data source and read the state of what was uploaded."
+  },
+  "servers": [
+    {
+      "url": "https://api.occtoo.com",
+      "description": "Occtoo public API"
+    }
+  ],
+  "paths": {
+    "/v1/assets/{dataSourceId}": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Initialize assets and get links to upload them to",
+        "description": "Registers assets against the data source and returns one signed upload link per entry key. At most 100 assets per call.\n\n`PUT` the file bytes to the link. They go straight to Azure Blob Storage and never pass through Occtoo, so no Occtoo request-size ceiling applies to the upload. Call `/complete` once the `PUT` returns.\n\nAn entry key that couldn't be initialized comes back under `failed` with the reason; the rest of the batch still succeeds. Links expire — use `/uploadLinks` to sign an entry key that was already initialized.",
+        "operationId": "initializeAssets",
+        "parameters": [
+          {
+            "name": "dataSourceId",
+            "in": "path",
+            "description": "Stable customer-facing source id within the authenticated tenant.",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "example": "product-images"
+            },
+            "example": "product-images"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitializeAssetsRequest"
+              },
+              "examples": {
+                "example": {
+                  "summary": "Initialize two assets",
+                  "value": {
+                    "assets": [
+                      {
+                        "entryKey": "sku-1",
+                        "filename": "front.jpg"
+                      },
+                      {
+                        "entryKey": "sku-2",
+                        "filename": "back.jpg"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "An upload link per entry key that could be initialized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializedAssets"
+                },
+                "examples": {
+                  "example": {
+                    "summary": "One link per entry key",
+                    "value": {
+                      "initialized": {
+                        "sku-1": {
+                          "uploadUrl": "https://occtoomedia.blob.core.windows.net/6b1f0b3c/9c2a7d18/front.jpg?sv=2024-11-04&se=...&sig=...",
+                          "expiresAt": "2026-09-25T13:30:00+00:00"
+                        },
+                        "sku-2": {
+                          "uploadUrl": "https://occtoomedia.blob.core.windows.net/6b1f0b3c/1e77a904/back.jpg?sv=2024-11-04&se=...&sig=...",
+                          "expiresAt": "2026-09-25T13:30:00+00:00"
+                        }
+                      },
+                      "failed": { }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Optional number of seconds to wait before retrying.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ],
+        "x-required-permissions": [
+          "write:media",
+          "write:sources",
+          "import-datasource"
+        ],
+        "x-permission-match": "any"
+      },
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Read the state of initialized assets",
+        "description": "Reads the state of initialized assets. At most 50 entry keys per call.\n\nAn entry key with no initialized asset is absent from the response. `Initialized` covers the whole window between initializing and the bytes being accounted for — the `PUT` goes straight to storage, so nothing in between is observable here.",
+        "operationId": "listAssets",
+        "parameters": [
+          {
+            "name": "dataSourceId",
+            "in": "path",
+            "description": "Stable customer-facing source id within the authenticated tenant.",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "example": "product-images"
+            },
+            "example": "product-images"
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "description": "Entry key to act on. Repeat the parameter for several keys: `?key=sku-1&key=sku-2`. At most 50 per call.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": "sku-1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The state of every requested entry key that has an asset.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/AssetState"
+                  }
+                },
+                "examples": {
+                  "example": {
+                    "summary": "One completed asset",
+                    "value": {
+                      "sku-1": {
+                        "status": "Completed",
+                        "filename": "front.jpg",
+                        "mimeType": "image/jpeg",
+                        "size": 120432,
+                        "publicUrl": "https://cdn.occtoo-media.com/6b1f0b3c-6f2e-4a52-9a1e-7c6f0c2f9a10/9c2a7d18-4f6b-4f0b-9a2a-2f2e6c7d8e90/front.jpg"
+                      },
+                      "sku-2": {
+                        "status": "Initialized",
+                        "filename": null,
+                        "mimeType": null,
+                        "size": null,
+                        "publicUrl": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Optional number of seconds to wait before retrying.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ],
+        "x-required-permissions": [
+          "write:media",
+          "write:sources",
+          "import-datasource"
+        ],
+        "x-permission-match": "any"
+      },
+      "delete": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Delete assets and the files behind them",
+        "description": "Deletes the entries and the files behind them, and answers `204` with no body. At most 50 entry keys per call.\n\nThe entry is removed first; the file follows asynchronously.",
+        "operationId": "deleteAssets",
+        "parameters": [
+          {
+            "name": "dataSourceId",
+            "in": "path",
+            "description": "Stable customer-facing source id within the authenticated tenant.",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "example": "product-images"
+            },
+            "example": "product-images"
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "description": "Entry key to act on. Repeat the parameter for several keys: `?key=sku-1&key=sku-2`. At most 50 per call.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": "sku-1"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The entries were deleted."
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Optional number of seconds to wait before retrying.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ],
+        "x-required-permissions": [
+          "write:media",
+          "write:sources",
+          "import-datasource"
+        ],
+        "x-permission-match": "any"
+      }
+    },
+    "/v1/assets/{dataSourceId}/uploadLinks": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Get fresh upload links for assets that are already initialized",
+        "description": "Signs a fresh upload link for already-initialized assets, for a caller whose link expired or never arrived. At most 50 assets per call.\n\nAn entry key that was never initialized, or that's already completed, comes back under `failed`. Replacing a completed file means deleting the asset and initializing it again.",
+        "operationId": "createAssetUploadLinks",
+        "parameters": [
+          {
+            "name": "dataSourceId",
+            "in": "path",
+            "description": "Stable customer-facing source id within the authenticated tenant.",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "example": "product-images"
+            },
+            "example": "product-images"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUploadLinksRequest"
+              },
+              "examples": {
+                "example": {
+                  "summary": "Re-sign one asset",
+                  "value": {
+                    "assets": [
+                      {
+                        "entryKey": "sku-1",
+                        "filename": "front.jpg"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A fresh upload link per eligible entry key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializedAssets"
+                },
+                "examples": {
+                  "example": {
+                    "summary": "A fresh link, and a key that could not be signed",
+                    "value": {
+                      "initialized": {
+                        "sku-1": {
+                          "uploadUrl": "https://occtoomedia.blob.core.windows.net/6b1f0b3c/9c2a7d18/front.jpg?sv=2024-11-04&se=...&sig=...",
+                          "expiresAt": "2026-09-25T13:30:00+00:00"
+                        }
+                      },
+                      "failed": {
+                        "sku-2": "Asset is not initialized"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Optional number of seconds to wait before retrying.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ],
+        "x-required-permissions": [
+          "write:media",
+          "write:sources",
+          "import-datasource"
+        ],
+        "x-permission-match": "any"
+      }
+    },
+    "/v1/assets/{dataSourceId}/complete": {
+      "post": {
+        "tags": [
+          "Assets"
+        ],
+        "summary": "Confirm asset uploads and create the files",
+        "description": "Confirms the uploads and creates the files. At most 50 assets per call.\n\nOcctoo reads each blob back, creates the media file and updates the data source entry behind the entry key. Each asset must carry the same filename it was initialized under — a different name points at a blob that doesn't exist, and that entry key comes back under `failed`.",
+        "operationId": "completeAssets",
+        "parameters": [
+          {
+            "name": "dataSourceId",
+            "in": "path",
+            "description": "Stable customer-facing source id within the authenticated tenant.",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string",
+              "example": "product-images"
+            },
+            "example": "product-images"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteAssetsRequest"
+              },
+              "examples": {
+                "example": {
+                  "summary": "Complete one upload",
+                  "value": {
+                    "assets": [
+                      {
+                        "entryKey": "sku-1",
+                        "filename": "front.jpg"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The file created for each entry key that could be completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompletedAssets"
+                },
+                "examples": {
+                  "example": {
+                    "summary": "The file Occtoo read back off the blob",
+                    "value": {
+                      "completed": {
+                        "sku-1": {
+                          "filename": "front.jpg",
+                          "mimeType": "image/jpeg",
+                          "size": 120432,
+                          "publicUrl": "https://cdn.occtoo-media.com/6b1f0b3c-6f2e-4a52-9a1e-7c6f0c2f9a10/9c2a7d18-4f6b-4f0b-9a2a-2f2e6c7d8e90/front.jpg",
+                          "width": 1200,
+                          "height": 800
+                        }
+                      },
+                      "failed": { }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Optional number of seconds to wait before retrying.",
+                "schema": {
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "kindeOAuth": [ ]
+          },
+          {
+            "bearerAuth": [ ]
+          },
+          {
+            "apiKey": [ ]
+          }
+        ],
+        "x-required-permissions": [
+          "write:media",
+          "write:sources",
+          "import-datasource"
+        ],
+        "x-permission-match": "any"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssetInitialization": {
+        "required": [
+          "uploadUrl",
+          "expiresAt"
+        ],
+        "type": "object",
+        "properties": {
+          "uploadUrl": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AssetState": {
+        "required": [
+          "status",
+          "filename",
+          "mimeType",
+          "size",
+          "publicUrl"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AssetStatus"
+          },
+          "filename": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "mimeType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "size": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
+          "publicUrl": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "AssetStatus": {
+        "enum": [
+          "Initialized",
+          "Completed",
+          "Failed"
+        ]
+      },
+      "AssetToInitialize": {
+        "required": [
+          "entryKey",
+          "filename"
+        ],
+        "type": "object",
+        "properties": {
+          "entryKey": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          }
+        }
+      },
+      "CompleteAssetsRequest": {
+        "required": [
+          "assets"
+        ],
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetToInitialize"
+            }
+          }
+        }
+      },
+      "CompletedAsset": {
+        "required": [
+          "filename",
+          "mimeType",
+          "size",
+          "publicUrl",
+          "width",
+          "height"
+        ],
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "size": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          },
+          "publicUrl": {
+            "type": "string"
+          },
+          "width": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "height": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          }
+        }
+      },
+      "CompletedAssets": {
+        "required": [
+          "completed",
+          "failed"
+        ],
+        "type": "object",
+        "properties": {
+          "completed": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CompletedAsset"
+            }
+          },
+          "failed": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CreateUploadLinksRequest": {
+        "required": [
+          "assets"
+        ],
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetToInitialize"
+            }
+          }
+        }
+      },
+      "HttpValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "InitializeAssetsRequest": {
+        "required": [
+          "folderId",
+          "assets"
+        ],
+        "type": "object",
+        "properties": {
+          "folderId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "uuid"
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetToInitialize"
+            }
+          }
+        }
+      },
+      "InitializedAssets": {
+        "required": [
+          "initialized",
+          "failed"
+        ],
+        "type": "object",
+        "properties": {
+          "initialized": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AssetInitialization"
+            }
+          },
+          "failed": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "kindeOAuth": {
+        "type": "oauth2",
+        "description": "Sign in with the existing Occtoo Studio identity and selected organization.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://auth.occtoo.com/oauth2/auth?audience=https%3A%2F%2Fapi-weu.occtoo.com",
+            "tokenUrl": "https://auth.occtoo.com/oauth2/token",
+            "scopes": {
+              "openid": "Authenticate the user with OpenID Connect.",
+              "profile": "Read the user's basic profile.",
+              "email": "Read the user's email address.",
+              "offline": "Refresh the access token without another interactive sign-in."
+            },
+            "x-usePkce": "SHA-256",
+            "x-scalar-redirect-uri": "https://api.occtoo.com/docs/"
+          }
+        }
+      },
+      "bearerAuth": {
+        "type": "http",
+        "description": "Tenant-scoped Occtoo access token, including Kinde machine-to-machine application tokens.",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "apiKey": {
+        "type": "apiKey",
+        "description": "Occtoo organization API key.",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Assets"
+    }
+  ]
+}
