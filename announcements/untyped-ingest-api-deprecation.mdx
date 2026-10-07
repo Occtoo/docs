@@ -1,0 +1,205 @@
+---
+title: "Legacy Ingest API deprecation"
+sidebarTitle: "Legacy Ingest API deprecation"
+description: "The untyped, string-based import endpoints are deprecated and will be removed on 1 March 2027. Migrate to typed source ingest."
+---
+
+<Warning>
+  **Removal date: 1 March 2027.** After this date the legacy import endpoints stop responding, and imports sent to them are not processed. Migrate before that date.
+</Warning>
+
+| | |
+| --- | --- |
+| **Announced** | October 2026 |
+| **Removal** | 1 March 2027 |
+| **Affects** | Integrations calling `POST /datasources/{dataSource}/import` or `/import/verify`, including the archived `Occtoo.Onboarding.Sdk` |
+| **Replacement** | [Typed source ingest](/api-reference/ingest/typed-source-entries) — `POST /v1/sources/{sourceId}` |
+
+## What is deprecated
+
+| Deprecated | Replacement |
+| --- | --- |
+| `POST https://api.occtoo.com/datasources/{dataSource}/import` | `POST https://api.occtoo.com/v1/sources/{sourceId}` |
+| `POST https://api.occtoo.com/datasources/{dataSource}/import/verify` | Validation is part of `POST /v1/sources/{sourceId}`; a `400` means nothing was accepted |
+| Data Provider access token (scope `import-datasource`) for data import | [Application](/concepts/applications) access token with scope `write:sources` |
+| `Occtoo.Onboarding.Sdk` NuGet package (archived) | [`Occtoo.Sdk`](https://www.nuget.org/packages/Occtoo.Sdk) NuGet package |
+
+Media ingest (`/media/*` endpoints) is not affected by this announcement and continues to use the Data Provider access token.
+
+## Why
+
+The legacy import accepts every value as a string and leaves type handling to downstream configuration. Typed source ingest validates each value against the property type configured on the source — numbers are numbers, booleans are booleans, lists are arrays — so invalid data is rejected at import time with a clear error instead of surfacing later as a broken card or destination. It also uses the same tenant-level [Application](/concepts/applications) identity as the Events and Configuration APIs, replacing per-Data-Provider credentials.
+
+## What changes
+
+| | Legacy import | Typed source ingest |
+| --- | --- | --- |
+| Authentication | Data Provider client credentials, scope `import-datasource` | Application client credentials, scope `write:sources`, audience = Tenant ID |
+| Request body | `{ "entities": [{ "key", "delete", "properties": [...] }] }` | `{ "entries": [{ "id", "properties": [...] }] }` |
+| Property values | Always strings, optional `type` hint and `delimiter` | Native JSON types validated against the source property configuration |
+| Deletes | `"delete": true` flag per entity | Not supported — every entry is an upsert |
+| Unknown properties | Created as text | Created with the type inferred from the value, reported as `newPropertiesFound` |
+| Success response | `202` with `result.id` | `202` with `correlationId`, `acceptedEntryCount`, `newPropertiesFound` |
+
+## Migration steps
+
+<Steps>
+  <Step title="Create an Application">
+    In Occtoo Studio, create a tenant-level Application with the `write:sources` scope and grant it access to the sources you import into. Note the client ID, client secret, and your Tenant ID. See [Applications](/concepts/applications).
+  </Step>
+  <Step title="Set property types on your sources">
+    Typed ingest validates values against the property types configured on the source. Review each source's properties in Studio and set the correct type and, for list types, the delimiter. See [Source properties](/guides/studio/sources/source-properties). Properties you do not configure are inferred from the first value received; new list properties default to the `,` delimiter.
+  </Step>
+  <Step title="Switch your client">
+    Use the .NET SDK or call the typed endpoint directly.
+
+    <Tabs>
+      <Tab title=".NET SDK">
+        Replace `Occtoo.Onboarding.Sdk` with `Occtoo.Sdk`:
+
+        ```bash
+        dotnet remove package Occtoo.Onboarding.Sdk
+        dotnet add package Occtoo.Sdk
+        ```
+
+        Before, with the legacy import:
+
+        ```csharp
+        var client = new OnboardingServiceClient(dataProviderId, dataProviderSecret);
+
+        var entities = new List<DynamicEntity>
+        {
+            new DynamicEntity
+            {
+                Key = "sku-123",
+                Properties =
+                {
+                    new DynamicProperty { Id = "name", Value = "Blue chair", Language = "en" },
+                    new DynamicProperty { Id = "price", Value = "100.111" },
+                    new DynamicProperty { Id = "inStock", Value = "true" },
+                    new DynamicProperty { Id = "tags", Value = "summer|sale" }
+                }
+            }
+        };
+
+        var response = await client.StartEntityImportAsync("products", entities);
+        ```
+
+        After, with typed source ingest:
+
+        ```csharp
+        using Occtoo;
+        using Occtoo.Authentication;
+        using Occtoo.Sources;
+
+        using var client = new OcctooClient(new OcctooClientOptions
+        {
+            Credential = OcctooCredential.ClientCredentials(
+                new OcctooAuthorityOptions
+                {
+                    ClientId = ClientId.From(clientId),
+                    Audience = Audience.From(tenantId),
+                    Scopes = [OcctooScopes.WriteSources],
+                },
+                ClientSecret.From(clientSecret)),
+        });
+
+        var outcome = await client.Sources.IngestEntries(
+            SourceId.From("products"),
+            [
+                SourceEntry.WithId("sku-123")
+                    .WithLocalizedText("name", "Blue chair", "en")
+                    .WithDecimal("price", 100.111m)
+                    .WithBoolean("inStock", true)
+                    .WithList("tags", "summer", "sale"),
+            ]);
+
+        outcome
+            .Tap(receipt => logger.LogInformation("Accepted {Count} entries, correlation {Id}",
+                receipt.AcceptedEntryCount, receipt.CorrelationId.Value))
+            .TapError(error => logger.LogWarning("Ingest failed: {Error}", error));
+        ```
+
+        The SDK acquires, caches, and refreshes the token for you, retries `429` and `5xx` responses honoring `Retry-After`, and returns validation failures as values rather than exceptions. See the [SDK repository](https://github.com/Occtoo/dotnet-sdk) for the full guide.
+      </Tab>
+      <Tab title="HTTP">
+        Request a token with your Application credentials. Tokens are valid for 60 minutes; cache and reuse them.
+
+        ```bash
+        curl --request POST 'https://auth.occtoo.com/oauth2/token' \
+          --header 'Content-Type: application/x-www-form-urlencoded' \
+          --data-urlencode 'grant_type=client_credentials' \
+          --data-urlencode 'client_id={@CLIENT-ID}' \
+          --data-urlencode 'client_secret={@CLIENT-SECRET}' \
+          --data-urlencode 'audience={@TENANT-ID}' \
+          --data-urlencode 'scope=write:sources'
+        ```
+
+        Send entries to the typed endpoint. Values use native JSON types; `language` is set only on localized properties.
+
+        ```bash
+        curl --request POST 'https://api.occtoo.com/v1/sources/products' \
+          --header 'Authorization: Bearer {@ACCESS-TOKEN}' \
+          --header 'Content-Type: application/json' \
+          --data '{
+            "entries": [
+              {
+                "id": "sku-123",
+                "properties": [
+                  { "id": "name", "value": "Blue chair", "language": "en" },
+                  { "id": "price", "value": 100.111 },
+                  { "id": "inStock", "value": true },
+                  { "id": "publishedAt", "value": "2026-10-01T08:00:00Z" },
+                  { "id": "tags", "value": ["summer", "sale"] }
+                ]
+              }
+            ]
+          }'
+        ```
+
+        A `202 Accepted` response means the whole batch passed validation and was queued:
+
+        ```json
+        {
+          "correlationId": "83b538a7-df7c-4cf4-b988-cd3b71c4cd90",
+          "sourceId": "products",
+          "acceptedAt": "2026-10-01T08:00:01Z",
+          "acceptedEntryCount": 1,
+          "newPropertiesFound": [
+            { "id": "tags", "type": "List", "delimiter": "," }
+          ]
+        }
+        ```
+
+        Validation is all-or-nothing: a `400` means nothing was accepted and the response names the failing request paths. Retry `429` and `5xx` with backoff, honoring `Retry-After`. Do not retry an accepted batch because data is not visible yet — processing is asynchronous.
+
+        | Value type | JSON on the wire | Source property type |
+        | --- | --- | --- |
+        | Text | string | `Text`, `LocalizedText` |
+        | Integer | number | `Integer` |
+        | Decimal | number | `Decimal` |
+        | Boolean | boolean | `Boolean` |
+        | Timestamp | ISO 8601 string | `Timestamp` |
+        | List | array of strings | `List`, `LocalizedList` |
+        | Clear | `null` | Clears the configured property |
+
+        Full request and response schemas are in the [typed source entries reference](/api-reference/ingest/typed-source-entries).
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Review delete handling">
+    Typed ingest is upsert-only and has no `delete` flag. If your integration removes entries through the legacy import's `"delete": true`, contact Occtoo support before migrating so we can help plan the transition.
+  </Step>
+  <Step title="Verify and decommission">
+    Run both integrations in parallel if needed, confirm entries arrive with the expected types in Studio, then switch traffic to typed ingest and remove the Data Provider credentials from Studio if nothing else uses them.
+  </Step>
+</Steps>
+
+## Timeline
+
+| Date | Milestone |
+| --- | --- |
+| October 2026 | Legacy import deprecated. Existing integrations keep working. |
+| **1 March 2027** | **Legacy import endpoints removed.** |
+
+Questions about your migration? Contact your Occtoo representative.

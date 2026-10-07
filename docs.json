@@ -375,6 +375,19 @@
         "pages": [
           "changelog"
         ]
+      },
+      {
+        "tab": "Announcements",
+        "icon": "bullhorn",
+        "groups": [
+          {
+            "group": "Announcements",
+            "pages": [
+              "announcements/overview",
+              "announcements/untyped-ingest-api-deprecation"
+            ]
+          }
+        ]
       }
     ]
   },

@@ -1,0 +1,17 @@
+---
+title: "Announcements"
+description: "Deprecations, breaking changes, and other notices that need your attention"
+rss: true
+---
+
+Each announcement has a dedicated page with full details and migration steps. Subscribe to the RSS feed to be notified of new announcements.
+
+<Update label="October 2026" description="Deprecation" tags={["API", "Ingest", "Deprecation"]}>
+## Legacy Ingest API deprecation
+
+The legacy string-based import (`POST /datasources/{dataSource}/import` and `/import/verify`) is deprecated and **will be removed on 1 March 2027**. Migrate to typed source ingest (`POST /v1/sources/{sourceId}`) with a tenant-level Application token.
+
+<Card title="Read the announcement" icon="arrow-right" href="/announcements/untyped-ingest-api-deprecation">
+  What is deprecated, what changes, and step-by-step migration using the .NET SDK or direct HTTP calls.
+</Card>
+</Update>
