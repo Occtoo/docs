@@ -4,9 +4,13 @@ title: "API overview"
 
 Interaction with Occtoo occurs, from a technical viewpoint, through one of two use cases: as an integration component ingesting data to the platform *or* as a consumer of data using an Occtoo destination. The purpose of this page is to provide the reader with an understanding of how integration is performed within these two use cases.
 
-## Onboarding SDK
+## .NET SDK
 
-To ease any integration work we've created a NuGet package with an onboarding SDK. The package covers integrations of both data and media resources, and the code can be found on our [GitHub page](https://github.com/Occtoo/Occtoo.Onboarding.Sdk). The package is available via [nuget.org](https://www.nuget.org/packages/Occtoo.Onboarding.Sdk).
+The official .NET client, `Occtoo.Sdk`, handles authentication and token caching, typed source ingest, file uploads, applications, managed tags, and events. The code and documentation are in the [Occtoo/dotnet-sdk](https://github.com/Occtoo/dotnet-sdk) repository, and the package is available on [nuget.org](https://www.nuget.org/packages/Occtoo.Sdk).
+
+<Note>
+  The SDK is pre-1.0. Expect breaking changes until version 1.0.
+</Note>
 
 ## Authentication
 
