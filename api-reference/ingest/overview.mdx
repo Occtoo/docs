@@ -21,7 +21,7 @@ Typed ingest requires a tenant-level Application token with the `write:sources` 
 ### Legacy import (deprecated)
 
 <Warning>
-  The legacy import is deprecated and will be removed on 1 March 2027. Use [typed source entries](/api-reference/ingest/typed-source-entries) for new integrations, and move existing integrations before that date.
+  The legacy import is deprecated and will be removed on 1 March 2027. Use [typed source entries](/api-reference/ingest/typed-source-entries) for new integrations, and move existing integrations before that date. See the [deprecation announcement](/announcements/untyped-ingest-api-deprecation) for migration steps.
 </Warning>
 
 The legacy import format serializes property values as strings. Exchange registered Data Provider credentials through the Occtoo authorization service, then use that bearer token to call the import endpoint.
@@ -118,7 +118,7 @@ See [Data Provider access token](/api-reference/authentication/application-token
 #### Import
 
 <Warning>
-  The legacy import is deprecated and will be removed on 1 March 2027. Use [typed source entries](/api-reference/ingest/typed-source-entries) for new integrations, and move existing integrations before that date.
+  The legacy import is deprecated and will be removed on 1 March 2027. Use [typed source entries](/api-reference/ingest/typed-source-entries) for new integrations, and move existing integrations before that date. See the [deprecation announcement](/announcements/untyped-ingest-api-deprecation) for migration steps.
 </Warning>
 
 Imports are initiated by sending a POST request to the URL ending with the identifier of the [data source](/guides/studio/sources/add-a-data-source) the data is intended for.
