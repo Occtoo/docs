@@ -4,6 +4,16 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
+<Update label="October 2026" description="Configuration API" tags={["API", "Events", "Sources"]}>
+## Durable consumers
+
+Pull events without storing a cursor yourself. A durable consumer tracks its position on the server: your workers pull leased batches with `POST /v1/event-destinations/{id}/pull` and confirm them with `POST /v1/event-destinations/{id}/acknowledge`. Any number of stateless workers can share one durable consumer, and failed or expired batches are redelivered. See [Durable consumers](/api-reference/events/durable-consumers).
+
+## Configuration API
+
+Manage sources, source properties, applications, and managed tags over REST at `https://api.occtoo.com/v1`. Create Applications with scoped access and discover grantable access through the access catalog, maintain managed tags and their values, and create, update, or delete sources and their properties. Lists support filtering and cursor pagination. See the [Configuration API reference](/api-reference/configuration/overview).
+</Update>
+
 <Update label="September 2026" description="Event subscriptions" tags={["Events", "Studio", "Sources", "Segments", "API"]}>
 ## Event subscriptions
 

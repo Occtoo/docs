@@ -22,6 +22,9 @@ Use **Try it** to exchange an Application's or Data Provider's client credential
 | Use every Events API transport | Tenant ID | `read:events` |
 | Pull events and inspect metadata | Tenant ID | `read:events:pull` |
 | Stream events with SSE | Tenant ID | `read:events:sse` |
+| Manage sources and source properties | Tenant ID | `read:sources`, `write:sources` |
+| Manage applications | Tenant ID | `read:applications`, `write:applications` |
+| Manage managed tags | Tenant ID | `read:cards`, `write:cards` |
 
 Omit `scope` with the tenant audience to request every tenant API scope enabled for the Application.
 
