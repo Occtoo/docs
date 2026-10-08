@@ -35,9 +35,9 @@ The legacy import accepts every value as a string and leaves type handling to do
 | | Legacy import | Typed source ingest |
 | --- | --- | --- |
 | Authentication | Data Provider client credentials, scope `import-datasource` | Application client credentials, scope `write:sources`, audience = Tenant ID |
-| Request body | `{ "entities": [{ "key", "delete", "properties": [...] }] }` | `{ "entries": [{ "id", "properties": [...] }] }` |
+| Request body | `{ "entities": [{ "key", "delete", "properties": [...] }] }` | `{ "entries": [{ "id", "delete", "properties": [...] }] }` |
 | Property values | Always strings, optional `type` hint and `delimiter` | Native JSON types validated against the source property configuration |
-| Deletes | `"delete": true` flag per entity | Not supported — every entry is an upsert |
+| Deletes | `"delete": true` flag per entity | `"delete": true` flag per entry; deleted entries carry no properties |
 | Unknown properties | Created as text | Created with the type inferred from the value, reported as `newPropertiesFound` |
 | Success response | `202` with `result.id` | `202` with `correlationId`, `acceptedEntryCount`, `newPropertiesFound` |
 
@@ -79,7 +79,8 @@ The legacy import accepts every value as a string and leaves type handling to do
                     new DynamicProperty { Id = "inStock", Value = "true" },
                     new DynamicProperty { Id = "tags", Value = "summer|sale" }
                 }
-            }
+            },
+            new DynamicEntity { Key = "sku-obsolete", Delete = true }
         };
 
         var response = await client.StartEntityImportAsync("products", entities);
@@ -112,6 +113,7 @@ The legacy import accepts every value as a string and leaves type handling to do
                     .WithDecimal("price", 100.111m)
                     .WithBoolean("inStock", true)
                     .WithList("tags", "summer", "sale"),
+                SourceEntry.Delete("sku-obsolete"),
             ]);
 
         outcome
@@ -120,7 +122,7 @@ The legacy import accepts every value as a string and leaves type handling to do
             .TapError(error => logger.LogWarning("Ingest failed: {Error}", error));
         ```
 
-        The SDK acquires, caches, and refreshes the token for you, retries `429` and `5xx` responses honoring `Retry-After`, and returns validation failures as values rather than exceptions. See the [SDK repository](https://github.com/Occtoo/dotnet-sdk) for the full guide.
+        `SourceEntry.Delete(id)` replaces `Delete = true` on a `DynamicEntity`; it carries no properties and can share a batch with upserts. The SDK acquires, caches, and refreshes the token for you, retries `429` and `5xx` responses honoring `Retry-After`, and returns validation failures as values rather than exceptions. See the [SDK repository](https://github.com/Occtoo/dotnet-sdk) for the full guide.
       </Tab>
       <Tab title="HTTP">
         Request a token with your Application credentials. Tokens are valid for 60 minutes; cache and reuse them.
@@ -135,7 +137,7 @@ The legacy import accepts every value as a string and leaves type handling to do
           --data-urlencode 'scope=write:sources'
         ```
 
-        Send entries to the typed endpoint. Values use native JSON types; `language` is set only on localized properties.
+        Send entries to the typed endpoint. Values use native JSON types; `language` is set only on localized properties. Set `"delete": true` to delete an entry; deleted entries carry no properties, and upserts and deletes can share one request.
 
         ```bash
         curl --request POST 'https://api.occtoo.com/v1/sources/products' \
@@ -152,7 +154,8 @@ The legacy import accepts every value as a string and leaves type handling to do
                   { "id": "publishedAt", "value": "2026-10-01T08:00:00Z" },
                   { "id": "tags", "value": ["summer", "sale"] }
                 ]
-              }
+              },
+              { "id": "sku-obsolete", "delete": true }
             ]
           }'
         ```
@@ -164,7 +167,7 @@ The legacy import accepts every value as a string and leaves type handling to do
           "correlationId": "83b538a7-df7c-4cf4-b988-cd3b71c4cd90",
           "sourceId": "products",
           "acceptedAt": "2026-10-01T08:00:01Z",
-          "acceptedEntryCount": 1,
+          "acceptedEntryCount": 2,
           "newPropertiesFound": [
             { "id": "tags", "type": "List", "delimiter": "," }
           ]
@@ -188,7 +191,7 @@ The legacy import accepts every value as a string and leaves type handling to do
     </Tabs>
   </Step>
   <Step title="Review delete handling">
-    Typed ingest is upsert-only and has no `delete` flag. If your integration removes entries through the legacy import's `"delete": true`, contact Occtoo support before migrating so we can help plan the transition.
+    Deletes work the same way: set `"delete": true` on the entry and send no properties. The legacy `"properties": []` on a deleted entity can stay or be omitted. A delete that also sends properties is rejected with `400`.
   </Step>
   <Step title="Verify and decommission">
     Run both integrations in parallel if needed, confirm entries arrive with the expected types in Studio, then switch traffic to typed ingest and remove the Data Provider credentials from Studio if nothing else uses them.
