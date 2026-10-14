@@ -1,17 +1,17 @@
 ---
 title: "Legacy Ingest API deprecation"
 sidebarTitle: "Legacy Ingest API deprecation"
-description: "The untyped, string-based import endpoints are deprecated and will be removed on 1 March 2027. Migrate to typed source ingest."
+description: "The untyped, string-based import endpoints are deprecated and will be removed on 1 May 2027. Migrate to typed source ingest."
 ---
 
 <Warning>
-  **Removal date: 1 March 2027.** After this date the legacy import endpoints stop responding, and imports sent to them are not processed. Migrate before that date.
+  **Removal date: 1 May 2027.** After this date the legacy import endpoints stop responding, and imports sent to them are not processed. Migrate before that date.
 </Warning>
 
 | | |
 | --- | --- |
 | **Announced** | October 2026 |
-| **Removal** | 1 March 2027 |
+| **Removal** | 1 May 2027 |
 | **Affects** | Integrations calling `POST /datasources/{dataSource}/import` or `/import/verify`, including the archived `Occtoo.Onboarding.Sdk` |
 | **Replacement** | [Typed source ingest](/api-reference/ingest/typed-source-entries) — `POST /v1/sources/{sourceId}` |
 
@@ -203,6 +203,6 @@ The legacy import accepts every value as a string and leaves type handling to do
 | Date | Milestone |
 | --- | --- |
 | October 2026 | Legacy import deprecated. Existing integrations keep working. |
-| **1 March 2027** | **Legacy import endpoints removed.** |
+| **1 May 2027** | **Legacy import endpoints removed.** |
 
 Questions about your migration? Contact your Occtoo representative.
