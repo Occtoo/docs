@@ -12,7 +12,7 @@ description: "The untyped, string-based import endpoints are deprecated and will
 | --- | --- |
 | **Announced** | October 2026 |
 | **Removal** | 1 May 2027 |
-| **Affects** | Integrations calling `POST /datasources/{dataSource}/import` or `/import/verify`, including the archived `Occtoo.Onboarding.Sdk` |
+| **Affects** | Integrations calling `POST /datasources/{dataSource}/import`, including the archived `Occtoo.Onboarding.Sdk` |
 | **Replacement** | [Typed source ingest](/api-reference/ingest/typed-source-entries) — `POST /v1/sources/{sourceId}` |
 
 ## What is deprecated
@@ -20,7 +20,6 @@ description: "The untyped, string-based import endpoints are deprecated and will
 | Deprecated | Replacement |
 | --- | --- |
 | `POST https://api.occtoo.com/datasources/{dataSource}/import` | `POST https://api.occtoo.com/v1/sources/{sourceId}` |
-| `POST https://api.occtoo.com/datasources/{dataSource}/import/verify` | Validation is part of `POST /v1/sources/{sourceId}`; a `400` means nothing was accepted |
 | Data Provider access token (scope `import-datasource`) for data import | [Application](/concepts/applications) access token with scope `write:sources` |
 | `Occtoo.Onboarding.Sdk` NuGet package (archived) | [`Occtoo.Sdk`](https://www.nuget.org/packages/Occtoo.Sdk) NuGet package |
 
