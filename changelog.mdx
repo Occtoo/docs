@@ -4,7 +4,11 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
-<Update label="October 2026" description="Configuration API" tags={["API", "Events", "Sources"]}>
+<Update label="October 2026" description="Configuration API and catalog filtering" tags={["API", "Events", "Sources", "Studio", "Catalog"]}>
+## Advanced catalog filtering
+
+The Catalog filter panel is reorganised into **System**, **Properties**, **Relations** and **Segments** sections, with an **Active filters** view to review and edit everything you have set. Combine property filters with **Match all** or **Match any**, filter on pasted lists of entry ids, on relations and on segment membership, and see the applied filters as chips under the toolbar. Filters are kept in the page address, so a link opens the same filtered list. See [Filter entries](/guides/studio/catalog/filter-entries).
+
 ## Durable consumers
 
 Pull events without storing a cursor yourself. A durable consumer tracks its position on the server: your workers pull leased batches with `POST /v1/event-destinations/{id}/pull` and confirm them with `POST /v1/event-destinations/{id}/acknowledge`. Any number of stateless workers can share one durable consumer, and failed or expired batches are redelivered. See [Durable consumers](/api-reference/events/durable-consumers).
