@@ -382,6 +382,7 @@
         "icon": "bullhorn",
         "pages": [
           "announcements/overview",
+          "announcements/media-management",
           "announcements/untyped-ingest-api-deprecation"
         ]
       }
