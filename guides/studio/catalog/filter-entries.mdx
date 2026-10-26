@@ -1,23 +1,93 @@
 ---
 title: "Filter entries"
-description: "Narrow the entry list with the filter panel, and turn the result into a query segment."
+description: "Narrow the entry list with the filter panel, combine filters, and turn the result into a query segment."
 ---
 
-Search only matches entry titles. To narrow the list on any other property — a colour, a price range, a status, a date, a relation — open the **Filter** panel from the toolbar.
+Search only matches entry titles. To narrow the list on anything else — a colour, a status, a date, an entry id, a relation or a segment — open the **Filter** panel from the toolbar.
 
 ![The filter panel open over the Catalog page](/images/guides/studio/catalog/catalog-filter-panel.png)
 
-The panel lists the card's filterable properties on the left with **Last updated (system)** pinned at the top, and the value editor for the selected property on the right. The footer counts how many entries match before you commit, and **Apply** puts the filters on the list.
+The left side lists everything you can filter on, grouped into sections. The right side shows the editor for the row you select, and the footer counts how many entries match before you press **Apply**.
+
+| Section | What it holds |
+| --- | --- |
+| **System** | **Last updated** and **Entry id** |
+| **Properties** | The card's filterable properties, grouped the way the card groups them, with **General** first |
+| **Relations** | One row per relation the card takes part in |
+| **Segments** | One row per segment category of the card, when it has any |
+
+A badge on a row, group or section counts the filters set inside it. **Collapse all** and **Expand all** fold the sections, and **Search filter** looks across all of them at once — each match shows which section and group it comes from.
 
 <Info>
-This is the same panel used when building a segment. [Filter segment entries](/guides/studio/segments/filter-segment-entries) documents every operator, the number, date, boolean and relation editors, the **Localized content** selector, and why some properties are greyed out.
+Every filter type and operator — text, list, number, date and true/false properties, and relations — is described in [Filter segment entries](/guides/studio/segments/filter-segment-entries). This page covers what is specific to Catalog.
 </Info>
 
-## What differs in Catalog
+## Review your filters
 
-- Filters are **not saved**. They live on the page while you are on it, and switching card clears them.
-- The **Filter** button carries a badge with the number of applied filters, so you can tell a filtered list from a full one.
-- The **Localized content** selector only appears when the card's sources carry languages. On a card with no localized data the panel has no language control at all.
+As soon as one filter is set, an **Active filters** row appears at the top of the list. Select it to see every filter on one screen. When you open the panel with filters already applied, it starts here.
+
+![Active filters with the match control and the always-applied group](/images/guides/studio/catalog/catalog-filter-active-filters.png)
+
+- Select a filter card to open its editor. The list jumps to that property and opens its group if it was collapsed.
+- **×** removes a filter, and **Clear all filters** removes them all.
+- System, relation and segment filters sit under **Always applied**.
+
+## Match all or match any
+
+With two or more property filters, the **Active filters** block offers **Match all (AND)** and **Match any (OR)**:
+
+- **Match all (AND)** — an entry has to match every property filter.
+- **Match any (OR)** — an entry has to match at least one property filter.
+
+The choice only combines property filters. Filters under **Always applied** narrow the result either way: with **Match any**, an entry has to match one of the property filters *and* every always-applied filter.
+
+The value counts in a property's editor follow the same rule. With **Match all** they count entries that also match your other filters; with **Match any** they only take the always-applied filters into account, because picking a value widens the result rather than narrowing it.
+
+## Filter on entry ids
+
+**Entry id** under **System** filters on the entries' ids. Choose how the ids are matched in the **Entries must** dropdown:
+
+- **Include any of** — only the listed entries.
+- **Exclude any of** — every entry except the listed ones.
+- **Match** — one pattern, with `*` as a wildcard, for example `PRD-1002*` or `*-EU`.
+
+For the first two, press **Paste list** and paste the ids — one per line, separated by commas, or both.
+
+![Paste entry ids dialog with a not-found warning](/images/guides/studio/catalog/catalog-filter-entry-id-paste.png)
+
+The dialog cleans up the list as you paste: it trims spaces, drops empty entries and duplicates, and says how many it removed. It also checks the ids against the card and warns about the ones that do not exist — **Remove not found** drops them. **Select** adds the ids to the filter.
+
+![Entry id filter with the pasted ids selected](/images/guides/studio/catalog/catalog-filter-entry-id.png)
+
+The ids then appear as a checked list. Untick an id to leave it out, use **Search values** to find one, and press **Paste list** again to add more.
+
+## Filter on segments
+
+The **Segments** section lists the card's segment categories. Select one to see its segments, and set **Include** or **Exclude** on each segment you want to filter on.
+
+![Segment filter with an included and an excluded segment](/images/guides/studio/catalog/catalog-filter-segments.png)
+
+- Within one category, an entry has to be in at least one included segment and in none of the excluded ones.
+- Filters on different categories all apply.
+- Select the active **Include** or **Exclude** again to clear that segment.
+
+The panel cannot count entries per segment, so segments show no numbers.
+
+## Applied filters
+
+**Apply** puts the filters on the list. They show as chips under the toolbar, and the **Filter** button counts them.
+
+![Filter chips under the Catalog toolbar](/images/guides/studio/catalog/catalog-filter-chips.png)
+
+- Select a chip to open the panel at that filter's editor. **×** removes the filter straight away.
+- Between property chips, **AND** or **OR** shows how they are combined. Select it to switch.
+- **Clear all** removes every filter.
+
+The filters are part of the page address, so reloading the page keeps them and a copied link opens the same filtered list. Switching card clears them.
+
+<Warning>
+Switching **Localized content** in the panel clears every filter except **Entry id**. Studio asks you to confirm first.
+</Warning>
 
 ## Turn a filtered list into a segment
 
@@ -27,7 +97,7 @@ Once at least one filter is applied, **Create query segment** appears next to **
 
 <Steps>
 <Step title="Filter the list">
-Apply the filters that describe the entries you want. The entry count under the heading is the size of the segment you are about to create.
+Apply the filters that describe the entries you want. The entry count under the toolbar is the size of the segment you are about to create.
 </Step>
 <Step title="Press Create query segment">
 Studio opens the segment creation form with the card and your filters already filled in, at the **Segment details** step.
@@ -37,5 +107,8 @@ Fill in the name, description and tags. See [Create a segment](/guides/studio/se
 </Step>
 </Steps>
 
-A query segment keeps the criteria, not a list of ids — it re-evaluates as the data changes. To pin a fixed list of entries instead, select them in the list and see [Select entries](/guides/studio/catalog/select-entries).
+<Warning>
+A segment cannot store every filter Catalog can apply. **Create query segment** is unavailable while the list uses **Match any** with two or more property filters, a segment filter, or an **Entry id** filter. Remove those filters, or switch to **Match all**, to create the segment.
+</Warning>
 
+A query segment keeps the criteria, not a list of ids — it re-evaluates as the data changes. To pin a fixed list of entries instead, select them in the list and see [Select entries](/guides/studio/catalog/select-entries).

@@ -3,49 +3,54 @@ title: "Filter segment entries"
 description: "Use the filter panel to narrow down which entries a segment contains."
 ---
 
-The filter panel is where you define what a segment contains. Open it with the **Filter** button while creating or editing a segment.
+The filter panel is where you define what a query segment contains. Open it with the **Filter** button while creating or editing a segment. The same panel filters the entry list in Catalog — see [Filter entries](/guides/studio/catalog/filter-entries) for what is specific to Catalog.
 
-![Filter panel with the property list and the value editor](/images/guides/studio/segments/segment-filters-panel-focus.png)
+![Filter panel in the segment form](/images/guides/studio/segments/segment-filters-panel-focus.png)
 
-The panel has three parts:
+The left side lists everything you can filter on, grouped into sections:
 
-- **Property list** (left) — every filterable property on the card, in alphabetical order, plus **Last updated (system)** at the top. A badge shows how many values you selected for a property.
-- **Value editor** (right) — the filter options for the selected property.
-- **Footer** — the number of matching entries for your current selection, and **Apply** to put the filters on the segment.
+- **System** — **Last updated**, the time the entry last changed.
+- **Properties** — the card's filterable properties, grouped the way the card groups them, with **General** first.
+- **Relations** — one row per relation the card takes part in.
 
-Use **Search filter** to find a property by name, and **Clear all filters** to start over.
+A badge on a row, group or section counts the filters set inside it. **Search filter** looks across every section, and **Collapse all** / **Expand all** fold them. The right side is the editor for the selected row, and the footer counts the matching entries before you press **Apply**.
 
-<Info>
-The number in the footer updates as you change the filters, so you can see the size of the result before you apply anything.
-</Info>
+Once a filter is set, an **Active filters** row appears at the top of the list. It shows every filter as a card — select one to edit it, **×** to remove it, or **Clear all filters** to start over.
+
+## In the segment form
+
+A segment can only store filters that are combined with AND, so the segment form leaves out what Catalog offers on top:
+
+- No **Match all / Match any** choice — property filters always all apply.
+- No **Entry id** filter and no **Segments** section. The entries a segment holds or excludes by hand are managed on its **Included entries** and **Excluded entries** tabs instead.
+
+The matching count in the footer takes those hand-picked entries into account.
 
 ## Text and list properties
 
-Text and list properties are filtered on their values (facets). Pick an operator, then select the values.
+Text and list properties are filtered on their values. Pick an operator in the **Entries must** dropdown, then tick the values. Each value shows how many entries carry it.
 
 ![Facet filter with values for a colour property](/images/guides/studio/segments/segment-filter-facet-focus.png)
 
-The operator decides how the selected values are matched:
+![Operator dropdown for a list property](/images/guides/studio/segments/segment-filter-operators-focus.png)
 
-| Operator | Result |
-| --- | --- |
-| Include any of | Entries that match at least one of the selected values |
-| Include all of | Entries that match all of the selected values (list properties) |
-| Exclude any of | Entries that match at least one of the selected values are left out |
-| Exclude all of | Entries that match all of the selected values are left out |
-| Empty | Entries with no value |
-| Not empty | Entries that have a value |
-| Contain / Don't contain | Entries where the text contains, or does not contain, the value you type |
-| Start with / Don't start with | Entries where the text begins, or does not begin, with the value |
-| End With / Don't end with | Entries where the text ends, or does not end, with the value |
-
-![Operator dropdown for a facet filter](/images/guides/studio/segments/segment-filter-operators-focus.png)
+| Operator | Result | Available on |
+| --- | --- | --- |
+| Include any of | Entries that match at least one of the selected values | Text and list |
+| Include all of | Entries that match all of the selected values | List |
+| Exclude any of | Entries that match at least one of the selected values are left out | Text and list |
+| Exclude all of | Entries that match all of the selected values are left out | List |
+| Empty | Entries with no value | Text and list |
+| Not empty | Entries that have a value | Text and list |
+| Contain / Don't contain | Entries where the text contains, or does not contain, the value you type | Text with full-text search |
+| Start with / Don't start with | Entries where the text begins, or does not begin, with the value | Text with full-text search |
+| End With / Don't end with | Entries where the text ends, or does not end, with the value | Text with full-text search |
 
 <Info>
-Use **Search facets** when a property has many values. Selected values are counted on the property in the left list, so you can see at a glance where your filters sit.
+The partial-match operators only appear when full-text search is enabled on the source property. Without it, the text is stored as a whole value and can only be matched exactly.
 </Info>
 
-![Facet filter with one value selected and the matching entry count](/images/guides/studio/segments/segment-filter-selected-focus.png)
+Use **Search facets** when a property has many values. The note under the list says which filters the counts take into account.
 
 ## Number properties
 
@@ -59,7 +64,7 @@ Integer and decimal properties are filtered on a value or a range:
 
 ## Date properties
 
-Timestamp properties, including **Last updated (system)**, are filtered on a point in time or a period: **After**, **Before**, or **In between (range)**.
+Timestamp properties are filtered on a point in time or a period: **After**, **Before**, or **In between (range)**, plus **Empty (no values)** and **Is not empty (has values)**. **Last updated** is set on every entry, so it offers only the first three.
 
 ![Date filter with an in between range](/images/guides/studio/segments/segment-filter-date-focus.png)
 
@@ -75,13 +80,19 @@ Boolean properties are filtered with **True**, **False**, **Empty (no values)** 
 
 ## Relations
 
-Relations appear in the property list as **Relation [name]**. Filter on whether the entry has the relation at all: **Empty (no values)** or **Is not empty (has values)**.
+Each relation has its own row under **Relations**. Choose whether the entry has to have the relation:
+
+- **Any** — no filter.
+- **Has relation** — the entry is related to at least one entry through this relation.
+- **Has no relation** — the entry is not related through it.
 
 ![Relation filter options](/images/guides/studio/segments/segment-filter-relation-focus.png)
 
+Relation filters always apply on top of the property filters.
+
 ## Localized content
 
-When the data behind the card is localized, the panel header holds a **Localized content** selector. It lists the languages found in the data sources that feed the card, and decides which language the facet values and the entry list are read in. The choice is saved with the segment.
+When the data behind the card is localized, the panel header holds a **Localized content** selector. It lists the languages found in the data sources that feed the card, and decides which language the values and the entry list are read in. The choice is saved with the segment.
 
 <Warning>
 Switching the localization resets all filters you have set in the panel. Studio asks you to confirm before it does.
@@ -100,6 +111,6 @@ The tooltip links to **Open source property**, which takes you to the property o
 
 Press **Apply** to put the filters on the segment. The **Filter** button then shows how many filters are active, and the entry list is reduced to the matching entries.
 
-On the segment page, the applied filters are listed under **Selected criteria**. Select a filter chip to see the operator and the values behind it.
+On the segment page, the applied filters are listed under **Selected criteria**, including relation filters. Select a filter chip to see the operator and the values behind it.
 
 ![Selected criteria with a filter chip expanded](/images/guides/studio/segments/segment-criteria-chip-focus.png)
