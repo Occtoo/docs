@@ -4,6 +4,14 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
+<Update label="November 2026" tags={["API","Events","Managed tags"]} description="Managed tag events">
+  ## Managed tag events
+
+  React to changes in managed tag lists and values through the Events API, SSE, durable consumers, webhooks, Azure Storage Queue, or Azure Service Bus. Six new types cover list creation, update, and deletion, plus value addition, update, and deletion. Filter by `managedTagId` and use `subject` to select a value key.
+
+  Creation and update events carry current metadata or value snapshots; list events exclude values. Subscribe to list events as well as value events to handle list deletion and parent changes, which do not emit individual value events. Only future changes are emitted, with no backfill. See [Managed tag events](/api-reference/events/overview#managed-tags).
+</Update>
+
 <Update label="October 2026" description="Configuration API" tags={["API", "Events", "Sources"]}>
 ## Durable consumers
 
