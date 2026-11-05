@@ -19,7 +19,7 @@ What each type means, and what its payload carries, is listed in the [Events API
 
 ## Conditions
 
-**Add condition** adds a property with one value. Use **Add value** within the condition to accept more values for the same property. Values within a condition are combined with **or**; separate conditions are combined with **and**. The property list holds only the properties the selected event types actually carry:
+Click **Add condition**, choose a property, and select one or more values in its dropdown. Selected values appear as badges; select an option again to remove it. For `subject`, enter values directly and use **Add value** to add another. Values within a condition are combined with **or**; separate conditions are combined with **and**. The property list holds only the properties the selected event types actually carry:
 
 | Event types | Properties you can filter on |
 | --- | --- |
@@ -36,7 +36,7 @@ What each type means, and what its payload carries, is listed in the [Events API
 
 Select several families and the list offers the union of their properties.
 
-Type values for `subject`, `endpoint`, and `apiVersion` directly. Other properties let you select values from what exists in the environment, such as sources, destinations, or endpoints, and send the underlying IDs.
+Only `subject` uses text input. All other properties offer available values from your environment. The `endpoint` dropdown saves endpoint safe names, and `apiVersion` saves version numbers as strings. Repeated safe names or version numbers appear once. Identifier properties such as `endpointId` and `apiVersionId` save the selected resource IDs.
 
 For destination-entry events, `endpoint` is the endpoint's safe name, such as `products`. Pair it with `destinationId` to match that safe name within one destination. Leave out `apiVersion` and `apiVersionId` if you want to match across API versions. Use `endpointId` for a specific endpoint identifier. The `endpoint.*` lifecycle events do not support safe-name filtering.
 
