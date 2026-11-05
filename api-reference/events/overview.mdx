@@ -59,7 +59,7 @@ type eq "card.updated" and cardDefinitionId eq "products" and subject eq "card-1
 ```
 
 ```text Destination entry
-type eq "destination_entry.updated" and destinationId eq "catalog" and apiVersion eq "3" and endpointId eq "products" and subject eq "entry-123"
+type eq "destination_entry.updated" and destinationId eq "catalog" and apiVersion eq "3" and endpoint eq "products" and subject eq "entry-123"
 ```
 
 The field names `entryKey`, `cardId`, and `entryId` are not separate filter operands. Use `subject` for these values. Check `GET /v1/event-types` for the properties supported by each type.
@@ -71,6 +71,32 @@ The field names `entryKey`, `cardId`, and `entryId` are not separate filter oper
 You can combine comparisons with `and`, `or`, and parentheses. Filter values must be double-quoted strings of 1–200 characters. The existing limits remain 4,096 characters per expression, 50 comparisons, and eight nesting levels.
 
 The same subject matching applies to webhook and queue subscription filters. Every branch of a subscription filter must also constrain `type`.
+
+## Filter by endpoint safe name
+
+For `destination_entry.updated` and `destination_entry.deleted`, use `endpoint` to match the endpoint's safe name, such as `products`. The public filter property is `endpoint`, not `endpointSafeName`. Matching is exact and case-sensitive.
+
+Combine it with `destinationId` to scope the safe name to one destination:
+
+```text
+(type eq "destination_entry.updated" or type eq "destination_entry.deleted") and destinationId eq "<destination-id>" and endpoint eq "products"
+```
+
+This filter can match the same endpoint safe name across destination API versions. Add `apiVersion` or `apiVersionId` only when you want to restrict it to one version. Use `endpointId` when you want to match a specific endpoint identifier instead.
+
+`endpoint.created`, `endpoint.updated`, and `endpoint.deleted` support `endpointId`, but do not support the `endpoint` safe-name filter.
+
+To match several safe names, group them with `or`:
+
+```text
+type eq "destination_entry.updated" and destinationId eq "<destination-id>" and (endpoint eq "products" or endpoint eq "categories")
+```
+
+The same expressions work for pull, metadata, live streams, and webhook or queue subscriptions.
+
+<Note>
+  Making a property filterable applies only to events processed after support for that property is enabled. Older events are not backfilled. For example, an older event cannot match an `endpoint` condition even if its payload already contains `endpoint`. Filters without that condition, including an `or` branch without it, can still match older events.
+</Note>
 
 ## Inspect stream metadata
 
@@ -180,7 +206,7 @@ In the tables, `?` marks a property that is not required — it may be absent or
 
 ## Data property reference
 
-Properties marked **filterable** can be used in the filter grammar of `GET /v1/events`, `GET /v1/events/metadata`, and `GET /v1/events/stream`. The exact set accepted for a given type is returned as `filterableProperties` by `GET /v1/event-types`. You can also filter by the envelope fields `type` and [`subject`](#filter-by-subject).
+Properties marked **filterable** can be used in event subscription filters and the filter grammar of `GET /v1/events`, `GET /v1/events/metadata`, and `GET /v1/events/stream`. The exact set accepted for a given type is returned as `filterableProperties` by `GET /v1/event-types`. You can also filter by the envelope fields `type` and [`subject`](#filter-by-subject).
 
 | Property | Type | Filterable | Description |
 |---|---|---|---|
@@ -193,7 +219,7 @@ Properties marked **filterable** can be used in the filter grammar of `GET /v1/e
 | `changes` | `string[]` | — | Names of the configuration areas that changed. |
 | `destinationId` | `string` | Yes | Identifier of the destination. |
 | `email` | `string \| null` | — | User email address. |
-| `endpoint` | `string` | — | Name of the destination endpoint. |
+| `endpoint` | `string` | Yes | Safe name of the destination endpoint. Filterable on `destination_entry.updated` and `destination_entry.deleted` only. |
 | `endpointId` | `string` | Yes | Identifier of the destination endpoint. |
 | `entryId` | `string` | — | Identifier of the destination entry. |
 | `entryKey` | `string` | — | Key of the source entry within its source. |

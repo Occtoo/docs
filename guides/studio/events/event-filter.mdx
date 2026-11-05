@@ -19,7 +19,7 @@ What each type means, and what its payload carries, is listed in the [Events API
 
 ## Conditions
 
-**Add condition** adds a `property eq value` row. The property list holds only the properties the selected event types actually carry:
+**Add condition** adds a property with one value. Use **Add value** within the condition to accept more values for the same property. Values within a condition are combined with **or**; separate conditions are combined with **and**. The property list holds only the properties the selected event types actually carry:
 
 | Event types | Properties you can filter on |
 | --- | --- |
@@ -30,12 +30,19 @@ What each type means, and what its payload carries, is listed in the [Events API
 | `card_definition.*` | `cardDefinitionId` |
 | `segment.*` | `segmentId`, `segmentDefinitionId`, `cardDefinitionId` |
 | `destination.*` | `destinationId` |
-| `destination_entry.*`, `endpoint.*` | `destinationId`, `endpointId`, `apiVersionId`, `apiVersion` |
+| `destination_entry.*` | `destinationId`, `endpoint`, `endpointId`, `apiVersionId`, `apiVersion` |
+| `endpoint.*` | `destinationId`, `endpointId`, `apiVersionId`, `apiVersion` |
 | `user.*` | `userId` |
 
 Select several families and the list offers the union of their properties.
 
-Type the value for `subject` and `apiVersion` directly. Other properties pick a value from a list of what exists in the environment — sources, card definitions, segments, destinations, endpoints, API versions or users — and send the underlying ID rather than the name you chose.
+Type values for `subject`, `endpoint`, and `apiVersion` directly. Other properties let you select values from what exists in the environment, such as sources, destinations, or endpoints, and send the underlying IDs.
+
+For destination-entry events, `endpoint` is the endpoint's safe name, such as `products`. Pair it with `destinationId` to match that safe name within one destination. Leave out `apiVersion` and `apiVersionId` if you want to match across API versions. Use `endpointId` for a specific endpoint identifier. The `endpoint.*` lifecycle events do not support safe-name filtering.
+
+<Note>
+  Newly filterable properties apply only to events processed after support is enabled. Older events are not backfilled, even when their payload already contains the property. See [Filter by endpoint safe name](/api-reference/events/overview#filter-by-endpoint-safe-name).
+</Note>
 
 To filter for one entry when creating or editing a subscription, click **Add condition**, choose `subject`, and enter the complete CloudEvent subject. Matching is exact and case-sensitive. Do not split the value on `/` or `.`; those characters can be part of an ID. Combine it with the event type and a parent condition such as `sourceId` or `cardDefinitionId` to distinguish entries that share an ID. See [Filter by subject](/api-reference/events/overview#filter-by-subject) for the value used by each event family.
 
@@ -47,14 +54,18 @@ To filter for one entry when creating or editing a subscription, click **Add con
 Conditions are combined with **and**, so a condition applies to every selected event type. Adding `sourceId` while `user.*` types are also selected leaves the user events unable to match at all.
 </Warning>
 
-Narrowing the event types can strand a condition on a property the remaining types do not carry. Studio then re-points that row at the first property that is still allowed — check the conditions again after you change the selection.
+Changing a condition's property clears its values. Narrowing the event types can leave a condition on a property the remaining types do not carry. Studio then selects an allowed property and clears the values. Check the conditions and fill in their values again before saving.
 
 ## The compiled expression
 
 **Filter expression** shows exactly what Studio sends, in a grammar limited to `eq`, `and` and `or`:
 
 ```text
-(type eq "source_entry.added" or type eq "source_entry.updated" or type eq "source_entry.deleted") and sourceId eq "product" and subject eq "sku-123"
+(type eq "destination_entry.updated" or type eq "destination_entry.deleted") and destinationId eq "<destination-id>" and (endpoint eq "products" or endpoint eq "categories")
 ```
 
-Types are joined with `or` and bracketed as a group once a condition is present; conditions are appended with `and`. A condition left without a value is omitted from the expression preview, but it blocks creation and saving. Fill in the value or remove the condition before submitting.
+Types are joined with `or` and bracketed as a group once a condition is present. Multiple values for one property are also grouped with `or`, and conditions are joined with `and`. In this example, an update or deletion must belong to the selected destination and have either endpoint safe name.
+
+Fill in every value before saving, or remove the empty value or condition. Incomplete values may be omitted from the expression preview, but they still block creation and saving.
+
+When you edit an existing subscription whose filter cannot be represented by these conditions, Studio preserves it in the expression editor. Edit the expression directly, keeping a `type` constraint in every `or` branch.
