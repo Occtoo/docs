@@ -3,7 +3,7 @@ title: "Events"
 description: "Consume tenant-scoped CloudEvents by pull or live stream, and inspect the retained stream's current position."
 ---
 
-The Occtoo Events API lets you react to changes across your tenant — sources, cards, segments, destinations, endpoints, and users — without polling each resource. Every change is published as a [CloudEvents](https://cloudevents.io/) message (`application/cloudevents+json`).
+The Occtoo Events API lets you react to changes across your tenant — sources, cards, segments, destinations, endpoints, users, and managed tags — without polling each resource. Every change is published as a [CloudEvents](https://cloudevents.io/) message (`application/cloudevents+json`).
 
 ## Consume and inspect events
 
@@ -51,6 +51,8 @@ Its meaning depends on the event type:
 | `destination_entry.*` | The destination entry (`entryId`). |
 | `endpoint.*` | The endpoint (`endpointId`). |
 | `user.*` | The user (`userId`). |
+| `managed_tag_list.*` | The managed tag list (`managedTagId`). |
+| `managed_tag_value.*` | The value within its list (`key`). |
 
 Combine `subject` with the event type and parent identifiers to distinguish entries that share an ID:
 
@@ -107,7 +109,7 @@ When no retained event matches, `first`, `latest`, and `after` are `null`, and `
 
 ## Event types
 
-Occtoo publishes 30 event types across sources, cards, segments, destinations, endpoints and users. All are currently at payload schema version `1.0`.
+Occtoo publishes 36 event types across sources, cards, segments, destinations, endpoints, users, and managed tags. All are currently at payload schema version `1.0`.
 
 Every `data` payload includes these two properties, so they are omitted from the tables below:
 
@@ -178,12 +180,85 @@ In the tables, `?` marks a property that is not required — it may be absent or
 | `user.updated` | A tenant user changed. | `userId`, `email?`, `firstName?`, `lastName?` |
 | `user.deleted` | A tenant user was deleted. | `userId`, `email?`, `firstName?`, `lastName?` |
 
+### Managed tags
+
+Managed tag events are available through the Events API, SSE, durable consumers, webhooks, Azure Storage Queue, and Azure Service Bus.
+
+| Event type | Description | Data properties |
+| --- | --- | --- |
+| `managed_tag_list.created` | A list was created. | `managedTagId`, `displayName`, `type`, `createdAt`, `lastModifiedAt`, `parentId?`, `createdBy?`, `updatedBy?` |
+| `managed_tag_list.updated` | List metadata changed, including its parent. | `managedTagId`, `displayName`, `type`, `createdAt`, `lastModifiedAt`, `parentId?`, `createdBy?`, `updatedBy?` |
+| `managed_tag_list.deleted` | A list and its values were deleted. | `managedTagId` |
+| `managed_tag_value.added` | A value was added. | `managedTagId`, `key`, `value?`, `order`, `createdAt`, `createdBy`, `valueTruncated`, `parentKey?`, `lastModifiedAt?`, `updatedBy?` |
+| `managed_tag_value.updated` | A value's content, order, or parent key changed. | `managedTagId`, `key`, `value?`, `order`, `createdAt`, `createdBy`, `valueTruncated`, `parentKey?`, `lastModifiedAt?`, `updatedBy?` |
+| `managed_tag_value.deleted` | A value was deleted directly. | `managedTagId`, `key` |
+
+List creation and update events contain metadata, never the list's values. Value addition and update events contain replacement snapshots: `value` is a string for a `Text` list or a language-to-string object for a `LocalizedText` list. Replace your stored translations with this object; a missing language means that translation was removed. An omitted `parentId` or `parentKey` means there is no parent.
+
+For all six types, `source` is `/managed-tags/{managedTagId}`. The `subject` is the list UUID for list events and the opaque, case-sensitive value key for value events. Use `managedTagId` to filter by list and `subject` to filter by value key. The data field `key` is not a separate filter operand.
+
+#### Value update example
+
+```json
+{
+  "specversion": "1.0",
+  "id": "76b466ae-1520-5bdf-b9a9-99360e92283f",
+  "type": "managed_tag_value.updated",
+  "source": "/managed-tags/42f3cce5-a2b8-4cf9-9c2e-8c07a2ced339",
+  "subject": "blue",
+  "time": "2026-11-05T09:15:12Z",
+  "datacontenttype": "application/json",
+  "dataschema": "https://api.occtoo.com/v1/events/schemas/managed_tag_value.updated/1.0",
+  "sequence": "003.00000000000000184467",
+  "tenantid": "6dc156d9-e25d-470a-bbba-7b503e5b4769",
+  "data": {
+    "managedTagId": "42f3cce5-a2b8-4cf9-9c2e-8c07a2ced339",
+    "key": "blue",
+    "value": { "en": "Blue", "sv": "Blå" },
+    "order": 2,
+    "createdAt": "2026-11-01T08:00:00Z",
+    "createdBy": "c157d71e-b930-4eae-9c3d-23a8de1a1cbc",
+    "lastModifiedAt": "2026-11-05T09:15:12Z",
+    "updatedBy": "c157d71e-b930-4eae-9c3d-23a8de1a1cbc",
+    "valueTruncated": false,
+    "correlationIds": [],
+    "actor": { "id": "c157d71e-b930-4eae-9c3d-23a8de1a1cbc" }
+  }
+}
+```
+
+#### List changes and deletion
+
+List operations emit list events only:
+
+- Deleting a list emits one `managed_tag_list.deleted` event and a `managed_tag_list.updated` event for each child list detached from it. It does not emit individual value deletions.
+- Changing a list's parent emits one `managed_tag_list.updated` event. Its values' parent keys are cleared without individual value update events.
+- Deleting a parent value directly emits `managed_tag_value.deleted` and updates for surviving child values whose parent keys are cleared.
+
+If you maintain a copy of values, subscribe to list events as well. Discard a deleted list's values and refetch values when a list's parent changes. Make processing idempotent and handle delayed value events without recreating a deleted list.
+
+This filter receives all list and value changes for one list:
+
+```text
+(type eq "managed_tag_list.created" or type eq "managed_tag_list.updated" or type eq "managed_tag_list.deleted"
+ or type eq "managed_tag_value.added" or type eq "managed_tag_value.updated" or type eq "managed_tag_value.deleted")
+and managedTagId eq "42f3cce5-a2b8-4cf9-9c2e-8c07a2ced339"
+```
+
+Unchanged writes emit no events and do not advance modification timestamps. Batch writes emit one event per changed value. Only future changes are emitted; existing lists and values are not backfilled.
+
+#### Large values
+
+When the event exceeds the 60 KiB envelope budget, `value` is omitted and `valueTruncated` is `true`. Identity and metadata remain. Fetch the full value with `GET /v1/managed-tags/{managedTagId}/values/{key}` using a credential with `read:cards`. URL-encode the key.
+
+The fetch returns current state, which may be newer than the event or already deleted. Do not clear your stored content when `valueTruncated` is `true`. See the [Configuration API reference](/api-reference/configuration/overview) for authentication and managed-tag reads.
+
 ## Data property reference
 
 Properties marked **filterable** can be used in the filter grammar of `GET /v1/events`, `GET /v1/events/metadata`, and `GET /v1/events/stream`. The exact set accepted for a given type is returned as `filterableProperties` by `GET /v1/event-types`. You can also filter by the envelope fields `type` and [`subject`](#filter-by-subject).
 
 | Property | Type | Filterable | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `apiVersion` | `string` | Yes | Destination API version name the endpoint belongs to. |
 | `apiVersionId` | `string` | Yes | Identifier of the destination API version. |
 | `cardDefinitionId` | `string` | Yes | Identifier of the card definition. Nullable on `segment.*` events. |
@@ -204,6 +279,19 @@ Properties marked **filterable** can be used in the filter grammar of `GET /v1/e
 | `segmentId` | `string` | Yes | Identifier of the segment. |
 | `sourceId` | `string` | Yes | Identifier of the source. |
 | `userId` | `string` | Yes | Identifier of the tenant user. |
+| `managedTagId` | `string` | Yes | UUID of the managed tag list. Present on all list and value events. |
+| `displayName` | `string` | No | Managed tag list's display name. |
+| `type` (in `data`) | `string` | No | Managed tag list kind: `Text` or `LocalizedText`. The filter operand `type` refers to the CloudEvent event type instead. |
+| `parentId` | \`string \\ | null\` | No | Parent list UUID. Omitted when the list has no parent. |
+| `key` | `string` | No | Value key within its managed tag list. Filter using the envelope `subject`. |
+| `value` | \`string \\ | object\` | No | Full text or language-to-string value. Omitted when `valueTruncated` is `true`. |
+| `valueTruncated` | `boolean` | No | Whether managed tag value content was omitted because the event exceeded the size limit. |
+| `order` | `number` | No | Managed tag value's sort order. |
+| `parentKey` | \`string \\ | null\` | No | Key of the parent value. Omitted when the value has no parent. |
+| `createdAt` | `string` | No | Creation timestamp in date-time format. |
+| `lastModifiedAt` | \`string \\ | null\` | No | Modification timestamp in date-time format. Lists use `createdAt` until modified; values may omit this field until modified. |
+| `createdBy` | \`string \\ | null\` | No | Creator's ID. Required on value snapshots; optional on list snapshots. |
+| `updatedBy` | \`string \\ | null\` | No | Last updater's ID, when available. |
 | `values` | `object \| null` | — | Changed values keyed by property name, each an array of `{ "value", "language?" }`. Omitted when `valuesTruncated` is `true`. |
 | `valuesTruncated` | `boolean` | — | Whether `values` was dropped because the payload exceeded the size limit. |
 | `version` | `string \| integer` | — | Monotonic version of the entry, as an integer-valued string or integer. |
