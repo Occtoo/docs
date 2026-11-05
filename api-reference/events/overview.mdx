@@ -229,7 +229,7 @@ For all six types, `source` is `/managed-tags/{managedTagId}`. The `subject` is 
 
 #### List changes and deletion
 
-List operations emit list events only:
+Handle list and value hierarchy changes as follows:
 
 - Deleting a list emits one `managed_tag_list.deleted` event and a `managed_tag_list.updated` event for each child list detached from it. It does not emit individual value deletions.
 - Changing a list's parent emits one `managed_tag_list.updated` event. Its values' parent keys are cleared without individual value update events.
@@ -282,16 +282,16 @@ Properties marked **filterable** can be used in the filter grammar of `GET /v1/e
 | `managedTagId` | `string` | Yes | UUID of the managed tag list. Present on all list and value events. |
 | `displayName` | `string` | No | Managed tag list's display name. |
 | `type` (in `data`) | `string` | No | Managed tag list kind: `Text` or `LocalizedText`. The filter operand `type` refers to the CloudEvent event type instead. |
-| `parentId` | \`string \\ | null\` | No | Parent list UUID. Omitted when the list has no parent. |
+| `parentId` | `string` | No | Parent list UUID. Omitted when the list has no parent. |
 | `key` | `string` | No | Value key within its managed tag list. Filter using the envelope `subject`. |
-| `value` | \`string \\ | object\` | No | Full text or language-to-string value. Omitted when `valueTruncated` is `true`. |
+| `value` | `string or object` | No | Full text or language-to-string value. Omitted when `valueTruncated` is `true`. |
 | `valueTruncated` | `boolean` | No | Whether managed tag value content was omitted because the event exceeded the size limit. |
 | `order` | `number` | No | Managed tag value's sort order. |
-| `parentKey` | \`string \\ | null\` | No | Key of the parent value. Omitted when the value has no parent. |
+| `parentKey` | `string` | No | Key of the parent value. Omitted when the value has no parent. |
 | `createdAt` | `string` | No | Creation timestamp in date-time format. |
-| `lastModifiedAt` | \`string \\ | null\` | No | Modification timestamp in date-time format. Lists use `createdAt` until modified; values may omit this field until modified. |
-| `createdBy` | \`string \\ | null\` | No | Creator's ID. Required on value snapshots; optional on list snapshots. |
-| `updatedBy` | \`string \\ | null\` | No | Last updater's ID, when available. |
+| `lastModifiedAt` | `string` | No | Modification timestamp in date-time format. Lists use `createdAt` until modified; values may omit this field until modified. |
+| `createdBy` | `string` | No | Creator's ID. Required on value snapshots; optional on list snapshots. |
+| `updatedBy` | `string` | No | Last updater's ID, when available. |
 | `values` | `object \| null` | — | Changed values keyed by property name, each an array of `{ "value", "language?" }`. Omitted when `valuesTruncated` is `true`. |
 | `valuesTruncated` | `boolean` | — | Whether `values` was dropped because the payload exceeded the size limit. |
 | `version` | `string \| integer` | — | Monotonic version of the entry, as an integer-valued string or integer. |
