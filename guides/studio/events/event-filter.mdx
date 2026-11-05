@@ -9,7 +9,7 @@ The filter decides which events reach the subscription. It has two parts: the **
 
 ## Event types
 
-The tree groups the 30 event types into nine families. Ticking a family row selects every type under it; expand the row to pick individual types. The header checkbox selects all of them, and the counter above the tree tracks how many of the 30 are selected.
+The tree groups the available event types into families, including managed tag lists and managed tag values. Ticking a family row selects every type under it; expand the row to pick individual types. The header checkbox selects all of them, and the counter above the tree tracks how many types are selected.
 
 At least one type is required — the dialog will not create or save a subscription without one.
 
@@ -32,6 +32,7 @@ What each type means, and what its payload carries, is listed in the [Events API
 | `destination.*` | `destinationId` |
 | `destination_entry.*`, `endpoint.*` | `destinationId`, `endpointId`, `apiVersionId`, `apiVersion` |
 | `user.*` | `userId` |
+| `managed_tag_list.*`, `managed_tag_value.*` | `managedTagId` |
 
 Select several families and the list offers the union of their properties.
 
@@ -48,6 +49,10 @@ Conditions are combined with **and**, so a condition applies to every selected e
 </Warning>
 
 Narrowing the event types can strand a condition on a property the remaining types do not carry. Studio then re-points that row at the first property that is still allowed — check the conditions again after you change the selection.
+
+## Managed tag changes
+
+Use `managedTagId` to match a list and `subject` to match a value key. If your integration maintains a copy of values, include list events too: deleting a list does not emit individual value deletions, and changing its parent clears value parent keys without individual value updates. See [Managed tag event semantics](/api-reference/events/overview#managed-tags).
 
 ## The compiled expression
 
