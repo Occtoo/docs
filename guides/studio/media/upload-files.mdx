@@ -1,0 +1,51 @@
+---
+title: "Upload files"
+description: "Upload images, videos and documents into a media source folder."
+---
+
+<Steps>
+  <Step title="Open the folder and press Upload">
+
+    **Upload** is in the header of the media source. Studio preselects the media source and the folder you are in. An empty folder also offers an **Upload files** button.
+
+  </Step>
+  <Step title="Check the media source and folder">
+
+    Change **Media source** or **Folder** if the files belong somewhere else. Both are locked once you add the first file.
+
+  </Step>
+  <Step title="Drag files onto the dialog, or press browse">
+
+    The upload starts straight away.
+
+    ![The Upload files dialog with one file uploading and the others done](/images/guides/studio/media/upload-dialog.png)
+
+    Up to 20 files upload at the same time; the rest wait as **Queued**. Each row shows its progress:
+
+    - **Pause** stops an upload, and **Resume now** continues it.
+    - A failed upload is retried automatically. If it still fails, the row is marked as failed and **Resume now** tries again.
+    - The **×** on a queued row removes it, and **Cancel remaining** stops everything that has not finished.
+
+  </Step>
+  <Step title="Press Done">
+
+    The dialog closes. Uploads that are still running carry on, and reappear when you open the dialog again.
+
+  </Step>
+</Steps>
+
+<Warning>
+Keep the page open until every upload has finished. While uploads are running, Studio keeps you on the page and asks before the browser tab closes.
+</Warning>
+
+## After the upload
+
+Files appear in the folder right away and show **Processing** while Occtoo generates the preview, reads the size and dimensions and publishes the link. They cannot be opened until processing completes. The list refreshes on its own.
+
+![New files processing in the Campaign SS27 folder](/images/guides/studio/media/files-processing.png)
+
+Files are uploaded without property values. Open a file to fill them in, or select several and edit them together — see [View and edit a file](/guides/studio/media/view-and-edit-a-file) and [Work with multiple files](/guides/studio/media/edit-multiple-files).
+
+<Info>
+Uploading a file with the same name as an existing one does not overwrite it — each upload creates a new file. To swap the content of an existing file and keep its properties, use [Replace a file](/guides/studio/media/replace-a-file).
+</Info>
