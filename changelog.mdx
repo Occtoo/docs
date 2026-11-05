@@ -4,7 +4,13 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
-<Update label="November 2026" tags={["API","Events","Managed tags"]} description="Managed tag events">
+<Update label="November 2026" tags={["Platform","API","Events","Managed tags"]} description="Status page and managed tag events">
+  ## Status page
+
+  Occtoo now has a public status page at [status.occtoo.com](https://status.occtoo.com). It probes Studio, Ingest, Destinations, Media, and the MCP server from several locations every minute, shows 90 days of uptime per component, and lists active and past incidents and planned maintenance.
+
+  Subscribe at the top of the page to get an email, or a signed webhook call, whenever an incident or maintenance is posted or updated. A machine-readable summary is available at `https://status.occtoo.com/status.json`.
+
   ## Managed tag events
 
   React to changes in managed tag lists and values through the Events API, SSE, durable consumers, webhooks, Azure Storage Queue, or Azure Service Bus. Six new types cover list creation, update, and deletion, plus value addition, update, and deletion. Filter by `managedTagId` and use `subject` to select a value key.
