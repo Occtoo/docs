@@ -79,6 +79,24 @@
     "endpoint.updated": {
      "$ref": "#/components/messages/endpoint.updated"
     },
+    "managed_tag_list.created": {
+     "$ref": "#/components/messages/managed_tag_list.created"
+    },
+    "managed_tag_list.deleted": {
+     "$ref": "#/components/messages/managed_tag_list.deleted"
+    },
+    "managed_tag_list.updated": {
+     "$ref": "#/components/messages/managed_tag_list.updated"
+    },
+    "managed_tag_value.added": {
+     "$ref": "#/components/messages/managed_tag_value.added"
+    },
+    "managed_tag_value.deleted": {
+     "$ref": "#/components/messages/managed_tag_value.deleted"
+    },
+    "managed_tag_value.updated": {
+     "$ref": "#/components/messages/managed_tag_value.updated"
+    },
     "segment.archived": {
      "$ref": "#/components/messages/segment.archived"
     },
@@ -142,6 +160,7 @@
     "cardDefinitionId",
     "destinationId",
     "endpointId",
+    "managedTagId",
     "segmentDefinitionId",
     "segmentId",
     "sourceId",
@@ -206,6 +225,24 @@
     },
     {
      "$ref": "#/channels/events/messages/endpoint.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/managed_tag_list.created"
+    },
+    {
+     "$ref": "#/channels/events/messages/managed_tag_list.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/managed_tag_list.updated"
+    },
+    {
+     "$ref": "#/channels/events/messages/managed_tag_value.added"
+    },
+    {
+     "$ref": "#/channels/events/messages/managed_tag_value.deleted"
+    },
+    {
+     "$ref": "#/channels/events/messages/managed_tag_value.updated"
     },
     {
      "$ref": "#/channels/events/messages/segment.archived"
@@ -1289,6 +1326,396 @@
       },
       "data": {
        "$ref": "https://api.occtoo.com/v1/events/schemas/endpoint.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "managed_tag_list.created": {
+    "name": "managed_tag_list.created",
+    "title": "managed_tag_list.created",
+    "summary": "A managed tag list was created. Contains its metadata, excluding values.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "managed_tag_list.created"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api.occtoo.com/v1/events/schemas/managed_tag_list.created/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api.occtoo.com/v1/events/schemas/managed_tag_list.created/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "managed_tag_list.deleted": {
+    "name": "managed_tag_list.deleted",
+    "title": "managed_tag_list.deleted",
+    "summary": "A managed tag list and its values were deleted. No individual value deletions are emitted.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "managed_tag_list.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api.occtoo.com/v1/events/schemas/managed_tag_list.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api.occtoo.com/v1/events/schemas/managed_tag_list.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "managed_tag_list.updated": {
+    "name": "managed_tag_list.updated",
+    "title": "managed_tag_list.updated",
+    "summary": "Managed tag list metadata changed. Contains its complete current metadata, excluding values.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "managed_tag_list.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api.occtoo.com/v1/events/schemas/managed_tag_list.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api.occtoo.com/v1/events/schemas/managed_tag_list.updated/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "managed_tag_value.added": {
+    "name": "managed_tag_value.added",
+    "title": "managed_tag_value.added",
+    "summary": "A managed tag value was added. Contains its current state; oversized value content is omitted with valueTruncated set to true.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "managed_tag_value.added"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api.occtoo.com/v1/events/schemas/managed_tag_value.added/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api.occtoo.com/v1/events/schemas/managed_tag_value.added/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "managed_tag_value.deleted": {
+    "name": "managed_tag_value.deleted",
+    "title": "managed_tag_value.deleted",
+    "summary": "A managed tag value was deleted directly.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "managed_tag_value.deleted"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api.occtoo.com/v1/events/schemas/managed_tag_value.deleted/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api.occtoo.com/v1/events/schemas/managed_tag_value.deleted/1.0"
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "managed_tag_value.updated": {
+    "name": "managed_tag_value.updated",
+    "title": "managed_tag_value.updated",
+    "summary": "A managed tag value's content, order, or parent changed. Contains its complete current state; oversized value content is omitted with valueTruncated set to true.",
+    "contentType": "application/cloudevents+json",
+    "payload": {
+     "type": "object",
+     "required": [
+      "specversion",
+      "id",
+      "type",
+      "source",
+      "subject",
+      "datacontenttype",
+      "dataschema",
+      "sequence",
+      "tenantid",
+      "data"
+     ],
+     "properties": {
+      "specversion": {
+       "type": "string",
+       "const": "1.0"
+      },
+      "id": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": {
+       "type": "string",
+       "const": "managed_tag_value.updated"
+      },
+      "source": {
+       "type": "string"
+      },
+      "subject": {
+       "type": "string"
+      },
+      "time": {
+       "type": "string",
+       "format": "date-time"
+      },
+      "datacontenttype": {
+       "type": "string",
+       "const": "application/json"
+      },
+      "dataschema": {
+       "type": "string",
+       "const": "https://api.occtoo.com/v1/events/schemas/managed_tag_value.updated/1.0"
+      },
+      "sequence": {
+       "type": "string",
+       "pattern": "^[0-9]{3}\\.[0-9]{20}$"
+      },
+      "tenantid": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "data": {
+       "$ref": "https://api.occtoo.com/v1/events/schemas/managed_tag_value.updated/1.0"
       }
      },
      "additionalProperties": false
