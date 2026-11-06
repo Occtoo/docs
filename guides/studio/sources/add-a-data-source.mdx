@@ -11,7 +11,7 @@ description: "Add a data source, and link it to the sources it shares entry IDs 
   </Step>
   <Step title="Fill in the details">
 
-    ![The New source dialog](/images/guides/studio/sources/new-source-dialog.png)
+    ![New source dialog with Entry expiration set to No](/images/guides/studio/sources/new-source-dialog.png)
 
     - **Name** — required, and unique across sources.
     - **Description** — optional.
@@ -25,6 +25,11 @@ description: "Add a data source, and link it to the sources it shares entry IDs 
     The identifier is fixed at creation. Renaming the source later changes the display name only — the identifier keeps its original value. Pick the name with that in mind.
     </Warning>
 
+  </Step>
+  <Step title="Choose whether entries expire">
+    Leave **Entry expiration** set to **No** to keep entries until you delete them. To expire entries automatically, select **Yes**, enter a value in **Expire after**, and choose **Hours** or **Days**. Use a period from 24 hours to 36,500 days that adds up to a whole number of hours.
+
+    Studio measures the period from each entry’s last content change. Sending identical content again keeps the original expiration date. The nightly cleanup permanently deletes eligible entries and their associated media where applicable.
   </Step>
   <Step title="Save">
 
