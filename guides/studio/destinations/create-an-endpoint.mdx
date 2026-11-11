@@ -49,8 +49,8 @@ An endpoint is one callable path on a destination. A version can hold several, e
   </Step>
 </Steps>
 
-<Warning>
-Endpoints can only be added to a version that is not yet published. On a published version **Add Endpoint** is disabled — create a new version instead. See [Create a version](/guides/studio/destinations/create-a-version).
-</Warning>
+You can add an endpoint to a published version too; it is callable as soon as it is saved. **Add Endpoint** is disabled only while a publish or update is running.
+
+If the destination changed while you were adding the endpoint — someone else edited or published it — Studio explains why in an **Endpoint was not created** dialog. Click **Reload page** to load the latest version, then try again.
 
 Next, choose which properties and relations the endpoint exposes — see [Endpoint content](/guides/studio/destinations/endpoint-content).

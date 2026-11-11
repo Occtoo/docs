@@ -20,12 +20,10 @@ Use **Add language** for a new row, and the bin icon to drop one. Then pick the 
 
 Keys and values must be 2–10 characters, may contain only letters, digits, `_` and `-`, and must each be unique within the version. The **Default language** selector only offers rows that are completely and validly filled in, and follows along if you delete the row it was pointing at.
 
-<Warning>
-Languages can only be changed while the version is **Not published**. Once published, the whole tab is read-only — a language added later would change the shape of every localized field. Create a new version to add one. See [Create a version](/guides/studio/destinations/create-a-version).
-</Warning>
+On a published version, saved language changes go live straight away — there is nothing to publish. The tab is read-only only while a publish or update is running.
 
-<Info>
-Add every language you intend to query before publishing. A localized property can only be requested for a language the destination carries; asking for one it does not know returns the default language instead of an error.
-</Info>
+<Warning>
+Removing a language or changing the **Default language** on a published version changes what callers get back at once. A request for a language the destination no longer carries returns the default language instead of an error.
+</Warning>
 
 Facet headers are entered per language, so adding a language means every faceted property needs a header for it — see [Endpoint content](/guides/studio/destinations/endpoint-content).

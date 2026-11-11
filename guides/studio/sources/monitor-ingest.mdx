@@ -9,20 +9,20 @@ Two widgets on the source page show how onboarding is going: **Updates over time
 
 ![The Updates over time widget](/images/guides/studio/sources/updates-over-time.png)
 
-The chart breaks the chosen time frame into added, updated, deleted and ignored entries. A source with no ingest activity in range shows **No updates available** instead — widen the range, or check the freshness badge in the page header.
+The chart breaks the chosen time frame into added, updated, deleted, expired and ignored entries. **Deleted** counts entries removed by a delete request; **Expired** counts entries the nightly cleanup removed because the source's entry expiration ran out — see [Edit a source](/guides/studio/sources/edit-a-source). A source with no ingest activity in range shows **No updates available** instead — widen the range, or check the freshness badge in the page header.
 
 ### The four stat boxes
 
 | Box | What it counts |
 | --- | --- |
-| **Volume** | Added + updated + deleted entries, with the breakdown underneath |
+| **Volume** | Added + updated + deleted + expired entries, with the breakdown underneath |
 | **Effective** | The share of processed entries that actually changed something |
 | **Updates** | The number of ingest requests in the range |
 | **Update rate** | Average requests per bucket, with the busiest bucket as **Peak** |
 
 ### Effectiveness
 
-An ingest call that sends a value identical to the stored one is a **noop** — counted, but no change. **Effective** is everything that did change, over everything processed.
+An ingest call that sends a value identical to the stored one is a **noop** — counted, but no change. **Effective** is everything that did change (the **Volume**), over everything processed; the line underneath shows the two counts.
 
 <Info>
 A low effectiveness percentage means the integration is resending unchanged data. That is harmless for correctness but wasteful, and it is the main thing this box is for.

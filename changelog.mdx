@@ -4,7 +4,7 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
-<Update label="November 2026" tags={["Platform","API","Events","Managed tags","Studio","Sources","Media"]} description="Entry expiration, status page and managed tag events">
+<Update label="November 2026" tags={["Platform","API","Events","Managed tags","Studio","Sources","Media","Destinations"]} description="Entry expiration, status page, managed tag events and live destination changes">
   ## Data-source entry expiration
 
   Automatically delete source entries after their content remains unchanged for a period you choose. Set **Entry expiration** when creating or editing a source in Studio, using hours or days, and see the setting in the source header. Durations must resolve to whole hours, from 24 hours through 36,500 days.
@@ -22,6 +22,22 @@ rss: true
   React to changes in managed tag lists and values through the Events API, SSE, durable consumers, webhooks, Azure Storage Queue, or Azure Service Bus. Six new types cover list creation, update, and deletion, plus value addition, update, and deletion. Filter by `managedTagId` and use `subject` to select a value key.
 
   Creation and update events carry current metadata or value snapshots; list events exclude values. Subscribe to list events as well as value events to handle list deletion and parent changes, which do not emit individual value events. Only future changes are emitted, with no backfill. See [Managed tag events](/api-reference/events/overview#managed-tags).
+
+  ## Endpoints and languages on published destinations
+
+  You no longer need a new version to grow a live destination. Add an endpoint or edit the language mappings on a published version and the change goes live as soon as you save. Deleting an endpoint from a published version is possible too: the confirmation shows the endpoint's calls over the last 7 days and asks you to type its name. See [Create an endpoint](/guides/studio/destinations/create-an-endpoint) and [Delete an endpoint](/guides/studio/destinations/delete-an-endpoint).
+
+  ## Application tags
+
+  **Settings → Applications** now shows each application's tags, and you can narrow the list by name or by tags. See [Applications](/guides/studio/settings/applications).
+
+  ## Query tool requests as cURL
+
+  After a run, the Destination Query Tool shows the request as a ready-to-copy cURL command next to the response. See [Generate documentation](/guides/studio/destinations/generate-documentation#try-a-request).
+
+  ## Clear a boolean value
+
+  Boolean properties in the Catalog now offer **Not set** next to **True** and **False**, so you can clear a value instead of only flipping it. See [Enrich an entry](/guides/studio/catalog/enrich-an-entry).
 </Update>
 
 <Update label="October 2026" description="Configuration API" tags={["API", "Events", "Sources"]}>

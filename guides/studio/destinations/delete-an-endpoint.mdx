@@ -1,6 +1,6 @@
 ---
 title: "Delete an endpoint"
-description: "Remove an endpoint from a version that has not been published."
+description: "Remove an endpoint from a version, published or not."
 ---
 
 <Steps>
@@ -20,8 +20,14 @@ description: "Remove an endpoint from a version that has not been published."
 Deletion cannot be undone. The endpoint's property selection, aliases, facets, segment filters and relations all go with it — recreating it means configuring all of that again.
 </Warning>
 
+## Delete from a published version
+
+On a published version the endpoint is live, so the confirmation asks for more. It shows how many calls the endpoint received in the last 7 days — a non-zero count means a client is still using it — and you have to type the endpoint's name before **Yes, delete endpoint** goes through.
+
+![Deleting an endpoint from a published version](/images/guides/studio/destinations/destination-delete-published-endpoint.png)
+
+The path stops answering as soon as it is deleted. Move callers off it first.
+
 ## When it is blocked
 
-**Delete endpoint** is disabled on a **published** version, and while a publish or update is running. A published path stays callable for the life of its version.
-
-To retire an endpoint that is already live, create a new version without it and publish that — see [Create a version](/guides/studio/destinations/create-a-version). Consumers move over when they switch to the new version URL.
+**Delete endpoint** is disabled while a publish or update is running on the version.
