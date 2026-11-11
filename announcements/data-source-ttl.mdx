@@ -1,0 +1,59 @@
+---
+title: "Automatic entry expiration for data sources"
+sidebarTitle: "Entry expiration"
+description: "Set a retention period for unchanged source entries in Studio, understand nightly deletion and media cleanup, and track expiration separately in activity metrics."
+keywords: ["TTL", "entry expiration", "data sources", "retention", "Expired"]
+---
+
+Data-source time to live (TTL) lets you automatically remove entries after their content has remained unchanged for a period you choose. Configure it when you create a source or edit an existing one in Studio.
+
+| | |
+| --- | --- |
+| **Announced** | November 2026 |
+| **Affects** | Data sources where you enable entry expiration |
+| **Action needed** | Opt in per source; new sources have expiration off by default |
+
+## Expiration follows content changes
+
+TTL measures time since an entry's last actual content change. Sending identical content again does not restart the period. A regular import can therefore report activity while unchanged entries remain eligible to expire.
+
+For example, with a 180-day TTL, an entry becomes eligible for deletion once its content has remained unchanged for 180 days. Importing that same content every day does not extend its lifetime. Changing its content starts a new 180-day period.
+
+Occtoo checks for expiration nightly. Saving the setting does not delete entries immediately, and reaching the configured age does not trigger an immediate deletion.
+
+<Warning>
+Expired entries are permanently deleted, including associated media where applicable. Enabling expiration or shortening its period can make existing entries eligible for deletion on the next nightly run. Review the period before saving.
+</Warning>
+
+## Set expiration in Studio
+
+You need permission to edit the data source.
+
+<Steps>
+  <Step title="Create or edit a source">
+    In **Sources**, select **New data source**, or open an existing source and select **Edit** from its menu.
+  </Step>
+  <Step title="Choose an expiration period">
+    Set **Entry expiration** to **Yes**. Enter **Expire after** and choose **Hours** or **Days**.
+
+    Use a duration of at least 24 hours and at most 36,500 days (100 years). The duration must resolve to whole hours: for example, 36 hours or 1.5 days.
+  </Step>
+  <Step title="Review and save">
+    Review the deletion warning and select **Save**. The source header shows the configured **Entry expiration**, such as **180 days** or **36 hours**.
+  </Step>
+</Steps>
+
+To disable expiration, edit the source, set **Entry expiration** to **No**, and save. The header shows **Entry expiration: Off**. Disabling expiration does not restore entries already deleted.
+
+The header's **Fresh**, **Recent**, or **Aging** badge describes source activity. It does not show the expiration time of individual entries.
+
+## Track expired entries
+
+Source activity metrics distinguish two deletion actions:
+
+- **Expired** counts entries deleted because they reached the configured TTL.
+- **Deleted** counts requested deletions.
+
+You can inspect **Expired** separately in the activity chart and action filter. Totals that include all actions include expired entries once. The distinction applies to events recorded after the expiration metrics update is deployed; historical aggregates are unchanged.
+
+Read more about [adding a source](/guides/studio/sources/add-a-data-source), [editing a source](/guides/studio/sources/edit-a-source), and [monitoring source activity](/guides/studio/sources/monitor-ingest).

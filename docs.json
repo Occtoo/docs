@@ -201,7 +201,8 @@
                     "group": "Settings",
                     "pages": [
                       "guides/studio/settings/users-and-roles",
-                      "guides/studio/settings/managed-tags"
+                      "guides/studio/settings/managed-tags",
+                      "guides/studio/settings/applications"
                     ]
                   }
                 ]
@@ -382,6 +383,7 @@
         "icon": "bullhorn",
         "pages": [
           "announcements/overview",
+          "announcements/data-source-ttl",
           "announcements/media-management",
           "announcements/untyped-ingest-api-deprecation"
         ]

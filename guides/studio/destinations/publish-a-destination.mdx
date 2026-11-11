@@ -18,10 +18,6 @@ A version's APIs cannot be called until it is published. **Publish** sits in the
   </Step>
 </Steps>
 
-<Warning>
-Once a version is published you can no longer add endpoints to it, only edit the ones it has. Get the endpoint set right before publishing — afterwards, adding one means a new version.
-</Warning>
-
 ## When Publish is blocked
 
 The button is disabled, with a tooltip, when:
@@ -58,4 +54,6 @@ Saving one of those puts the version into **Pending changes** and brings **Publi
 Publishing pending changes onto a live version shows an **Updates impact** warning per risky change. Read them before confirming — this API is already being called.
 </Warning>
 
-Anything that would break the existing contract — removing a property, renaming an alias, adding an endpoint or a language — needs [a new version](/guides/studio/destinations/create-a-version).
+Endpoints and languages are not pending changes: adding or deleting one on a published version takes effect as soon as you save. See [Create an endpoint](/guides/studio/destinations/create-an-endpoint), [Delete an endpoint](/guides/studio/destinations/delete-an-endpoint) and [Manage languages](/guides/studio/destinations/add-languages).
+
+Anything that would break the existing contract — removing a property or renaming an alias — needs [a new version](/guides/studio/destinations/create-a-version).

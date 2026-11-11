@@ -33,6 +33,12 @@ The left half is the request:
 
 The right half holds the response, and the footer says whether the request as composed is valid. Send it with the play button beside the URL, or with **Run now**.
 
+After a run, the right half shows the request as a **cURL** command above the response — the full URL with its parameters, every header and the body — ready to copy into a terminal or share with a developer.
+
+<Warning>
+The **cURL** command carries the request headers as they were sent, including the `Authorization` token on a Protected version. Remove it before pasting the command anywhere public.
+</Warning>
+
 <Warning>
 A Protected version with no registered application cannot be called from here: the tool shows a warning and the run buttons stay disabled. [Register an application](/guides/studio/destinations/register-an-application) first.
 </Warning>
