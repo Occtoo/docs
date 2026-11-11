@@ -4,7 +4,13 @@ description: "New features, improvements, and fixes across the Occtoo platform"
 rss: true
 ---
 
-<Update label="November 2026" tags={["Platform","API","Events","Managed tags"]} description="Status page and managed tag events">
+<Update label="November 2026" tags={["Platform","API","Events","Managed tags","Studio","Sources","Media"]} description="Entry expiration, status page and managed tag events">
+  ## Data-source entry expiration
+
+  Automatically delete source entries after their content remains unchanged for a period you choose. Set **Entry expiration** when creating or editing a source in Studio, using hours or days, and see the setting in the source header. Durations must resolve to whole hours, from 24 hours through 36,500 days.
+
+  Deletion runs nightly and includes associated media where applicable. Re-sending identical content does not reset the period, and existing entries already older than it may be deleted on the next nightly run. **Expired** activity now distinguishes TTL deletion from requested **Deleted** actions for future events; historical aggregates are unchanged. See [Automatic entry expiration for data sources](/announcements/data-source-ttl).
+
   ## Status page
 
   Occtoo now has a public status page at [status.occtoo.com](https://status.occtoo.com). It probes Studio, Ingest, Destinations, Media, and the MCP server from several locations every minute, shows 90 days of uptime per component, and lists active and past incidents and planned maintenance.
