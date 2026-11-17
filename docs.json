@@ -157,7 +157,15 @@
                   {
                     "group": "Media",
                     "pages": [
-                      "guides/studio/media/upload-media"
+                      "guides/studio/media/find-media-sources",
+                      "guides/studio/media/create-a-media-source",
+                      "guides/studio/media/media-source-page",
+                      "guides/studio/media/organize-folders",
+                      "guides/studio/media/upload-files",
+                      "guides/studio/media/view-and-edit-a-file",
+                      "guides/studio/media/replace-a-file",
+                      "guides/studio/media/edit-multiple-files",
+                      "guides/studio/media/property-layout"
                     ]
                   },
                   {
@@ -723,7 +731,7 @@
     },
     {
       "source": "/docs/occtoo-studio/guides/media/how-to-configure-media",
-      "destination": "/guides/studio/media/upload-media"
+      "destination": "/guides/studio/media/upload-files"
     },
     {
       "source": "/docs/occtoo-studio/guides/destination/how-to-create-destination",
@@ -972,6 +980,10 @@
     {
       "source": "/guides/studio/destinations/update-a-version",
       "destination": "/guides/studio/destinations/publish-a-destination"
+    },
+    {
+      "source": "/guides/studio/media/upload-media",
+      "destination": "/guides/studio/media/upload-files"
     }
   ]
 }
