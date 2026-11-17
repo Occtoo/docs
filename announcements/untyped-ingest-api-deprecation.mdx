@@ -13,6 +13,7 @@ description: "The untyped, string-based import endpoints are deprecated and will
 | **Announced** | October 2026 |
 | **Removal** | 1 May 2027 |
 | **Affects** | Integrations calling `POST /datasources/{dataSource}/import`, including the archived `Occtoo.Onboarding.Sdk` |
+| **Also deprecated** | The `ingest.occtoo.com` domain — use `api.occtoo.com` for all new development |
 | **Replacement** | [Typed source ingest](/api-reference/ingest/typed-source-entries) — `POST /v1/sources/{sourceId}` |
 
 ## What is deprecated
@@ -24,6 +25,13 @@ description: "The untyped, string-based import endpoints are deprecated and will
 | `Occtoo.Onboarding.Sdk` NuGet package (archived) | [`Occtoo.Sdk`](https://www.nuget.org/packages/Occtoo.Sdk) NuGet package |
 
 Media ingest (`/media/*` endpoints) is not affected by this announcement and continues to use the Data Provider access token.
+
+## `ingest.occtoo.com` domain
+
+The `ingest.occtoo.com` domain is deprecated. It covers the Data Provider token, the legacy import, and media ingest under `/media`. Only the domain is deprecated; media ingest itself stays.
+
+- **New development:** use `https://api.occtoo.com` only. All endpoints in the [Ingest API reference](/api-reference/ingest/overview) are served there.
+- **Existing integrations:** calls to `ingest.occtoo.com` keep working for now. Move them to `api.occtoo.com` when you migrate to typed source ingest.
 
 ## Why
 
@@ -202,6 +210,7 @@ The legacy import accepts every value as a string and leaves type handling to do
 | Date | Milestone |
 | --- | --- |
 | October 2026 | Legacy import deprecated. Existing integrations keep working. |
+| November 2026 | `ingest.occtoo.com` domain deprecated. Use `api.occtoo.com` for new development. |
 | **1 May 2027** | **Legacy import endpoints removed.** |
 
 Questions about your migration? Contact your Occtoo representative.
